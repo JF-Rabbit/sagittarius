@@ -1,0 +1,8 @@
+# Ignore
+.settings/
+logs/
+*.class
+target/
+/target*
+.classpath
+.project

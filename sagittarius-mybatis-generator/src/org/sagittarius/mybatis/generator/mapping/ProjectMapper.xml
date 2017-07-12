@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.sagittarius.mybatis.generator.dao.ProjectMapper">
+  <resultMap id="BaseResultMap" type="org.sagittarius.mybatis.generator.model.Project">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="proj_name" jdbcType="VARCHAR" property="projName" />
+    <result column="owner" jdbcType="VARCHAR" property="owner" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="last_editor" jdbcType="VARCHAR" property="lastEditor" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+    <result column="shared" jdbcType="BIT" property="shared" />
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.sagittarius.mybatis.generator.model.Project">
+    <result column="flow" jdbcType="LONGVARCHAR" property="flow" />
+  </resultMap>
+  <sql id="Blob_Column_List">
+    flow
+  </sql>
+  <insert id="insert" parameterType="org.sagittarius.mybatis.generator.model.Project">
+    insert into project (id, task_id, proj_name, 
+      owner, creator, create_time, 
+      update_time, last_editor, description, 
+      status, deleted, shared, icon_url, 
+      flow)
+    values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{projName,jdbcType=VARCHAR}, 
+      #{owner,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{lastEditor,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{deleted,jdbcType=BIT}, #{shared,jdbcType=BIT}, #{iconUrl,jdbcType=VARCHAR}, 
+      #{flow,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.sagittarius.mybatis.generator.model.Project">
+    insert into project
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="projName != null">
+        proj_name,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="lastEditor != null">
+        last_editor,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="shared != null">
+        shared,
+      </if>
+      <if test="iconUrl != null">
+        icon_url,
+      </if>
+      <if test="flow != null">
+        flow,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="projName != null">
+        #{projName,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastEditor != null">
+        #{lastEditor,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+      <if test="shared != null">
+        #{shared,jdbcType=BIT},
+      </if>
+      <if test="iconUrl != null">
+        #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flow != null">
+        #{flow,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="org.sagittarius.mybatis.generator.model.Project">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="proj_name" jdbcType="VARCHAR" property="projName" />
+    <result column="owner" jdbcType="VARCHAR" property="owner" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="last_editor" jdbcType="VARCHAR" property="lastEditor" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+    <result column="shared" jdbcType="BIT" property="shared" />
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.sagittarius.mybatis.generator.model.Project">
+    <result column="flow" jdbcType="LONGVARCHAR" property="flow" />
+  </resultMap>
+  <sql id="Blob_Column_List">
+    flow
+  </sql>
+  <insert id="insert" parameterType="org.sagittarius.mybatis.generator.model.Project">
+    insert into project (id, task_id, proj_name, 
+      owner, creator, create_time, 
+      update_time, last_editor, description, 
+      status, deleted, shared, icon_url, 
+      flow)
+    values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{projName,jdbcType=VARCHAR}, 
+      #{owner,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{lastEditor,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{deleted,jdbcType=BIT}, #{shared,jdbcType=BIT}, #{iconUrl,jdbcType=VARCHAR}, 
+      #{flow,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.sagittarius.mybatis.generator.model.Project">
+    insert into project
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="projName != null">
+        proj_name,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="lastEditor != null">
+        last_editor,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="shared != null">
+        shared,
+      </if>
+      <if test="iconUrl != null">
+        icon_url,
+      </if>
+      <if test="flow != null">
+        flow,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="projName != null">
+        #{projName,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastEditor != null">
+        #{lastEditor,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+      <if test="shared != null">
+        #{shared,jdbcType=BIT},
+      </if>
+      <if test="iconUrl != null">
+        #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flow != null">
+        #{flow,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="org.sagittarius.mybatis.generator.model.Project">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="proj_name" jdbcType="VARCHAR" property="projName" />
+    <result column="owner" jdbcType="VARCHAR" property="owner" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="last_editor" jdbcType="VARCHAR" property="lastEditor" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+    <result column="shared" jdbcType="BIT" property="shared" />
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.sagittarius.mybatis.generator.model.Project">
+    <result column="flow" jdbcType="LONGVARCHAR" property="flow" />
+  </resultMap>
+  <sql id="Blob_Column_List">
+    flow
+  </sql>
+  <insert id="insert" parameterType="org.sagittarius.mybatis.generator.model.Project">
+    insert into project (id, task_id, proj_name, 
+      owner, creator, create_time, 
+      update_time, last_editor, description, 
+      status, deleted, shared, icon_url, 
+      flow)
+    values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{projName,jdbcType=VARCHAR}, 
+      #{owner,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{lastEditor,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{deleted,jdbcType=BIT}, #{shared,jdbcType=BIT}, #{iconUrl,jdbcType=VARCHAR}, 
+      #{flow,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.sagittarius.mybatis.generator.model.Project">
+    insert into project
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="projName != null">
+        proj_name,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="lastEditor != null">
+        last_editor,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="shared != null">
+        shared,
+      </if>
+      <if test="iconUrl != null">
+        icon_url,
+      </if>
+      <if test="flow != null">
+        flow,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="projName != null">
+        #{projName,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastEditor != null">
+        #{lastEditor,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+      <if test="shared != null">
+        #{shared,jdbcType=BIT},
+      </if>
+      <if test="iconUrl != null">
+        #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flow != null">
+        #{flow,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="org.sagittarius.mybatis.generator.model.Project">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="proj_name" jdbcType="VARCHAR" property="projName" />
+    <result column="owner" jdbcType="VARCHAR" property="owner" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="last_editor" jdbcType="VARCHAR" property="lastEditor" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+    <result column="shared" jdbcType="BIT" property="shared" />
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.sagittarius.mybatis.generator.model.Project">
+    <result column="flow" jdbcType="LONGVARCHAR" property="flow" />
+  </resultMap>
+  <sql id="Blob_Column_List">
+    flow
+  </sql>
+  <insert id="insert" parameterType="org.sagittarius.mybatis.generator.model.Project">
+    insert into project (id, task_id, proj_name, 
+      owner, creator, create_time, 
+      update_time, last_editor, description, 
+      status, deleted, shared, icon_url, 
+      flow)
+    values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{projName,jdbcType=VARCHAR}, 
+      #{owner,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{lastEditor,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{deleted,jdbcType=BIT}, #{shared,jdbcType=BIT}, #{iconUrl,jdbcType=VARCHAR}, 
+      #{flow,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.sagittarius.mybatis.generator.model.Project">
+    insert into project
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="projName != null">
+        proj_name,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="lastEditor != null">
+        last_editor,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="shared != null">
+        shared,
+      </if>
+      <if test="iconUrl != null">
+        icon_url,
+      </if>
+      <if test="flow != null">
+        flow,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="projName != null">
+        #{projName,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastEditor != null">
+        #{lastEditor,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+      <if test="shared != null">
+        #{shared,jdbcType=BIT},
+      </if>
+      <if test="iconUrl != null">
+        #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flow != null">
+        #{flow,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="org.sagittarius.mybatis.generator.model.Project">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="proj_name" jdbcType="VARCHAR" property="projName" />
+    <result column="owner" jdbcType="VARCHAR" property="owner" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="last_editor" jdbcType="VARCHAR" property="lastEditor" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+    <result column="shared" jdbcType="BIT" property="shared" />
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.sagittarius.mybatis.generator.model.Project">
+    <result column="flow" jdbcType="LONGVARCHAR" property="flow" />
+  </resultMap>
+  <sql id="Blob_Column_List">
+    flow
+  </sql>
+  <insert id="insert" parameterType="org.sagittarius.mybatis.generator.model.Project">
+    insert into project (id, task_id, proj_name, 
+      owner, creator, create_time, 
+      update_time, last_editor, description, 
+      status, deleted, shared, icon_url, 
+      flow)
+    values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{projName,jdbcType=VARCHAR}, 
+      #{owner,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{lastEditor,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{deleted,jdbcType=BIT}, #{shared,jdbcType=BIT}, #{iconUrl,jdbcType=VARCHAR}, 
+      #{flow,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.sagittarius.mybatis.generator.model.Project">
+    insert into project
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="projName != null">
+        proj_name,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="lastEditor != null">
+        last_editor,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="shared != null">
+        shared,
+      </if>
+      <if test="iconUrl != null">
+        icon_url,
+      </if>
+      <if test="flow != null">
+        flow,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="projName != null">
+        #{projName,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastEditor != null">
+        #{lastEditor,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+      <if test="shared != null">
+        #{shared,jdbcType=BIT},
+      </if>
+      <if test="iconUrl != null">
+        #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flow != null">
+        #{flow,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

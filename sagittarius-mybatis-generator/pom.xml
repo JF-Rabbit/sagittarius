@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>sagittarius-mybatis-generator</groupId>
+	<artifactId>sagittarius-mybatis-generator</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>sagittarius-mybatis-generator</name>
+	<url>http://maven.apache.org</url>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>${version.mybatis-generator-maven-plugin}</version>
+				<configuration>
+					<!-- 指定配置文件的位置 -->
+					<configurationFile>${basedir}/src/test/resources/generatorConfig.xml</configurationFile>
+					<!-- 输出详细日志 -->
+					<verbose>true</verbose>
+					<!-- 覆盖已有文件 -->
+					<overwrite>true</overwrite>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<!-- dolphin-mybatis-generator提供了MySqlPaginationPlugin等扩展。 -->
+						<!-- https://github.com/beihaifeiwu/dolphin -->
+						<!-- 源代码和中央仓库为Java 1.8环境，1.1.0-1.7为自打包版本，已上传到私服 -->
+						<groupId>com.freetmp</groupId>
+						<artifactId>dolphin-mybatis-generator</artifactId>
+						<version>${version.dolphin-mybatis-generator}</version>
+					</dependency>
+
+					<dependency>
+						<!-- 连接数据库需要使用jdbc驱动，已上传到私服 -->
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>${version.mysql}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.mybatis.generator</groupId>
+			<artifactId>mybatis-generator-core</artifactId>
+			<version>1.3.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>6.0.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.4.4</version>
+		</dependency>
+
+	</dependencies>
+
+	<parent>
+		<groupId>sagittarius</groupId>
+		<artifactId>sagittarius-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+</project>
