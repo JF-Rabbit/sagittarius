@@ -1,6 +1,5 @@
 package org.sagittarius.uitest.web.test;
 
-import java.awt.AWTException;
 import java.io.IOException;
 
 import javax.annotation.Resource;
@@ -54,7 +53,7 @@ public class TestKMXDemo extends AbstractJUnit4SpringContextTests {
 	LoginAction loginAction;
 	
 	@Test
-	public void test01() throws IOException, AWTException, InterruptedException {
+	public void test01() throws IOException {
 
 		loginAction.login(driver, username, password);
 		loginAction.loadTask(driver);
