@@ -1,7 +1,10 @@
 package org.sagittarius.uitest.web.test;
 
+import java.io.IOException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sagittarius.common.io.IOUtil;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -11,7 +14,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class NorTest2 extends AbstractJUnit4SpringContextTests{
 
 	@Test
-	public void test01() {
-		System.out.println(2);
+	public void test01() throws IOException {
+		System.out.println(IOUtil.getFilePathFromClassLoader("spring.xml"));
+		
+         System.out.println(System.getProperty("user.dir"));
+        
 	}
+	
 }
