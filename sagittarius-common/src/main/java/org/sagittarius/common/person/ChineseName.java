@@ -1,4 +1,4 @@
-package org.sagittarius.common.util;
+package org.sagittarius.common.person;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;

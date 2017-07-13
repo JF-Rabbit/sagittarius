@@ -10,9 +10,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import org.sagittarius.common.ListFilter;
 import org.sagittarius.common.test.entity.User;
 import org.sagittarius.common.test.entity.UserFactory;
-import org.sagittarius.common.util.ListFilter;
 
 /**
  * java8 新特性

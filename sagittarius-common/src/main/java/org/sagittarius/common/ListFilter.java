@@ -1,4 +1,4 @@
-package org.sagittarius.common.util;
+package org.sagittarius.common;
 
 import java.util.ArrayList;
 import java.util.List;

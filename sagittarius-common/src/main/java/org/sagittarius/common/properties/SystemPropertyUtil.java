@@ -1,4 +1,4 @@
-package org.sagittarius.common.util;
+package org.sagittarius.common.properties;
 
 /**
  * java的System.getProperty()方法可以获取的值 

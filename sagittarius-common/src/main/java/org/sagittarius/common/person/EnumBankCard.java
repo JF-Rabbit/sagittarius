@@ -1,4 +1,4 @@
-package org.sagittarius.common.util;
+package org.sagittarius.common.person;
 
 /**
  * 常用银行卡枚举(cardBin只提供一种)

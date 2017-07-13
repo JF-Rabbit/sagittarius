@@ -1,8 +1,12 @@
-package org.sagittarius.common.util;
+package org.sagittarius.common.judge;
 
 import java.math.BigDecimal;
 
-public class CompareData {
+public class JudgeUtil {
+
+	public static boolean isNotNullStr(String obj) {
+		return (obj != null && !obj.equals(""));
+	}
 
 	public static int compareAmout(String value1, String value2) {
 
@@ -11,14 +15,10 @@ public class CompareData {
 
 		if (val1.compareTo(val2) < 0) {
 			return -1;
-		}
-		if (val1.compareTo(val2) == 0) {
+		} else if (val1.compareTo(val2) == 0) {
 			return 0;
-		}
-		if (val1.compareTo(val2) > 0) {
+		} else {
 			return 1;
 		}
-		return 0;
-
 	}
 }

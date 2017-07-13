@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.sagittarius.common.util.ListFilter;
+import org.sagittarius.common.ListFilter;
 
 public class TestListFilter {
 	public static void main(String[] args) {
