@@ -1,6 +1,7 @@
 package org.sagittarius.uitest.web.test;
 
 import java.io.IOException;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 
@@ -9,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+import org.sagittarius.common.properties.PropertiesUtil;
 import org.sagittarius.uitest.driver.DriverManager;
 import org.sagittarius.uitest.exception.DriverInitException;
 import org.sagittarius.uitest.web.action.LoginAction;
@@ -22,22 +24,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = "classpath:spring.xml")
 public class TestKMXDemo extends AbstractJUnit4SpringContextTests {
 	
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(TestKMXDemo.class);
 
 	@Resource
 	DriverManager manager;
 	WebDriver driver;
-
-	String url = "http://192.168.130.101:5004";
+	Properties properties;
 
 	@Before
-	public void setup() throws DriverInitException {
+	public void setup() throws DriverInitException, IOException {
 		driver = manager.getDriver();
-		driver.get(url);
-		logger.info("url:{}, driver:{}", url, driver);
-		logger.warn("url:{}, driver:{}", url, driver);
-		logger.error("url:{}, driver:{}", url, driver);
-		
+		properties = PropertiesUtil.load("conf/config.properties");
+		driver.get(properties.getProperty("url"));
 	}
 
 	@After
@@ -45,17 +44,15 @@ public class TestKMXDemo extends AbstractJUnit4SpringContextTests {
 		manager.quitDriver(driver);
 	}
 
-	String username = "k2data";
-	String password = "K2Data@k001";
 	String filePath = "D:\\project\\selenium\\chromedriver\\v2.9\\1.txt";
 
 	@Resource
 	LoginAction loginAction;
 	
-	@Test
+	//@Test
 	public void test01() throws IOException {
 
-		loginAction.login(driver, username, password);
+		loginAction.login(driver, properties.getProperty("username"), properties.getProperty("password"));
 		loginAction.loadTask(driver);
 		loginAction.inputTaskName(driver, "任务6");
 		
@@ -63,6 +60,15 @@ public class TestKMXDemo extends AbstractJUnit4SpringContextTests {
 		
 		// loginAction.clickLoadBtn(driver);
 		// TODO 点击上传后加延迟判断，等待上传完成
+		System.in.read();
+	}
+	
+	
+	@Test
+	public void test02() throws IOException {
+		loginAction.login(driver, properties.getProperty("username"), properties.getProperty("password"));
+		loginAction.loadTask(driver);
+		loginAction.inputTaskName(driver, "任务6");
 		System.in.read();
 	}
 }
