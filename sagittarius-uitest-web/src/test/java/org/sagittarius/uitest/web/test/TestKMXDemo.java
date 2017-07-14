@@ -67,8 +67,7 @@ public class TestKMXDemo extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void test02() throws IOException {
 		loginAction.login(driver, properties.getProperty("username"), properties.getProperty("password"));
-		loginAction.loadTask(driver);
-		loginAction.inputTaskName(driver, "任务6");
+		
 		System.in.read();
 	}
 }
