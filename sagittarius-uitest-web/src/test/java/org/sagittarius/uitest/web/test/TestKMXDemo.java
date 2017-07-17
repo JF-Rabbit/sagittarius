@@ -64,7 +64,7 @@ public class TestKMXDemo extends WebTest {
 		dataAnalysisAction.editCompoment(driver, ComponentEnum.HDFS_DATASOURC, dataSource, hdfsMap);
 		
 		Map<String, Object> scriptMap = new HashMap<String, Object>();
-		scriptMap.put(ComponentInfoConstant.SCRIPT_TYPE, ComponentInfoConstant.ScriptType.DATA_EXTRACT);
+		scriptMap.put(ComponentInfoConstant.SCRIPT_TYPE, ComponentInfoConstant.ScriptTypeEnum.DATA_EXTRACT);
 		dataAnalysisAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);
 		dataAnalysisAction.clickSaveBtn(driver);
 		Delay.suspend();

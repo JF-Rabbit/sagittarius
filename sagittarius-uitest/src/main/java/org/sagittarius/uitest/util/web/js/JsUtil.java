@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 public class JsUtil implements JsConstant {
 
 	/**
-	 * 获取页面显示的实际X坐标
+	 * 返回页面X原点在显示器的X坐标 
 	 * 
 	 * @param driver
 	 * @return

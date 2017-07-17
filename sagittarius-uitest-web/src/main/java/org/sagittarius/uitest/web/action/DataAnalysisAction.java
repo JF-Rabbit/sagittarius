@@ -15,7 +15,7 @@ import org.sagittarius.uitest.util.web.WebElementUtil;
 import org.sagittarius.uitest.util.web.js.JsUtil;
 import org.sagittarius.uitest.web.page.dataAnalysis.ComponentEnum;
 import org.sagittarius.uitest.web.page.dataAnalysis.ComponentInfoConstant;
-import org.sagittarius.uitest.web.page.dataAnalysis.ComponentInfoConstant.ScriptType;
+import org.sagittarius.uitest.web.page.dataAnalysis.ComponentInfoConstant.ScriptTypeEnum;
 import org.sagittarius.uitest.web.page.dataAnalysis.CreateProjectInfoPage;
 import org.sagittarius.uitest.web.page.dataAnalysis.CreateProjectPage;
 import org.sagittarius.uitest.web.page.dataAnalysis.DataAnalysisPage;
@@ -107,7 +107,7 @@ public class DataAnalysisAction {
 
 		switch (componentEnum) {
 		case KMX_TIMESERIES_DATASOURC:
-
+			// TODO
 			break;
 		case HDFS_DATASOURC:
 			HDFSInfoPage hdfsInfoPage = new HDFSInfoPage();
@@ -116,35 +116,31 @@ public class DataAnalysisAction {
 			hdfsInfoPage.hdfsPath.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstant.HDFS_PATH)));
 			break;
 		case KMX_OBJECT_DATASOURC:
-
+			// TODO
 			break;
 		case SCRIPT:
 			ScriptInfoPage scriptInfoPage = new ScriptInfoPage();
 			PageInitUtil.initPages(driver, scriptInfoPage);
 			scriptInfoPage.secletScriptBtn.click();
 			Delay.sleep(500);
-			ComponentInfoConstant.ScriptType scriptType = (ScriptType) componmentInfo.get(ComponentInfoConstant.SCRIPT_TYPE);
+			ComponentInfoConstant.ScriptTypeEnum scriptType = (ScriptTypeEnum) componmentInfo.get(ComponentInfoConstant.SCRIPT_TYPE);
 			switch (scriptType) {
 			case DATA_EXTRACT:
 				scriptInfoPage.dataExtract.click();
 				break;
 			case DATA_PRETREATMENT:
-
+				scriptInfoPage.dataPretreatment.click();
+				// TODO
 				break;
 			case DATA_TRAIN:
-
+				scriptInfoPage.dataTrain.click();
+				// TODO
 				break;
 			case DATA_GRADE:
-
-				break;
-
-			default:
+				scriptInfoPage.dataGrade.click();
+				// TODO
 				break;
 			}
-
-			break;
-
-		default:
 			break;
 		}
 	}
