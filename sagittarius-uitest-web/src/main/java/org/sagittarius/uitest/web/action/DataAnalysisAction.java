@@ -14,8 +14,8 @@ import org.sagittarius.uitest.util.PageInitUtil;
 import org.sagittarius.uitest.util.web.WebElementUtil;
 import org.sagittarius.uitest.util.web.js.JsUtil;
 import org.sagittarius.uitest.web.page.dataAnalysis.ComponentEnum;
-import org.sagittarius.uitest.web.page.dataAnalysis.ComponentInfoConstans;
-import org.sagittarius.uitest.web.page.dataAnalysis.ComponentInfoConstans.ScriptType;
+import org.sagittarius.uitest.web.page.dataAnalysis.ComponentInfoConstant;
+import org.sagittarius.uitest.web.page.dataAnalysis.ComponentInfoConstant.ScriptType;
 import org.sagittarius.uitest.web.page.dataAnalysis.CreateProjectInfoPage;
 import org.sagittarius.uitest.web.page.dataAnalysis.CreateProjectPage;
 import org.sagittarius.uitest.web.page.dataAnalysis.DataAnalysisPage;
@@ -113,7 +113,7 @@ public class DataAnalysisAction {
 			HDFSInfoPage hdfsInfoPage = new HDFSInfoPage();
 			PageInitUtil.initPages(driver, hdfsInfoPage);
 			hdfsInfoPage.hdfsPath.clear();
-			hdfsInfoPage.hdfsPath.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstans.HDFS_PATH)));
+			hdfsInfoPage.hdfsPath.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstant.HDFS_PATH)));
 			break;
 		case KMX_OBJECT_DATASOURC:
 
@@ -123,7 +123,7 @@ public class DataAnalysisAction {
 			PageInitUtil.initPages(driver, scriptInfoPage);
 			scriptInfoPage.secletScriptBtn.click();
 			Delay.sleep(500);
-			ComponentInfoConstans.ScriptType scriptType = (ScriptType) componmentInfo.get(ComponentInfoConstans.SCRIPT_TYPE);
+			ComponentInfoConstant.ScriptType scriptType = (ScriptType) componmentInfo.get(ComponentInfoConstant.SCRIPT_TYPE);
 			switch (scriptType) {
 			case DATA_EXTRACT:
 				scriptInfoPage.dataExtract.click();

@@ -5,21 +5,41 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.Properties;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.sagittarius.common.properties.PropertiesUtil;
 import org.sagittarius.uitest.util.PageInitUtil;
+import org.sagittarius.uitest.web.ConfigConstant;
 import org.sagittarius.uitest.web.page.login.LoginPage;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LoginAction {
+	
+	private String getTargetURL() throws IOException{
+		Properties properties = PropertiesUtil.load(ConfigConstant.CONFIG_FILE_PATH);
+		return properties.getProperty(ConfigConstant.URL);
+	}
 
-	public void login(WebDriver driver, String username, String password) {
+	public void login(WebDriver driver, String username, String password) throws IOException {
+		driver.get(getTargetURL());
 		LoginPage loginPage = new LoginPage();
 		PageInitUtil.initPages(driver, loginPage);
 		loginPage.usernameInput.sendKeys(username);
 		loginPage.passwordInput.sendKeys(password);
+		loginPage.loginBtn.click();
+	}
+	
+	public void login(WebDriver driver) throws IOException {
+		driver.get(getTargetURL());
+		LoginPage loginPage = new LoginPage();
+		PageInitUtil.initPages(driver, loginPage);
+		Properties properties = PropertiesUtil.load(ConfigConstant.CONFIG_FILE_PATH);
+		loginPage.usernameInput.sendKeys(properties.getProperty(ConfigConstant.USERNAME));
+		loginPage.passwordInput.sendKeys(properties.getProperty(ConfigConstant.PASSWORD));
 		loginPage.loginBtn.click();
 	}
 	
