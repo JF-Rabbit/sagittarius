@@ -1,6 +1,6 @@
 package org.sagittarius.uitest.web.page.dataAnalysis;
 
-public interface ComponentInfoConstans {
+public interface ComponentInfoConstant {
 
 	String HDFS_PATH = "hdfs_path";
 	String SCRIPT_TYPE = "script_type";
