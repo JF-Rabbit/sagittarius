@@ -9,4 +9,12 @@ public class Delay {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void suspend(){
+		try {
+			System.in.read();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
