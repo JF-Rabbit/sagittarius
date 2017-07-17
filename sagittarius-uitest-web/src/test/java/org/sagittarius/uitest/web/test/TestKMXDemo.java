@@ -1,5 +1,6 @@
 package org.sagittarius.uitest.web.test;
 
+import java.awt.AWTException;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.UUID;
@@ -10,13 +11,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.sagittarius.common.Delay;
 import org.sagittarius.common.properties.PropertiesUtil;
 import org.sagittarius.uitest.driver.DriverManager;
 import org.sagittarius.uitest.exception.DriverInitException;
+import org.sagittarius.uitest.util.web.js.JsUtil;
 import org.sagittarius.uitest.web.action.DataAnalysisAction;
 import org.sagittarius.uitest.web.action.LoginAction;
+import org.sagittarius.uitest.web.page.dataAnalysis.ComponentEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
@@ -26,8 +31,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring.xml")
 public class TestKMXDemo extends AbstractJUnit4SpringContextTests {
-	
-	@SuppressWarnings("unused")
+
 	private static final Logger logger = LoggerFactory.getLogger(TestKMXDemo.class);
 
 	@Resource
@@ -51,46 +55,48 @@ public class TestKMXDemo extends AbstractJUnit4SpringContextTests {
 
 	@Resource
 	LoginAction loginAction;
-	
-	//@Test
+
+	// @Test
 	public void test01() throws IOException {
 
 		loginAction.login(driver, properties.getProperty("username"), properties.getProperty("password"));
 		loginAction.loadTask(driver);
 		loginAction.inputTaskName(driver, "任务6");
-		
+
 		loginAction.sendFile(driver, filePath);
-		
+
 		// loginAction.clickLoadBtn(driver);
 		// TODO 点击上传后加延迟判断，等待上传完成
 		System.in.read();
 	}
-	
+
 	@Resource
 	DataAnalysisAction dataAnalysisAction;
-	
+
 	String projectName = "selenium_input" + UUID.randomUUID();
 	String projectDesc = "selenium_input";
-	
+
 	@Test
-	public void test02() throws IOException, InterruptedException {
+	public void test02() throws AWTException {
 		loginAction.login(driver, properties.getProperty("username"), properties.getProperty("password"));
-		
+
 		dataAnalysisAction.clickCreateProject(driver);
 		dataAnalysisAction.inputProjectInfo(driver, projectName, projectDesc);
 		System.out.println("##");
-		dataAnalysisAction.createComponent(driver);
+		dataAnalysisAction.createComponent(driver, ComponentEnum.HDFS_DATASOURC);
 		System.out.println("##");
-		Delay.sleep(1000);
+		Delay.suspend();
 	}
-	
-	//@Test
+
+	// @Test
 	public void test03() throws IOException {
 		loginAction.login(driver, properties.getProperty("username"), properties.getProperty("password"));
-		System.out.println("##");
-		dataAnalysisAction.clickTargetProject(driver);
-		System.out.println("##");
-		System.in.read();
+		WebElement logo = driver.findElement(By.xpath("//*[@id=\"coreLayoutContainer\"]/section[1]/header/div[1]/div/div"));
+		logger.info("x:{}, y:{}", logo.getLocation().x, logo.getLocation().y);
+
+		System.out.println(JsUtil.getActualX(driver));
+
+		Delay.suspend();
 	}
-	
+
 }
