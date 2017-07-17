@@ -2,6 +2,8 @@ package org.sagittarius.uitest.web.test;
 
 import java.awt.AWTException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -11,17 +13,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.sagittarius.common.Delay;
 import org.sagittarius.common.properties.PropertiesUtil;
 import org.sagittarius.uitest.driver.DriverManager;
 import org.sagittarius.uitest.exception.DriverInitException;
-import org.sagittarius.uitest.util.web.js.JsUtil;
 import org.sagittarius.uitest.web.action.DataAnalysisAction;
 import org.sagittarius.uitest.web.action.LoginAction;
 import org.sagittarius.uitest.web.page.dataAnalysis.ComponentEnum;
+import org.sagittarius.uitest.web.page.dataAnalysis.ComponentInfoConstans;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
@@ -73,7 +73,7 @@ public class TestKMXDemo extends AbstractJUnit4SpringContextTests {
 	@Resource
 	DataAnalysisAction dataAnalysisAction;
 
-	String projectName = "selenium_input" + UUID.randomUUID();
+	String projectName = "selenium_input" + "_" +UUID.randomUUID().toString().substring(0, 8);
 	String projectDesc = "selenium_input";
 
 	@Test
@@ -82,21 +82,20 @@ public class TestKMXDemo extends AbstractJUnit4SpringContextTests {
 
 		dataAnalysisAction.clickCreateProject(driver);
 		dataAnalysisAction.inputProjectInfo(driver, projectName, projectDesc);
-		System.out.println("##");
-		dataAnalysisAction.createComponent(driver, ComponentEnum.HDFS_DATASOURC);
-		System.out.println("##");
+		String dataSource = dataAnalysisAction.createComponent(driver, ComponentEnum.HDFS_DATASOURC, UUID.randomUUID().toString().substring(0, 8), 0, 0);
+		String script = dataAnalysisAction.createComponent(driver, ComponentEnum.SCRIPT, UUID.randomUUID().toString().substring(0, 8), 0, 2);
+		dataAnalysisAction.linkPoint(driver, 0, 1);
+		
+		logger.info("dataSource:{}, script:{}", dataSource, script);
+		
+		Map<String, Object> hdfsMap = new HashMap<String, Object>();
+		hdfsMap.put(ComponentInfoConstans.HDFS_PATH, "/project/workspace");
+		dataAnalysisAction.editCompoment(driver, ComponentEnum.HDFS_DATASOURC, dataSource, hdfsMap);
+		
+		Map<String, Object> scriptMap = new HashMap<String, Object>();
+		scriptMap.put(ComponentInfoConstans.SCRIPT_TYPE, ComponentInfoConstans.ScriptType.DATA_EXTRACT);
+		dataAnalysisAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);
+		dataAnalysisAction.clickSaveBtn(driver);
 		Delay.suspend();
 	}
-
-	// @Test
-	public void test03() throws IOException {
-		loginAction.login(driver, properties.getProperty("username"), properties.getProperty("password"));
-		WebElement logo = driver.findElement(By.xpath("//*[@id=\"coreLayoutContainer\"]/section[1]/header/div[1]/div/div"));
-		logger.info("x:{}, y:{}", logo.getLocation().x, logo.getLocation().y);
-
-		System.out.println(JsUtil.getActualX(driver));
-
-		Delay.suspend();
-	}
-
 }

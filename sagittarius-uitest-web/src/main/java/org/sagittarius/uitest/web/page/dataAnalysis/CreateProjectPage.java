@@ -20,4 +20,13 @@ public class CreateProjectPage implements PageUI {
 	
 	@FindBy(xpath = "//*[@id=\"v-2\"]")
 	public WebElement editBackground;
+	
+	@FindBy(xpath = "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div/div/div[2]/input")
+	public WebElement nameInput;
+	
+	@FindBy(xpath = "/html/body/div[3]/div/div[2]/div/div[1]/div[3]/button[2]/span")
+	public WebElement confirmBtn;
+	
+	@FindBy(xpath = "//*[@id=\"innerContainer\"]/form/div/div[1]/span[3]/i")
+	public WebElement saveBtn;
 }
