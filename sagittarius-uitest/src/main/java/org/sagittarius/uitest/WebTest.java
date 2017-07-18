@@ -31,4 +31,8 @@ public class WebTest extends AbstractJUnit4SpringContextTests {
 	public void teardown() {
 		manager.quitDriver(driver);
 	}
+	
+	public void getSource() {
+		logger.info(driver.getPageSource());
+	}
 }
