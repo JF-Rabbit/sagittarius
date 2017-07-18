@@ -11,7 +11,7 @@ import java.util.Properties;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.sagittarius.common.properties.PropertiesUtil;
-import org.sagittarius.uitest.util.PageInitUtil;
+import org.sagittarius.uitest.util.PageElementUtil;
 import org.sagittarius.uitest.web.ConfigConstant;
 import org.sagittarius.uitest.web.page.login.LoginPage;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class LoginAction {
 	public void login(WebDriver driver, String username, String password) throws IOException {
 		driver.get(getTargetURL());
 		LoginPage loginPage = new LoginPage();
-		PageInitUtil.initPages(driver, loginPage);
+		PageElementUtil.initPages(driver, loginPage);
 		loginPage.usernameInput.sendKeys(username);
 		loginPage.passwordInput.sendKeys(password);
 		loginPage.loginBtn.click();
@@ -36,7 +36,7 @@ public class LoginAction {
 	public void login(WebDriver driver) throws IOException {
 		driver.get(getTargetURL());
 		LoginPage loginPage = new LoginPage();
-		PageInitUtil.initPages(driver, loginPage);
+		PageElementUtil.initPages(driver, loginPage);
 		Properties properties = PropertiesUtil.load(ConfigConstant.CONFIG_FILE_PATH);
 		loginPage.usernameInput.sendKeys(properties.getProperty(ConfigConstant.USERNAME));
 		loginPage.passwordInput.sendKeys(properties.getProperty(ConfigConstant.PASSWORD));

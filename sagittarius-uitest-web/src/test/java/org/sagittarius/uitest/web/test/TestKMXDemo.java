@@ -1,6 +1,5 @@
 package org.sagittarius.uitest.web.test;
 
-import java.awt.AWTException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +10,8 @@ import org.junit.Test;
 import org.sagittarius.common.Delay;
 import org.sagittarius.common.random.RandomUtil;
 import org.sagittarius.uitest.WebTest;
-import org.sagittarius.uitest.web.action.DataAnalysisAction;
+import org.sagittarius.uitest.web.action.CreateProjectInfoAction;
+import org.sagittarius.uitest.web.action.EditProjectAction;
 import org.sagittarius.uitest.web.action.LoginAction;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.component.ComponentEnum;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant;
@@ -40,76 +40,95 @@ public class TestKMXDemo extends WebTest {
 		// TODO 点击上传后加延迟判断，等待上传完成
 		Delay.suspend();
 	}
-	
-	//@Test
+
+	@Resource
+	CreateProjectInfoAction createProjectInfoAction;
+
+	// @Test
 	public void login() throws IOException {
 		loginAction.login(driver);
-		dataAnalysisAction.clickCreateProject(driver);
-		dataAnalysisAction.inputProjectInfo(driver, projectName, projectDesc);
+		createProjectInfoAction.clickCreateProject(driver);
+		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
 		Delay.suspend();
 	}
 
 	@Resource
-	DataAnalysisAction dataAnalysisAction;
+	EditProjectAction editProjectAction;
 
 	String projectName = "selenium_input" + "_" + RandomUtil.randomUUID();
 	String projectDesc = "selenium_input";
 
+	String hdfsPath = "/project/workspace";
+
 	/**
 	 * 创建HDFS+Script
 	 * 
-	 * @throws AWTException
-	 * @throws IOException
+	 * @throws @throws
+	 *             IOException
 	 */
 	// @Test
-	public void create_HDFS$Script() throws AWTException, IOException {
+	public void create_HDFS$Script() throws IOException {
 		loginAction.login(driver);
 
-		dataAnalysisAction.clickCreateProject(driver);
-		dataAnalysisAction.inputProjectInfo(driver, projectName, projectDesc);
-		String dataSource = dataAnalysisAction.createComponent(driver, ComponentEnum.HDFS_DATASOURC, RandomUtil.randomUUID(), 0, 0);
-		String script = dataAnalysisAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
-		dataAnalysisAction.linkPoint(driver, 0, 1);
+		createProjectInfoAction.clickCreateProject(driver);
+		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
+		String dataSource = editProjectAction.createComponent(driver, ComponentEnum.HDFS_DATASOURC, RandomUtil.randomUUID(), 0, 0);
+		String script = editProjectAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
+		editProjectAction.linkPoint(driver, 0, 1);
 
 		logger.info("dataSource:{}, script:{}", dataSource, script);
 
 		Map<String, Object> hdfsMap = new HashMap<String, Object>();
-		hdfsMap.put(ComponentInfoConstant.HDFS_PATH, "/project/workspace");
-		dataAnalysisAction.editCompoment(driver, ComponentEnum.HDFS_DATASOURC, dataSource, hdfsMap);
+		hdfsMap.put(ComponentInfoConstant.HDFS_PATH, hdfsPath);
+		editProjectAction.editCompoment(driver, ComponentEnum.HDFS_DATASOURC, dataSource, hdfsMap);
 
 		Map<String, Object> scriptMap = new HashMap<String, Object>();
 		scriptMap.put(ComponentInfoConstant.SCRIPT_TYPE, ComponentInfoConstant.ScriptTypeEnum.DATA_EXTRACT);
-		dataAnalysisAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);
-		dataAnalysisAction.clickSaveBtn(driver);
+		editProjectAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);
+		editProjectAction.clickSaveBtn(driver);
 		Delay.suspend();
 	}
+
+	String tableName = "windfarm_eXOzq_001";
+	String[] fieldArray = new String[] { "turbineId", "windSpeed", "powerActive" };
+	String timeStart = "2016-06-18 20:00:00";
+	String endStart = "2016-06-18 20:00:00";
+	String idValue = "idValue";
+	String other = "other";
 
 	/**
 	 * 创建KMX时序+Script
 	 * 
-	 * @throws AWTException
-	 * @throws IOException
+	 * @throws @throws
+	 *             IOException
 	 */
 	@Test
-	public void create_KMX_T$Script() throws AWTException, IOException {
+	public void create_KMX_T$Script() throws IOException {
 		loginAction.login(driver);
 
-		dataAnalysisAction.clickCreateProject(driver);
-		dataAnalysisAction.inputProjectInfo(driver, projectName, projectDesc);
-		String dataSource = dataAnalysisAction.createComponent(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, RandomUtil.randomUUID(), 0, 0);
-		String script = dataAnalysisAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
-		dataAnalysisAction.linkPoint(driver, 0, 1);
+		createProjectInfoAction.clickCreateProject(driver);
+		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
+		String dataSource = editProjectAction.createComponent(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, RandomUtil.randomUUID(), 0,
+				0);
+		String script = editProjectAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
+		editProjectAction.linkPoint(driver, 0, 1);
 
 		logger.info("dataSource:{}, script:{}", dataSource, script);
 
-		Map<String, Object> hdfsMap = new HashMap<String, Object>();
-		hdfsMap.put(ComponentInfoConstant.HDFS_PATH, "/project/workspace");
-		dataAnalysisAction.editCompoment(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, dataSource, hdfsMap);
+		Map<String, Object> kmxTimeseriesMap = new HashMap<String, Object>();
+		kmxTimeseriesMap.put(ComponentInfoConstant.FIELD_TABLE_NAME, tableName);
+		kmxTimeseriesMap.put(ComponentInfoConstant.FIELD_ARRAY, fieldArray);
+		kmxTimeseriesMap.put(ComponentInfoConstant.HAVE_QUERY_CONDION, ComponentInfoConstant.TRUE);
+		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_TIME_START, timeStart);
+		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_TIME_END, endStart);
+		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_ID_VALUE, idValue);
+		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_OTHER, other);
+		editProjectAction.editCompoment(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, dataSource, kmxTimeseriesMap);
 
-		Map<String, Object> scriptMap = new HashMap<String, Object>();
-		scriptMap.put(ComponentInfoConstant.SCRIPT_TYPE, ComponentInfoConstant.ScriptTypeEnum.DATA_EXTRACT);
-		dataAnalysisAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);
-		dataAnalysisAction.clickSaveBtn(driver);
+//		Map<String, Object> scriptMap = new HashMap<String, Object>();
+//		scriptMap.put(ComponentInfoConstant.SCRIPT_TYPE, ComponentInfoConstant.ScriptTypeEnum.DATA_EXTRACT);
+//		editProjectAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);
+//		editProjectAction.clickSaveBtn(driver);
 		Delay.suspend();
 	}
 }

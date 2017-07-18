@@ -5,13 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.iOSXCUITBy;
 
-public class PageInitUtil {
+public class PageElementUtil {
 
 	public static void initPages(WebDriver driver, PageUI... pageUIs) {
 		for (PageUI pageUI : pageUIs) {
@@ -37,6 +38,11 @@ public class PageInitUtil {
 			}
 		}
 		return unFindElementMap;
+	}
+	
+	public static void clearAndSendKey(WebElement element, String key){
+		element.clear();
+		element.sendKeys(key);
 	}
 
 }
