@@ -29,4 +29,12 @@ public class RobotUtil {
 		Delay.sleep(100);
 		robot.mouseRelease(KeyEvent.BUTTON1_MASK);
 	}
+	
+	public static void pressESC() throws AWTException {
+		Robot robot = new Robot();
+		robot.keyPress(KeyEvent.VK_ESCAPE);
+		Delay.sleep(100);
+		robot.keyRelease(KeyEvent.VK_ESCAPE);
+	}
+	
 }
