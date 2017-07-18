@@ -19,7 +19,7 @@ public class PageInitUtil {
 		}
 	}
 
-	public Map<String, Object> getUnFindElement(WebDriver driver, PageUI... pageUIs) throws IllegalArgumentException, IllegalAccessException {
+	public static Map<String, Object> getUnFindElement(WebDriver driver, PageUI... pageUIs) throws IllegalArgumentException, IllegalAccessException {
 		Map<String, Object> unFindElementMap = new HashMap<String, Object>();
 		initPages(driver, pageUIs);
 		for (PageUI pageUI : pageUIs) {
