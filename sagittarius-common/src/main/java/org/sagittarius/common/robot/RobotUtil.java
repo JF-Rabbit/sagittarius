@@ -15,10 +15,9 @@ public class RobotUtil {
 	 * @param startY
 	 * @param endX
 	 * @param endY
-	 * @throws AWTException
 	 */
-	public static void dragToLocation(int startX, int startY, int endX, int endY) throws AWTException {
-		Robot robot = new Robot();
+	public static void dragToLocation(int startX, int startY, int endX, int endY) {
+		Robot robot = createRobot();
 		robot.mouseMove(startX, startY);
 		Delay.sleep(100);
 		robot.mousePress(KeyEvent.BUTTON1_MASK);
@@ -29,12 +28,31 @@ public class RobotUtil {
 		Delay.sleep(100);
 		robot.mouseRelease(KeyEvent.BUTTON1_MASK);
 	}
-	
-	public static void pressESC() throws AWTException {
-		Robot robot = new Robot();
+
+	public static void moveToClick(int x, int y) {
+		Robot robot = createRobot();
+		robot.mouseMove(x, y);
+		Delay.sleep(100);
+		robot.mousePress(KeyEvent.BUTTON1_MASK);
+		Delay.sleep(100);
+		robot.mouseRelease(KeyEvent.BUTTON1_MASK);
+	}
+
+	public static void pressESC() {
+		Robot robot = createRobot();
 		robot.keyPress(KeyEvent.VK_ESCAPE);
 		Delay.sleep(100);
 		robot.keyRelease(KeyEvent.VK_ESCAPE);
 	}
-	
+
+	private static Robot createRobot() {
+		Robot robot = null;
+		try {
+			robot = new Robot();
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
+		return robot;
+	}
+
 }
