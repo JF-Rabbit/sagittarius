@@ -4,7 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.sagittarius.uitest.util.PageUI;
 
-public class ScriptInfoPage implements PageUI {
+public class ScriptConfigPage implements PageUI {
 	
 	@FindBy(xpath = "//*[@id=\"innerContainer\"]/form/div/div[2]/div[5]/div[2]/section/div/div[1]/div/div/div/div")
 	public WebElement secletScriptBtn;
