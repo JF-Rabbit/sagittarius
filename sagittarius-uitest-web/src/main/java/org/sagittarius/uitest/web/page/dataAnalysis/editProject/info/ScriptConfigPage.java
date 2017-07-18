@@ -2,9 +2,9 @@ package org.sagittarius.uitest.web.page.dataAnalysis.editProject.info;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.sagittarius.uitest.util.PageUI;
+import org.sagittarius.uitest.web.page.CommonPage;
 
-public class ScriptConfigPage implements PageUI {
+public class ScriptConfigPage extends CommonPage {
 	
 	@FindBy(xpath = "//div[text()='请选择']")
 	public WebElement secletScriptBtn;

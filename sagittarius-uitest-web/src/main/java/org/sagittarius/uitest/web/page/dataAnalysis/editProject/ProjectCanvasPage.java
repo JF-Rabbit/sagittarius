@@ -2,9 +2,9 @@ package org.sagittarius.uitest.web.page.dataAnalysis.editProject;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.sagittarius.uitest.util.PageUI;
+import org.sagittarius.uitest.web.page.CommonPage;
 
-public class ProjectCanvasPage implements PageUI {
+public class ProjectCanvasPage extends CommonPage {
 	
 	@FindBy(id = "v-2")
 	public WebElement editBackground;
