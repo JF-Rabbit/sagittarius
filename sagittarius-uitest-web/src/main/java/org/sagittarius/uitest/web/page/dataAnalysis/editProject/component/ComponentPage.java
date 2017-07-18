@@ -6,15 +6,15 @@ import org.sagittarius.uitest.util.PageUI;
 
 public class ComponentPage implements PageUI {
 
-	@FindBy(xpath = "//*[@id=\"kmx\"]/div/span")
+	@FindBy(id = "kmx")
 	public WebElement kmxTimeSeriesDataSourc;
 
-	@FindBy(xpath = "//*[@id=\"hdfs\"]/div/span")
+	@FindBy(id = "hdfs")
 	public WebElement hdfsDataSourc;
 
-	@FindBy(xpath = "//*[@id=\"object\"]/div/span")
+	@FindBy(id = "object")
 	public WebElement kmxObjectDataSourc;
 
-	@FindBy(xpath = "//*[@id=\"script-upload\"]/div/span")
+	@FindBy(id = "script-upload")
 	public WebElement script;
 }

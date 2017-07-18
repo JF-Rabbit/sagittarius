@@ -6,13 +6,16 @@ import org.sagittarius.uitest.util.PageUI;
 
 public class CreateProjectInfoPage implements PageUI {
 
-	@FindBy(xpath = "//*[@id=\"projName\"]")
+	@FindBy(id = "projName")
 	public WebElement projectNameInput;
 	
-	@FindBy(xpath = "//*[@id=\"description\"]")
+	@FindBy(id = "description")
 	public WebElement projectDescInput;
 	
-	@FindBy(xpath = "/html/body/div[2]/div/div[2]/div/div[1]/div[3]/button[2]/span")
+	@FindBy(xpath = "//span[text()='取 消']")
+	public WebElement projectCancelBtn;
+	
+	@FindBy(xpath = "//span[text()='确 定']")
 	public WebElement projectConfirmBtn;
 
 }

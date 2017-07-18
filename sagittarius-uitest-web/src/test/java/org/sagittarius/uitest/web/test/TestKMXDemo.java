@@ -26,7 +26,7 @@ public class TestKMXDemo extends WebTest {
 	LoginAction loginAction;
 
 	String filePath = "D:\\project\\selenium\\chromedriver\\v2.9\\1.txt";
-	
+
 	// @Test
 	public void test01() throws IOException {
 
@@ -40,6 +40,14 @@ public class TestKMXDemo extends WebTest {
 		// TODO 点击上传后加延迟判断，等待上传完成
 		Delay.suspend();
 	}
+	
+	//@Test
+	public void login() throws IOException {
+		loginAction.login(driver);
+		dataAnalysisAction.clickCreateProject(driver);
+		dataAnalysisAction.inputProjectInfo(driver, projectName, projectDesc);
+		Delay.suspend();
+	}
 
 	@Resource
 	DataAnalysisAction dataAnalysisAction;
@@ -47,8 +55,14 @@ public class TestKMXDemo extends WebTest {
 	String projectName = "selenium_input" + "_" + RandomUtil.randomUUID();
 	String projectDesc = "selenium_input";
 
-	@Test
-	public void test02() throws AWTException, IOException {
+	/**
+	 * 创建HDFS+Script
+	 * 
+	 * @throws AWTException
+	 * @throws IOException
+	 */
+	// @Test
+	public void create_HDFS$Script() throws AWTException, IOException {
 		loginAction.login(driver);
 
 		dataAnalysisAction.clickCreateProject(driver);
@@ -56,13 +70,42 @@ public class TestKMXDemo extends WebTest {
 		String dataSource = dataAnalysisAction.createComponent(driver, ComponentEnum.HDFS_DATASOURC, RandomUtil.randomUUID(), 0, 0);
 		String script = dataAnalysisAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
 		dataAnalysisAction.linkPoint(driver, 0, 1);
-		
+
 		logger.info("dataSource:{}, script:{}", dataSource, script);
-		
+
 		Map<String, Object> hdfsMap = new HashMap<String, Object>();
 		hdfsMap.put(ComponentInfoConstant.HDFS_PATH, "/project/workspace");
 		dataAnalysisAction.editCompoment(driver, ComponentEnum.HDFS_DATASOURC, dataSource, hdfsMap);
-		
+
+		Map<String, Object> scriptMap = new HashMap<String, Object>();
+		scriptMap.put(ComponentInfoConstant.SCRIPT_TYPE, ComponentInfoConstant.ScriptTypeEnum.DATA_EXTRACT);
+		dataAnalysisAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);
+		dataAnalysisAction.clickSaveBtn(driver);
+		Delay.suspend();
+	}
+
+	/**
+	 * 创建KMX时序+Script
+	 * 
+	 * @throws AWTException
+	 * @throws IOException
+	 */
+	@Test
+	public void create_KMX_T$Script() throws AWTException, IOException {
+		loginAction.login(driver);
+
+		dataAnalysisAction.clickCreateProject(driver);
+		dataAnalysisAction.inputProjectInfo(driver, projectName, projectDesc);
+		String dataSource = dataAnalysisAction.createComponent(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, RandomUtil.randomUUID(), 0, 0);
+		String script = dataAnalysisAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
+		dataAnalysisAction.linkPoint(driver, 0, 1);
+
+		logger.info("dataSource:{}, script:{}", dataSource, script);
+
+		Map<String, Object> hdfsMap = new HashMap<String, Object>();
+		hdfsMap.put(ComponentInfoConstant.HDFS_PATH, "/project/workspace");
+		dataAnalysisAction.editCompoment(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, dataSource, hdfsMap);
+
 		Map<String, Object> scriptMap = new HashMap<String, Object>();
 		scriptMap.put(ComponentInfoConstant.SCRIPT_TYPE, ComponentInfoConstant.ScriptTypeEnum.DATA_EXTRACT);
 		dataAnalysisAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);

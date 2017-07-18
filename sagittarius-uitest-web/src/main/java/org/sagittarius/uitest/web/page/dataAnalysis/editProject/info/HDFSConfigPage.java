@@ -6,7 +6,7 @@ import org.sagittarius.uitest.util.PageUI;
 
 public class HDFSConfigPage implements PageUI{
 	
-	@FindBy(xpath = "//*[@id=\"innerContainer\"]/form/div/div[2]/div[5]/div[2]/section/div[2]/input")
+	@FindBy(xpath = "//input[@type='text']")
 	public WebElement hdfsPath;
 
 }

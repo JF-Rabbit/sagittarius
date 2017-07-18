@@ -6,21 +6,24 @@ import org.sagittarius.uitest.util.PageUI;
 
 public class ProjectCanvasPage implements PageUI {
 	
-	@FindBy(xpath = "//*[@id=\"v-2\"]")
+	@FindBy(id = "v-2")
 	public WebElement editBackground;
 	
-	@FindBy(xpath = "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div/div/div[2]/input")
+	@FindBy(xpath = "//input[@type='text']")
 	public WebElement nameInput;
 	
-	@FindBy(xpath = "/html/body/div[3]/div/div[2]/div/div[1]/div[3]/button[2]/span")
+	@FindBy(xpath = "//span[text()='取 消']")
+	public WebElement cancelBtn;
+	
+	@FindBy(xpath = "//span[text()='确 定']")
 	public WebElement confirmBtn;
 	
-	@FindBy(xpath = "//*[@id=\"innerContainer\"]/form/div/div[1]/span[1]/i")
+	@FindBy(className = "fa-reply")
 	public WebElement backBtn;
 	
-	@FindBy(xpath = "//*[@id=\"innerContainer\"]/form/div/div[1]/span[3]/i")
+	@FindBy(className = "fa-floppy-o")
 	public WebElement saveBtn;
 	
-	@FindBy(xpath = "//*[@id=\"innerContainer\"]/form/div/div[1]/span[2]/i")
+	@FindBy(className = "fa-play")
 	public WebElement runBtn;
 }

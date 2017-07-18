@@ -21,6 +21,7 @@ import org.sagittarius.uitest.web.page.dataAnalysis.editProject.component.Compon
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant.ScriptTypeEnum;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.HDFSConfigPage;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.KmxTimeSeriesConfigPage;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ScriptConfigPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,18 +98,34 @@ public class DataAnalysisAction {
 		RobotUtil.dragToLocation(startX, startY, endX, endY);
 	}
 
-	public void editCompoment(WebDriver driver, ComponentEnum componentEnum, String componmentName, Map<String, Object> componmentInfo) {
+	public void editCompoment(WebDriver driver, ComponentEnum componentEnum, String componmentName, Map<String, Object> componmentInfo) throws AWTException {
 		List<WebElement> list = driver.findElements(By.tagName("tspan"));
 		for (WebElement element : list) {
 			if (element.getText().endsWith(componmentName)) {
 				element.click();
+				Delay.sleep(1000);
 				break;
 			}
 		}
 
 		switch (componentEnum) {
 		case KMX_TIMESERIES_DATASOURC:
-			// TODO
+			KmxTimeSeriesConfigPage kmxTimeSeriesConfigPage = new KmxTimeSeriesConfigPage();
+			PageInitUtil.initPages(driver, kmxTimeSeriesConfigPage);
+			kmxTimeSeriesConfigPage.fieldEditBtn.click();
+			Delay.sleep(1000);
+			RobotUtil.pressESC();
+			Delay.sleep(1000);
+			kmxTimeSeriesConfigPage.previewBtn.click();
+			Delay.sleep(5000);
+			kmxTimeSeriesConfigPage.queryConditionEditBtn.click();
+			Delay.sleep(1000);
+			RobotUtil.pressESC();
+			Delay.sleep(1000);
+			kmxTimeSeriesConfigPage.groupEditBtn.click();
+			Delay.sleep(1000);
+			RobotUtil.pressESC();
+			Delay.sleep(1000);
 			break;
 		case HDFS_DATASOURC:
 			HDFSConfigPage hdfsConfigPage = new HDFSConfigPage();

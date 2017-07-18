@@ -6,16 +6,16 @@ import org.sagittarius.uitest.util.PageUI;
 
 public class ScriptConfigPage implements PageUI {
 	
-	@FindBy(xpath = "//*[@id=\"innerContainer\"]/form/div/div[2]/div[5]/div[2]/section/div/div[1]/div/div/div/div")
+	@FindBy(xpath = "//div[text()='请选择']")
 	public WebElement secletScriptBtn;
 	
-	@FindBy(xpath = "/html/body/div[4]/div/div/div/ul/li[1]")
+	@FindBy(xpath = "//ul/li[text()='数据抽取']")
 	public WebElement dataExtract;
-	@FindBy(xpath = "/html/body/div[4]/div/div/div/ul/li[2]")
+	@FindBy(xpath = "//ul/li[text()='数据预处理']")
 	public WebElement dataPretreatment;
-	@FindBy(xpath = "/html/body/div[4]/div/div/div/ul/li[3]")
+	@FindBy(xpath = "//ul/li[text()='模型训练']")
 	public WebElement dataTrain;
-	@FindBy(xpath = "/html/body/div[4]/div/div/div/ul/li[4]")
+	@FindBy(xpath = "//ul/li[text()='模型评分']")
 	public WebElement dataGrade;
 
 }

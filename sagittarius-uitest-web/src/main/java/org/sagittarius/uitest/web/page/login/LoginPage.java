@@ -6,11 +6,11 @@ import org.sagittarius.uitest.util.PageUI;
 
 public class LoginPage implements PageUI {
 
-	@FindBy(xpath = "//*[@id=\"username\"]")
+	@FindBy(id = "username")
 	public WebElement usernameInput;
-	@FindBy(xpath = "//*[@id=\"password\"]")
+	@FindBy(id = "password")
 	public WebElement passwordInput;
-	@FindBy(xpath = "//*[@id=\"fm1\"]/section[4]/input[4]")
+	@FindBy(xpath = "//input[@value='登录']")
 	public WebElement loginBtn;
 
 }
