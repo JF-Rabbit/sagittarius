@@ -1,4 +1,4 @@
-package org.sagittarius.uitest.web.page.dataAnalysis;
+package org.sagittarius.uitest.web.page.dataAnalysis.editProject.info;
 
 public interface ComponentInfoConstant {
 

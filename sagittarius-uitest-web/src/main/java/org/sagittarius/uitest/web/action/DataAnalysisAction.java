@@ -13,14 +13,15 @@ import org.sagittarius.common.robot.RobotUtil;
 import org.sagittarius.uitest.util.PageInitUtil;
 import org.sagittarius.uitest.util.web.WebElementUtil;
 import org.sagittarius.uitest.util.web.js.JsUtil;
-import org.sagittarius.uitest.web.page.dataAnalysis.ComponentEnum;
-import org.sagittarius.uitest.web.page.dataAnalysis.ComponentInfoConstant;
-import org.sagittarius.uitest.web.page.dataAnalysis.ComponentInfoConstant.ScriptTypeEnum;
 import org.sagittarius.uitest.web.page.dataAnalysis.CreateProjectInfoPage;
-import org.sagittarius.uitest.web.page.dataAnalysis.CreateProjectPage;
 import org.sagittarius.uitest.web.page.dataAnalysis.DataAnalysisPage;
-import org.sagittarius.uitest.web.page.dataAnalysis.HDFSInfoPage;
-import org.sagittarius.uitest.web.page.dataAnalysis.ScriptInfoPage;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.ProjectCanvasPage;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.component.ComponentEnum;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.component.ComponentPage;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant.ScriptTypeEnum;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.HDFSInfoPage;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ScriptInfoPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -63,17 +64,17 @@ public class DataAnalysisAction {
 		int startX = getX(driver, componentEnum.getElement(driver));
 		int startY = getY(driver, componentEnum.getElement(driver));
 
-		CreateProjectPage createProjectPage = new CreateProjectPage();
-		PageInitUtil.initPages(driver, createProjectPage);
-		int[] coordinate = WebElementUtil.getElementCenter(createProjectPage.editBackground);
+		ProjectCanvasPage projectCanvasPage = new ProjectCanvasPage();
+		PageInitUtil.initPages(driver, projectCanvasPage);
+		int[] coordinate = WebElementUtil.getElementCenter(projectCanvasPage.editBackground);
 		int endX = coordinate[0] + multipleX * EXCURSION_UTIL;
 		int endY = coordinate[1] + multipleY * EXCURSION_UTIL;
 		logger.info("startX:{}, startY:{}, endX:{}, endY:{}", startX, startY, endX, endY);
 		RobotUtil.dragToLocation(startX, startY, endX, endY);
 		Delay.sleep(1000);
-		createProjectPage.nameInput.clear();
-		createProjectPage.nameInput.sendKeys(projectName);
-		createProjectPage.confirmBtn.click();
+		projectCanvasPage.nameInput.clear();
+		projectCanvasPage.nameInput.sendKeys(projectName);
+		projectCanvasPage.confirmBtn.click();
 		return projectName;
 	}
 
@@ -146,26 +147,27 @@ public class DataAnalysisAction {
 	}
 
 	public void clickSaveBtn(WebDriver driver) {
-		CreateProjectPage createProjectPage = new CreateProjectPage();
-		PageInitUtil.initPages(driver, createProjectPage);
-		createProjectPage.saveBtn.click();
+		ProjectCanvasPage projectCanvasPage = new ProjectCanvasPage();
+		PageInitUtil.initPages(driver, projectCanvasPage);
+		projectCanvasPage.saveBtn.click();
 	}
 
 	@Deprecated
 	public void createComponent1(WebDriver driver) throws InterruptedException {
-		CreateProjectPage createProjectPage = new CreateProjectPage();
-		PageInitUtil.initPages(driver, createProjectPage);
-		int[] coordinate = WebElementUtil.getElementCenter(createProjectPage.editBackground);
+		ProjectCanvasPage projectCanvasPage = new ProjectCanvasPage();
+		ComponentPage componentPage = new ComponentPage();
+		PageInitUtil.initPages(driver, projectCanvasPage, componentPage);
+		int[] coordinate = WebElementUtil.getElementCenter(projectCanvasPage.editBackground);
 		logger.info("x:{}, y:{}", coordinate[0], coordinate[1]);
-		logger.info("x:{}, y:{}", createProjectPage.hdfsDataSourc.getLocation().x, createProjectPage.hdfsDataSourc.getLocation().y);
+		logger.info("x:{}, y:{}", componentPage.hdfsDataSourc.getLocation().x, componentPage.hdfsDataSourc.getLocation().y);
 		Actions action = new Actions(driver);
-		// action.dragAndDropBy(createProjectPage.hdfsDataSourc, coordinate[0],
+		// action.dragAndDropBy(projectCanvasPage.hdfsDataSourc, coordinate[0],
 		// coordinate[1]).perform();
 
-		action.dragAndDrop(createProjectPage.hdfsDataSourc, createProjectPage.hdfsDataSourc).perform();
+		action.dragAndDrop(componentPage.hdfsDataSourc, componentPage.hdfsDataSourc).perform();
 		Delay.suspend();
-		// action.clickAndHold(createProjectPage.hdfsDataSourc);
-		// action.moveToElement(createProjectPage.hdfsDataSourc, coordinate[0],
+		// action.clickAndHold(projectCanvasPage.hdfsDataSourc);
+		// action.moveToElement(projectCanvasPage.hdfsDataSourc, coordinate[0],
 		// coordinate[1]);
 		// action.release();
 		// action.perform();

@@ -13,8 +13,8 @@ import org.sagittarius.common.random.RandomUtil;
 import org.sagittarius.uitest.WebTest;
 import org.sagittarius.uitest.web.action.DataAnalysisAction;
 import org.sagittarius.uitest.web.action.LoginAction;
-import org.sagittarius.uitest.web.page.dataAnalysis.ComponentEnum;
-import org.sagittarius.uitest.web.page.dataAnalysis.ComponentInfoConstant;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.component.ComponentEnum;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
