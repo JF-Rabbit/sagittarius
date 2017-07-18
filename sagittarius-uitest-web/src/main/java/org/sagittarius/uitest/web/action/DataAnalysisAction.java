@@ -20,8 +20,8 @@ import org.sagittarius.uitest.web.page.dataAnalysis.editProject.component.Compon
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.component.ComponentPage;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant.ScriptTypeEnum;
-import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.HDFSInfoPage;
-import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ScriptInfoPage;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.HDFSConfigPage;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ScriptConfigPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -111,34 +111,34 @@ public class DataAnalysisAction {
 			// TODO
 			break;
 		case HDFS_DATASOURC:
-			HDFSInfoPage hdfsInfoPage = new HDFSInfoPage();
-			PageInitUtil.initPages(driver, hdfsInfoPage);
-			hdfsInfoPage.hdfsPath.clear();
-			hdfsInfoPage.hdfsPath.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstant.HDFS_PATH)));
+			HDFSConfigPage hdfsConfigPage = new HDFSConfigPage();
+			PageInitUtil.initPages(driver, hdfsConfigPage);
+			hdfsConfigPage.hdfsPath.clear();
+			hdfsConfigPage.hdfsPath.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstant.HDFS_PATH)));
 			break;
 		case KMX_OBJECT_DATASOURC:
 			// TODO
 			break;
 		case SCRIPT:
-			ScriptInfoPage scriptInfoPage = new ScriptInfoPage();
-			PageInitUtil.initPages(driver, scriptInfoPage);
-			scriptInfoPage.secletScriptBtn.click();
+			ScriptConfigPage scriptConfigPage = new ScriptConfigPage();
+			PageInitUtil.initPages(driver, scriptConfigPage);
+			scriptConfigPage.secletScriptBtn.click();
 			Delay.sleep(500);
 			ComponentInfoConstant.ScriptTypeEnum scriptType = (ScriptTypeEnum) componmentInfo.get(ComponentInfoConstant.SCRIPT_TYPE);
 			switch (scriptType) {
 			case DATA_EXTRACT:
-				scriptInfoPage.dataExtract.click();
+				scriptConfigPage.dataExtract.click();
 				break;
 			case DATA_PRETREATMENT:
-				scriptInfoPage.dataPretreatment.click();
+				scriptConfigPage.dataPretreatment.click();
 				// TODO
 				break;
 			case DATA_TRAIN:
-				scriptInfoPage.dataTrain.click();
+				scriptConfigPage.dataTrain.click();
 				// TODO
 				break;
 			case DATA_GRADE:
-				scriptInfoPage.dataGrade.click();
+				scriptConfigPage.dataGrade.click();
 				// TODO
 				break;
 			}
