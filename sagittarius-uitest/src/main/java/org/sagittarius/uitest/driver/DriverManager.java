@@ -38,6 +38,8 @@ public class DriverManager {
 	private static final String DRIVER_KEY = "driver.key";
 	private static final String DRIVER_LOCATION = "driver.path";
 	private static final String REMOTE_HUB = "remote.hub";
+	
+	public static final int DEFAULT_FIND_ELEMENT_TIMEOUT = 3;
 
 	public enum DriverType {
 		LOCAL_CHROME, REMOTE_CHROME
@@ -128,7 +130,7 @@ public class DriverManager {
 		}
 
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(DEFAULT_FIND_ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 
 		return driver;
 	}
