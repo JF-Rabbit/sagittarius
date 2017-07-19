@@ -19,9 +19,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginAction {
 	
+	private String getCurrentEnv() throws IOException {
+		Properties properties = PropertiesUtil.load(ConfigConstant.CONFIG_FILE_PATH);
+		return properties.getProperty(ConfigConstant.ENV);
+	}
+	
 	private String getTargetURL() throws IOException{
 		Properties properties = PropertiesUtil.load(ConfigConstant.CONFIG_FILE_PATH);
-		return properties.getProperty(ConfigConstant.URL);
+		return properties.getProperty(getCurrentEnv() + ConfigConstant.URL);
 	}
 
 	public void login(WebDriver driver, String username, String password) throws IOException {
@@ -38,8 +43,8 @@ public class LoginAction {
 		LoginPage loginPage = new LoginPage();
 		PageElementUtil.initPages(driver, loginPage);
 		Properties properties = PropertiesUtil.load(ConfigConstant.CONFIG_FILE_PATH);
-		loginPage.usernameInput.sendKeys(properties.getProperty(ConfigConstant.USERNAME));
-		loginPage.passwordInput.sendKeys(properties.getProperty(ConfigConstant.PASSWORD));
+		loginPage.usernameInput.sendKeys(properties.getProperty(getCurrentEnv() + ConfigConstant.USERNAME));
+		loginPage.passwordInput.sendKeys(properties.getProperty(getCurrentEnv() + ConfigConstant.PASSWORD));
 		loginPage.loginBtn.click();
 	}
 	
