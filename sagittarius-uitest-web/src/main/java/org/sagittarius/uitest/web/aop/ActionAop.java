@@ -17,7 +17,7 @@ public class ActionAop {
 		Object obj = null;
 		try {
 			obj = p.proceed();
-			// TODO
+			// TODO handle result
 			return obj;
 		} catch (ManualConfirmException e) {
 			// TODO set manual status
