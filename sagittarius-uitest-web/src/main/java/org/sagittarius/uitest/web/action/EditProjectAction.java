@@ -99,20 +99,22 @@ public class EditProjectAction {
 			editKmxTimeSeriesField(driver, componmentInfo, kmxTimeSeriesConfigPage);
 
 			// kmxTimeSeriesConfigPage.previewBtn.click();
-			// TODO
+			// TODO 预览按钮
 
 			editKmxTimeSeriesQueryCondition(driver, componmentInfo, kmxTimeSeriesConfigPage, kmxTimeSeriesQueryConditionEditPage);
 
-			// kmxTimeSeriesConfigPage.groupEditBtn.click();
-			// TODO
+			editGroup(driver, componmentInfo, kmxTimeSeriesConfigPage);
+			
 			break;
 		case HDFS_DATASOURC:
 			HDFSConfigPage hdfsConfigPage = new HDFSConfigPage();
 			PageElementUtil.initPages(driver, hdfsConfigPage);
+			
 			editHDFSPath(componmentInfo, hdfsConfigPage);
+			
 			break;
 		case KMX_OBJECT_DATASOURC:
-			// TODO
+			// TODO 对象数据源
 			break;
 		case SCRIPT:
 			ScriptConfigPage scriptConfigPage = new ScriptConfigPage();
@@ -120,7 +122,9 @@ public class EditProjectAction {
 			scriptConfigPage.secletScriptBtn.click();
 			Delay.sleep(500);
 			ComponentInfoConstant.ScriptTypeEnum scriptType = (ScriptTypeEnum) componmentInfo.get(ComponentInfoConstant.SCRIPT_TYPE);
+			
 			selectScriptType(scriptConfigPage, scriptType);
+			
 			break;
 		}
 	}
@@ -165,7 +169,7 @@ public class EditProjectAction {
 					.equals(ComponentInfoConstant.TRUE)) {
 				kmxTimeSeriesQueryConditionEditPage.staticTimeRangeSwitch.click();
 				Delay.sleep(500);
-				// TODO
+				// TODO 固定时间范围 
 			}
 
 			if (JudgeUtil.isNotNullStr(String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_TIME_START)))) {
@@ -191,7 +195,7 @@ public class EditProjectAction {
 				Set<String> keys = map.keySet();
 				
 				for(String key :keys){
-					kmxTimeSeriesQueryConditionEditPage.idSelect.get(index).click();
+					kmxTimeSeriesQueryConditionEditPage.multiSelectDiv.get(index).click();
 					Delay.sleep(500);
 
 					WebElementUtil.clickOneDisplayedElementofList(driver.findElements(By.xpath("//li[contains(text(), '" + key + "')]")));
@@ -212,6 +216,18 @@ public class EditProjectAction {
 			Delay.sleep(500);
 		}
 	}
+	
+	private void editGroup(WebDriver driver, Map<String, Object> componmentInfo, KmxTimeSeriesConfigPage kmxTimeSeriesConfigPage) {
+		if (JudgeUtil.isNotNullStr(ComponentInfoConstant.GROUP_VALUE)) {
+			kmxTimeSeriesConfigPage.groupEditBtn.click();
+			Delay.sleep(500);
+			WebElementUtil.clickOneDisplayedElementofList(driver.findElements(By.className("ant-select-selection__rendered")));
+			Delay.sleep(500);
+			driver.findElement(By.xpath("//li[text()='" + String.valueOf(componmentInfo.get(ComponentInfoConstant.GROUP_VALUE)) + "']")).click();
+			WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesConfigPage.allConfirmBtn);
+			Delay.sleep(500);
+		}
+	}
 
 	private void editHDFSPath(Map<String, Object> componmentInfo, HDFSConfigPage hdfsConfigPage) {
 		PageElementUtil.clearAndSendKey(hdfsConfigPage.hdfsPath, String.valueOf(componmentInfo.get(ComponentInfoConstant.HDFS_PATH)));
@@ -224,15 +240,15 @@ public class EditProjectAction {
 			break;
 		case DATA_PRETREATMENT:
 			scriptConfigPage.dataPretreatment.click();
-			// TODO
+			// TODO 脚本预处理
 			break;
 		case DATA_TRAIN:
 			scriptConfigPage.dataTrain.click();
-			// TODO
+			// TODO 模型训练
 			break;
 		case DATA_GRADE:
 			scriptConfigPage.dataGrade.click();
-			// TODO
+			// TODO 模型评分
 			break;
 		}
 	}

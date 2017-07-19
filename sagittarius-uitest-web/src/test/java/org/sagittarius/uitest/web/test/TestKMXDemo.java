@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class TestKMXDemo extends WebTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(TestKMXDemo.class);
-
+	
 	@Resource
 	LoginAction loginAction;
 
@@ -111,6 +111,7 @@ public class TestKMXDemo extends WebTest {
 	 */
 	@Test
 	public void create_KMX_T$Script() throws IOException {
+		
 		loginAction.login(driver);
 
 		createProjectInfoAction.clickCreateProject(driver);
@@ -130,6 +131,7 @@ public class TestKMXDemo extends WebTest {
 		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_TIME_END, endStart);
 		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_ID, getIDInfo());
 		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_OTHER, other);
+		kmxTimeseriesMap.put(ComponentInfoConstant.GROUP_VALUE, ComponentInfoConstant.GROUP_YEAR_MONTH_DAY);
 		editProjectAction.editCompoment(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, dataSource, kmxTimeseriesMap);
 
 		Map<String, Object> scriptMap = new HashMap<String, Object>();

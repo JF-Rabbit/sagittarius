@@ -21,9 +21,6 @@ public class KmxTimeSeriesQueryConditionEditPage extends CommonPage {
 	@FindBy(className = "ant-calendar-input ")
 	public WebElement timeInput;
 	
-	@FindAll(@FindBy(xpath = "//div[text()='请选择']"))
-	public List<WebElement> idSelect;
-	
 	@FindAll(@FindBy(xpath = "//input[@placeholder='请输入']"))
 	public List<WebElement> idInput;
 	

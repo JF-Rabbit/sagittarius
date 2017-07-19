@@ -7,7 +7,6 @@ public interface ComponentInfoConstant {
 
 	String HDFS_PATH = "hdfs_path";
 	
-	
 	String FIELD_TABLE_NAME = "field_table_name";
 	String FIELD_ARRAY = "field_array";
 	
@@ -17,6 +16,11 @@ public interface ComponentInfoConstant {
 	String QUERY_CONDION_TIME_END = "query_condition_time_end";
 	String QUERY_CONDION_ID = "query_condition_id";
 	String QUERY_CONDION_OTHER = "query_condition_other";
+	
+	String GROUP_VALUE = "group_value";
+	String GROUP_YEAR_MONTH_DAY = "Year-Month-Day";
+	String GROUP_YEAR_MONTH = "Year-Month";
+	String GROUP_YEAR = "Year";
 	
 	String SCRIPT_TYPE = "script_type";
 

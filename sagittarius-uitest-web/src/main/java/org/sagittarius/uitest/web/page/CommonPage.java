@@ -16,4 +16,10 @@ public class CommonPage implements PageUI {
 
 	@FindAll(@FindBy(xpath = "//span[text()='确 定']"))
 	public List<WebElement> allConfirmBtn;
+	
+	@FindBy(xpath = "//div[text()='请选择']")
+	public WebElement singleSelectDiv;
+	
+	@FindAll(@FindBy(xpath = "//div[text()='请选择']"))
+	public List<WebElement> multiSelectDiv;
 }

@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = CommonConstant.SPRING_PATH)
 public class WebTest extends AbstractJUnit4SpringContextTests {
-
+	
 	@Resource
 	DriverManager manager;
 	public WebDriver driver;
