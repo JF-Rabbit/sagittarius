@@ -15,7 +15,7 @@ public interface ComponentInfoConstant {
 	String QUERY_CONDION_IS_STATIC_TIMEQUERY_CONDION = "query_condition_is_static_timequery_condition";
 	String QUERY_CONDION_TIME_START = "query_condition_time_start";
 	String QUERY_CONDION_TIME_END = "query_condition_time_end";
-	String QUERY_CONDION_ID_VALUE = "query_condition_id_value";
+	String QUERY_CONDION_ID = "query_condition_id";
 	String QUERY_CONDION_OTHER = "query_condition_other";
 	
 	String SCRIPT_TYPE = "script_type";

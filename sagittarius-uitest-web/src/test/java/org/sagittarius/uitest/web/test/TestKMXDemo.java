@@ -44,19 +44,19 @@ public class TestKMXDemo extends WebTest {
 	@Resource
 	CreateProjectInfoAction createProjectInfoAction;
 
-	// @Test
+	//@Test
 	public void login() throws IOException {
 		loginAction.login(driver);
-		createProjectInfoAction.clickCreateProject(driver);
-		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
+//		createProjectInfoAction.clickCreateProject(driver);
+//		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
 		Delay.suspend();
 	}
 
 	@Resource
 	EditProjectAction editProjectAction;
 
-	String projectName = "selenium_input" + "_" + RandomUtil.randomUUID();
-	String projectDesc = "selenium_input";
+	String projectName = "selenium_script" + "_" + RandomUtil.randomUUID();
+	String projectDesc = "selenium_script";
 
 	String hdfsPath = "/project/workspace";
 
@@ -89,11 +89,18 @@ public class TestKMXDemo extends WebTest {
 		Delay.suspend();
 	}
 
-	String tableName = "windfarm_eXOzq_001";
-	String[] fieldArray = new String[] { "turbineId", "windSpeed", "powerActive" };
+	String tableName = "fg_7s_1dot5mw_freqcon_vensys_air_cooling_1";
+	String[] fieldArray = new String[] {"type", "fid", "tid", "wnac_wspd_instmag_f" }; // 
 	String timeStart = "2016-06-18 20:00:00";
 	String endStart = "2016-06-18 20:00:00";
-	String idValue = "idValue";
+	private Map<String, String> getIDInfo() {
+		Map<String, String> map = new HashMap<>();
+		
+		map.put("fid", "111");
+		map.put("tid", "222");
+		
+		return map;
+	}
 	String other = "other";
 
 	/**
@@ -121,14 +128,14 @@ public class TestKMXDemo extends WebTest {
 		kmxTimeseriesMap.put(ComponentInfoConstant.HAVE_QUERY_CONDION, ComponentInfoConstant.TRUE);
 		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_TIME_START, timeStart);
 		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_TIME_END, endStart);
-		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_ID_VALUE, idValue);
+		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_ID, getIDInfo());
 		kmxTimeseriesMap.put(ComponentInfoConstant.QUERY_CONDION_OTHER, other);
 		editProjectAction.editCompoment(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, dataSource, kmxTimeseriesMap);
 
-//		Map<String, Object> scriptMap = new HashMap<String, Object>();
-//		scriptMap.put(ComponentInfoConstant.SCRIPT_TYPE, ComponentInfoConstant.ScriptTypeEnum.DATA_EXTRACT);
-//		editProjectAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);
-//		editProjectAction.clickSaveBtn(driver);
+		Map<String, Object> scriptMap = new HashMap<String, Object>();
+		scriptMap.put(ComponentInfoConstant.SCRIPT_TYPE, ComponentInfoConstant.ScriptTypeEnum.DATA_EXTRACT);
+		editProjectAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);
+		editProjectAction.clickSaveBtn(driver);
 		Delay.suspend();
 	}
 }

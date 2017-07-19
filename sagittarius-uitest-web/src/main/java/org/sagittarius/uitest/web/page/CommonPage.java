@@ -1,6 +1,9 @@
 package org.sagittarius.uitest.web.page;
 
+import java.util.List;
+
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.sagittarius.uitest.util.PageUI;
 
@@ -9,5 +12,8 @@ public class CommonPage implements PageUI {
 	public WebElement cancelBtn;
 
 	@FindBy(xpath = "//span[text()='确 定']")
-	public WebElement confirmBtn;
+	public WebElement uniqeConfirmBtn;
+
+	@FindAll(@FindBy(xpath = "//span[text()='确 定']"))
+	public List<WebElement> allConfirmBtn;
 }

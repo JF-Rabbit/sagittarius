@@ -2,9 +2,11 @@ package org.sagittarius.uitest.web.action;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.sagittarius.common.Delay;
 import org.sagittarius.common.judge.JudgeUtil;
@@ -26,11 +28,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EditProjectAction {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(EditProjectAction.class);
 
 	public static final int EXCURSION_UTIL = 100;
-	
+
 	/**
 	 * 
 	 * @param driver
@@ -38,7 +40,7 @@ public class EditProjectAction {
 	 * @param multipleX
 	 *            x轴偏移倍数
 	 * @param multipleY
-	 *            y轴偏移倍数 @
+	 *            y轴偏移倍数 
 	 */
 	public String createComponent(WebDriver driver, ComponentEnum componentEnum, String projectName, int multipleX, int multipleY) {
 		Delay.sleep(1000);
@@ -54,8 +56,7 @@ public class EditProjectAction {
 		logger.info("startX:{}, startY:{}, endX:{}, endY:{}", startX, startY, endX, endY);
 		RobotUtil.dragToLocation(startX, startY, endX, endY);
 		Delay.sleep(1000);
-		projectCanvasPage.nameInput.clear();
-		projectCanvasPage.nameInput.sendKeys(projectName);
+		PageElementUtil.clearAndSendKey(projectCanvasPage.nameInput, projectName);
 		projectCanvasPage.confirmBtn.click();
 		return projectName;
 	}
@@ -108,8 +109,7 @@ public class EditProjectAction {
 		case HDFS_DATASOURC:
 			HDFSConfigPage hdfsConfigPage = new HDFSConfigPage();
 			PageElementUtil.initPages(driver, hdfsConfigPage);
-			hdfsConfigPage.hdfsPath.clear();
-			hdfsConfigPage.hdfsPath.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstant.HDFS_PATH)));
+			editHDFSPath(componmentInfo, hdfsConfigPage);
 			break;
 		case KMX_OBJECT_DATASOURC:
 			// TODO
@@ -136,14 +136,24 @@ public class EditProjectAction {
 		WebElement field = null;
 		String[] fieldArray = (String[]) componmentInfo.get(ComponentInfoConstant.FIELD_ARRAY);
 		for (String fieldName : fieldArray) {
-			field = driver.findElement(By.xpath("//span[@title='" + fieldName + "']/preceding-sibling::label/span/input"));
+			try {
+				field = driver.findElement(By.xpath("//span[@title='" + fieldName + "']/preceding-sibling::label/span/input"));
+				//field = WebElementUtil.findElementByWait(driver, 10, FindWebElementEnum.X_PATH, "//span[@title='" + fieldName + "']/preceding-sibling::label/span/input");
+			} catch (WebDriverException e) {
+				List<WebElement> eMenus = driver.findElements(By.xpath("//span[@ref='eMenu']"));
+				 eMenus.get(3).click();
+				//WebElementUtil.clickDisableElement(driver, eMenus.get(3));
+				driver.findElement(By.xpath("//input[@placeholder='字段查询']")).sendKeys(fieldName);
+				field = driver.findElement(By.xpath("//span[@title='" + fieldName + "']/preceding-sibling::label/span/input"));
+			}
 			field.click();
 		}
 		Delay.sleep(500);
-		WebElementUtil.clickDisableElement(driver, kmxTimeSeriesConfigPage.confirmBtn);
+		WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesConfigPage.allConfirmBtn);
 		Delay.sleep(500);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void editKmxTimeSeriesQueryCondition(WebDriver driver, Map<String, Object> componmentInfo,
 			KmxTimeSeriesConfigPage kmxTimeSeriesConfigPage, KmxTimeSeriesQueryConditionEditPage kmxTimeSeriesQueryConditionEditPage) {
 		if (String.valueOf(componmentInfo.get(ComponentInfoConstant.HAVE_QUERY_CONDION)).equals(ComponentInfoConstant.TRUE)) {
@@ -174,12 +184,23 @@ public class EditProjectAction {
 				Delay.sleep(500);
 			}
 
-			if (JudgeUtil.isNotNullStr(String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_ID_VALUE)))) {
-				kmxTimeSeriesQueryConditionEditPage.idSelect.click();
-				Delay.sleep(500);
-				kmxTimeSeriesQueryConditionEditPage.dropDownOne.click();
-				kmxTimeSeriesQueryConditionEditPage.idInput
-						.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_ID_VALUE)));
+			if ((componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_ID) != null) && ((Map<String, String>)(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_ID))).size() != 0) {
+				Map<String, String> map = (Map<String, String>)(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_ID));
+				
+				int index = 0;
+				Set<String> keys = map.keySet();
+				
+				for(String key :keys){
+					kmxTimeSeriesQueryConditionEditPage.idSelect.get(index).click();
+					Delay.sleep(500);
+
+					WebElementUtil.clickOneDisplayedElementofList(driver.findElements(By.xpath("//li[contains(text(), '" + key + "')]")));
+					Delay.sleep(500);
+					
+					kmxTimeSeriesQueryConditionEditPage.idInput.get(index).sendKeys(map.get(key));
+					Delay.sleep(500);
+					index++;
+				}
 			}
 
 			if (JudgeUtil.isNotNullStr(String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_OTHER)))) {
@@ -187,9 +208,13 @@ public class EditProjectAction {
 						.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_OTHER)));
 			}
 
-			WebElementUtil.clickDisableElement(driver, kmxTimeSeriesQueryConditionEditPage.confirmBtn);
+			WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesQueryConditionEditPage.allConfirmBtn);
 			Delay.sleep(500);
 		}
+	}
+
+	private void editHDFSPath(Map<String, Object> componmentInfo, HDFSConfigPage hdfsConfigPage) {
+		PageElementUtil.clearAndSendKey(hdfsConfigPage.hdfsPath, String.valueOf(componmentInfo.get(ComponentInfoConstant.HDFS_PATH)));
 	}
 
 	private void selectScriptType(ScriptConfigPage scriptConfigPage, ComponentInfoConstant.ScriptTypeEnum scriptType) {

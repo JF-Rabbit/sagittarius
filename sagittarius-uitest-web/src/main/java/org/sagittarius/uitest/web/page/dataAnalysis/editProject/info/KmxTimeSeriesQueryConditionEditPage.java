@@ -1,6 +1,9 @@
 package org.sagittarius.uitest.web.page.dataAnalysis.editProject.info;
 
+import java.util.List;
+
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.sagittarius.uitest.web.page.CommonPage;
 
@@ -18,14 +21,11 @@ public class KmxTimeSeriesQueryConditionEditPage extends CommonPage {
 	@FindBy(className = "ant-calendar-input ")
 	public WebElement timeInput;
 	
-	@FindBy(className = "ant-select-selection__placeholder")
-	public WebElement idSelect;
+	@FindAll(@FindBy(xpath = "//div[text()='请选择']"))
+	public List<WebElement> idSelect;
 	
-	@FindBy(className = "ant-select-dropdown-menu-item")
-	public WebElement dropDownOne;
-	
-	@FindBy(xpath = "//input[@placeholder='请输入']") // XXX 有多个
-	public WebElement idInput;
+	@FindAll(@FindBy(xpath = "//input[@placeholder='请输入']"))
+	public List<WebElement> idInput;
 	
 	@FindBy(tagName = "textarea")
 	public WebElement otherInput;
