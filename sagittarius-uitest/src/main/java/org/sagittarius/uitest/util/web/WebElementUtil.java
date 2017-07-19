@@ -1,5 +1,6 @@
 package org.sagittarius.uitest.util.web;
 
+import java.awt.AWTException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,27 +42,31 @@ public class WebElementUtil {
 		logger.info("screenX:{}, screenY:{}", coordinate[0], coordinate[1] + JsUtil.getActualY(driver));
 		RobotUtil.moveToClick(coordinate[0], coordinate[1] + JsUtil.getActualY(driver));
 	}
-	
+
 	private static final String MULTIPLE_CLICKABLE_ELEMENT = "MULTIPLE_CLICKABLE_ELEMENT";
+	private static final String NO_DISPLAYED_ELEMENT = "NO_DISPLAYED_ELEMENT";
 
 	public static void clickOneDisplayedElementofList(List<WebElement> elementList) {
 		List<WebElement> list = new ArrayList<WebElement>();
-		for (WebElement element : elementList) {
-			if (element.isDisplayed()) {
-				list.add(element);
+		for (int i = 0; i < elementList.size(); i++) {
+			logger.info("index:{}, isDisplayed:{}, element:{}", i, elementList.get(i).isDisplayed(), elementList.get(i));
+			if (elementList.get(i).isDisplayed()) {
+				list.add(elementList.get(i));
 			}
 		}
-		
-		if (list.size() == 1) {
+
+		if (list.size() == 0) {
+			throw new IllegalArgumentException(NO_DISPLAYED_ELEMENT);
+		} else if (list.size() == 1) {
 			list.get(0).click();
 		} else {
 			throw new IllegalArgumentException(MULTIPLE_CLICKABLE_ELEMENT);
 		}
-		
+
 	}
-	
+
 	private static void checkTimeout(int waitSecound) {
-		if(waitSecound <= DriverManager.DEFAULT_FIND_ELEMENT_TIMEOUT) {
+		if (waitSecound <= DriverManager.DEFAULT_FIND_ELEMENT_TIMEOUT) {
 			throw new IllegalArgumentException(MULTIPLE_CLICKABLE_ELEMENT);
 		}
 	}
@@ -69,7 +74,7 @@ public class WebElementUtil {
 	public static WebElement findElementByWait(WebDriver driver, int waitSecound, FindWebElementEnum findType, String findMsg) {
 
 		checkTimeout(waitSecound);
-		
+
 		WebDriverWait wait = new WebDriverWait(driver, waitSecound);
 		return wait.until(new ExpectedCondition<WebElement>() {
 			public WebElement apply(WebDriver driver) {
@@ -99,7 +104,7 @@ public class WebElementUtil {
 	public static List<WebElement> findElementsByWait(WebDriver driver, int waitSecound, FindWebElementEnum findType, String findMsg) {
 
 		checkTimeout(waitSecound);
-		
+
 		WebDriverWait wait = new WebDriverWait(driver, waitSecound);
 		return wait.until(new ExpectedCondition<List<WebElement>>() {
 			public List<WebElement> apply(WebDriver driver) {
@@ -125,6 +130,10 @@ public class WebElementUtil {
 			}
 		});
 	}
-	
+
+	public static void saveCurrentWebPage(String savePath) throws AWTException {
+		RobotUtil.setClipboardData(savePath);
+		RobotUtil.action_CONTROL_S_CONTROL_V_ENTER();
+	}
 
 }
