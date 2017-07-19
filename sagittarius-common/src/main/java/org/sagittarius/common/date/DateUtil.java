@@ -7,6 +7,7 @@ import java.util.Date;
 public class DateUtil {
 
 	public static String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+	public static String YYYY_MM_DD_HH_MM_SS_FILE_TYPE = "yyyy_MM_dd_HH_mm_ss";
 	public static String YYYY_MM_DD = "yyyy-MM-dd";
 	public static String HH_MM_SS = "HH:mm:ss";
 
