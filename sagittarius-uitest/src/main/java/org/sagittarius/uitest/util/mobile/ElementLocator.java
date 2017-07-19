@@ -69,7 +69,7 @@ public class ElementLocator {
 	 *            定位参数
 	 * @return
 	 */
-	public MobileElement locateElement(AppiumDriver<MobileElement> driver, FindMobileElementType findType, String findMsg) {
+	public MobileElement locateElement(AppiumDriver<MobileElement> driver, FindMobileElementEnum findType, String findMsg) {
 		switch (findType) {
 			case ID:
 				return driver.findElementById(findMsg);
@@ -98,7 +98,7 @@ public class ElementLocator {
 	 *            定位参数
 	 * @return
 	 */
-	public List<MobileElement> locateElements(AppiumDriver<MobileElement> driver, FindMobileElementType findType, String findMsg) {
+	public List<MobileElement> locateElements(AppiumDriver<MobileElement> driver, FindMobileElementEnum findType, String findMsg) {
 		switch (findType) {
 			case ID:
 				return driver.findElementsById(findMsg);
@@ -117,7 +117,7 @@ public class ElementLocator {
 		}
 	}
 
-	private String toStringTimeoutParam(FindMobileElementType findType, String findMsg, LoadElementConfirmType loadingType, String expect) {
+	private String toStringTimeoutParam(FindMobileElementEnum findType, String findMsg, LoadElementConfirmEnum loadingType, String expect) {
 		return "findType:" + findType + " findMsg:" + findMsg + " loadingType:" + loadingType + " expect:" + expect;
 	}
 
@@ -139,8 +139,8 @@ public class ElementLocator {
 	 * @throws FindElementTimeoutException
 	 *             超时异常
 	 */
-	public MobileElement loadingElement(AppiumDriver<MobileElement> driver, FindMobileElementType findType, String findMsg,
-			LoadElementConfirmType confirmType, String expect) throws FindElementTimeoutException {
+	public MobileElement loadingElement(AppiumDriver<MobileElement> driver, FindMobileElementEnum findType, String findMsg,
+			LoadElementConfirmEnum confirmType, String expect) throws FindElementTimeoutException {
 
 		logger.info("Loading Element START");
 		Boolean result = false;

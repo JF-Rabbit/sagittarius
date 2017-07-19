@@ -1,6 +1,6 @@
 package org.sagittarius.uitest.util.mobile;
 
-public enum FindMobileElementType {
+public enum FindMobileElementEnum {
 	/** resource-id */
 	ID,
 	/** class */
