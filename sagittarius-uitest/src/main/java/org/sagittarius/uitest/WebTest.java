@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.sagittarius.uitest.driver.DriverManager;
 import org.sagittarius.uitest.exception.DriverInitException;
+import org.sagittarius.uitest.util.PageElementUtil;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -33,6 +34,6 @@ public class WebTest extends AbstractJUnit4SpringContextTests {
 	}
 	
 	public void getSource() {
-		logger.info(driver.getPageSource());
+		PageElementUtil.showPageSource(driver);
 	}
 }
