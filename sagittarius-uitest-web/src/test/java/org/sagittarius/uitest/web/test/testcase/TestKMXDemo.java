@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.junit.Test;
 import org.sagittarius.common.random.RandomUtil;
 import org.sagittarius.uitest.WebTest;
 import org.sagittarius.uitest.web.action.CreateProjectInfoAction;
@@ -20,8 +19,9 @@ import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.object.Obje
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.object.ObjectProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.Test;
 
-public class TestKMXDemo extends WebTest {
+public class TestKMXDemo extends WebTest{
 
 	private static final Logger logger = LoggerFactory.getLogger(TestKMXDemo.class);
 
