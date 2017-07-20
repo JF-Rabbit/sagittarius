@@ -9,7 +9,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 public class AopUtil {
 
 	/** 从ProceedingJoinPoint中获取当前调用的方法 */
-	public Method getMethodFromProceedingJoinPoint(ProceedingJoinPoint p) throws NoSuchMethodException, SecurityException {
+	public static Method getMethodFromProceedingJoinPoint(ProceedingJoinPoint p) throws NoSuchMethodException, SecurityException {
 		Signature sig = p.getSignature();
 		MethodSignature msig = null;
 		if (!(sig instanceof MethodSignature)) {

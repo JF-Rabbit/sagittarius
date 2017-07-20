@@ -10,12 +10,18 @@ public class ScriptConfigPage extends CommonPage {
 	public WebElement secletScriptBtn;
 	
 	@FindBy(xpath = "//ul/li[text()='数据抽取']")
+	
 	public WebElement dataExtract;
 	@FindBy(xpath = "//ul/li[text()='数据预处理']")
+	
 	public WebElement dataPretreatment;
 	@FindBy(xpath = "//ul/li[text()='模型训练']")
 	public WebElement dataTrain;
+
 	@FindBy(xpath = "//ul/li[text()='模型评分']")
 	public WebElement dataGrade;
+	
+	@FindBy(xpath = "//input[@type='file']")
+	public WebElement uploadScriptBtn;
 
 }

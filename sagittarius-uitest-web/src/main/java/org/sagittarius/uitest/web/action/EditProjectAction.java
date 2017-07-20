@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.sagittarius.common.Delay;
+import org.sagittarius.common.annotation.DebugSuspend;
 import org.sagittarius.common.judge.JudgeUtil;
 import org.sagittarius.common.robot.RobotUtil;
 import org.sagittarius.uitest.util.PageElementUtil;
@@ -58,9 +59,10 @@ public class EditProjectAction {
 		int endY = coordinate[1] + multipleY * EXCURSION_UTIL;
 		logger.info("startX:{}, startY:{}, endX:{}, endY:{}", startX, startY, endX, endY);
 		RobotUtil.dragToLocation(startX, startY, endX, endY);
-		Delay.sleep(1000);
+		Delay.sleep(500);
 		PageElementUtil.clearAndSendKey(projectCanvasPage.nameInput, projectName);
 		projectCanvasPage.confirmBtn.click();
+		Delay.sleep(500);
 		return projectName;
 	}
 
@@ -130,9 +132,7 @@ public class EditProjectAction {
 			PageElementUtil.initPages(driver, scriptConfigPage);
 			scriptConfigPage.secletScriptBtn.click();
 			Delay.sleep(500);
-			ComponentInfoConstant.ScriptTypeEnum scriptType = (ScriptTypeEnum) componmentInfo.get(ComponentInfoConstant.SCRIPT_TYPE);
-
-			selectScriptType(scriptConfigPage, scriptType);
+			selectScriptType(scriptConfigPage, componmentInfo);
 
 			break;
 		}
@@ -317,7 +317,9 @@ public class EditProjectAction {
 		}
 	}
 
-	private void selectScriptType(ScriptConfigPage scriptConfigPage, ComponentInfoConstant.ScriptTypeEnum scriptType) {
+	private void selectScriptType(ScriptConfigPage scriptConfigPage, Map<String, Object> componmentInfo) {
+		ComponentInfoConstant.ScriptTypeEnum scriptType = (ScriptTypeEnum) componmentInfo.get(ComponentInfoConstant.SCRIPT_TYPE);
+		
 		switch (scriptType) {
 		case DATA_EXTRACT:
 			scriptConfigPage.dataExtract.click();
@@ -325,6 +327,9 @@ public class EditProjectAction {
 		case DATA_PRETREATMENT:
 			scriptConfigPage.dataPretreatment.click();
 			// TODO 脚本预处理
+			
+			scriptConfigPage.uploadScriptBtn.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstant.SCRIPT_PATH)));
+			
 			break;
 		case DATA_TRAIN:
 			scriptConfigPage.dataTrain.click();
@@ -337,9 +342,11 @@ public class EditProjectAction {
 		}
 	}
 
+	@DebugSuspend
 	public void clickSaveBtn(WebDriver driver) {
 		ProjectCanvasPage projectCanvasPage = new ProjectCanvasPage();
 		PageElementUtil.initPages(driver, projectCanvasPage);
 		projectCanvasPage.saveBtn.click();
+		Delay.sleep(1000);
 	}
 }

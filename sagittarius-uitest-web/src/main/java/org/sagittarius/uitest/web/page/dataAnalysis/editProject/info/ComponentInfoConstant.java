@@ -25,6 +25,7 @@ public interface ComponentInfoConstant {
 	String OBJECT_TYPE_LIST = "object_type_list";
 	
 	String SCRIPT_TYPE = "script_type";
+	String SCRIPT_PATH = "script_path";
 
 	enum ScriptTypeEnum {
 		DATA_EXTRACT, DATA_PRETREATMENT, DATA_TRAIN, DATA_GRADE
