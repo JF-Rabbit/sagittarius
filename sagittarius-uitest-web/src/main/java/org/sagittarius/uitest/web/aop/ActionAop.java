@@ -28,6 +28,11 @@ public class ActionAop implements ConfigConstant, CommonConstant {
 	private static final Logger logger = LoggerFactory.getLogger(ActionAop.class);
 
 	private static final String ACTION_AOP_RULE = "execution(public * org.sagittarius.uitest.web.action..*.*(..))";
+	
+	private static final String ACTION_START = "ACTION_START ";
+	private static final String ACTION_END = "ACTION_END ";
+	private static final String FOO_L = "---------- ";
+	private static final String FOO_R = " ----------";
 
 	private Properties properties;
 
@@ -40,10 +45,12 @@ public class ActionAop implements ConfigConstant, CommonConstant {
 		Object obj = null;
 		Method method = AopUtil.getMethodFromProceedingJoinPoint(p);
 		try {
+			logger.info(FOO_L + ACTION_START + method.getName() + FOO_R);
 			obj = p.proceed();
+			logger.info(FOO_L + ACTION_END + method.getName() + FOO_R);
 			// TODO handle result
 			everyActionDebug();
-			logger.info(method.getName());
+			
 			DebugSuspendResolver.suspend(method);
 			return obj;
 		} catch (ManualConfirmException e) {
