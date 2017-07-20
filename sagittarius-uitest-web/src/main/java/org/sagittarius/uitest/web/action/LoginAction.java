@@ -18,15 +18,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LoginAction {
-	
-	private String getCurrentEnv() throws IOException {
-		Properties properties = PropertiesUtil.load(ConfigConstant.CONFIG_FILE_PATH);
-		return properties.getProperty(ConfigConstant.ENV);
+
+	private String getCurrentEnv() {
+		return PropertiesUtil.getSingleValue(ConfigConstant.CONFIG_FILE_PATH, ConfigConstant.ENV);
 	}
-	
-	private String getTargetURL() throws IOException{
-		Properties properties = PropertiesUtil.load(ConfigConstant.CONFIG_FILE_PATH);
-		return properties.getProperty(getCurrentEnv() + ConfigConstant.URL);
+
+	private String getTargetURL() {
+		return PropertiesUtil.getSingleValue(ConfigConstant.CONFIG_FILE_PATH, getCurrentEnv() + ConfigConstant.URL);
 	}
 
 	public void login(WebDriver driver, String username, String password) throws IOException {
@@ -37,8 +35,8 @@ public class LoginAction {
 		loginPage.passwordInput.sendKeys(password);
 		loginPage.loginBtn.click();
 	}
-	
-	public void login(WebDriver driver) throws IOException {
+
+	public void login(WebDriver driver) {
 		driver.get(getTargetURL());
 		LoginPage loginPage = new LoginPage();
 		PageElementUtil.initPages(driver, loginPage);
@@ -47,36 +45,41 @@ public class LoginAction {
 		loginPage.passwordInput.sendKeys(properties.getProperty(getCurrentEnv() + ConfigConstant.PASSWORD));
 		loginPage.loginBtn.click();
 	}
-	
+
 	public void loadTask(WebDriver driver) {
 		driver.findElement(By.xpath("//*[@id=\"content-layout\"]/div/div/div/a/button/span")).click();
 	}
-	
+
 	public void inputTaskName(WebDriver driver, String taskName) {
-		driver.findElement(By.xpath("//*[@id=\"name\"]")).sendKeys(taskName);;
+		driver.findElement(By.xpath("//*[@id=\"name\"]")).sendKeys(taskName);
+		;
 	}
-	
+
 	@Deprecated
 	public void clickUpload(WebDriver driver) {
-		driver.findElement(By.xpath("//*[@id=\"content-layout\"]/div/div/form/section[1]/div/div[3]/div[2]/div/span/div[1]/span/button")).click();
+		driver.findElement(By.xpath("//*[@id=\"content-layout\"]/div/div/form/section[1]/div/div[3]/div[2]/div/span/div[1]/span/button"))
+				.click();
 	}
-	
+
 	public void sendFile(WebDriver driver, String filePath) {
-		driver.findElement(By.xpath("//*[@id=\"content-layout\"]/div/div/form/section[1]/div/div[3]/div[2]/div/span/div[1]/span/input")).sendKeys(filePath);
+		driver.findElement(By.xpath("//*[@id=\"content-layout\"]/div/div/form/section[1]/div/div[3]/div[2]/div/span/div[1]/span/input"))
+				.sendKeys(filePath);
 	}
-	
+
 	@Deprecated
 	public void setClipboardData(String filePath) {
 		StringSelection ss = new StringSelection(filePath);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
 	}
-	
+
 	@Deprecated
 	public void selectFile(String filePath) throws AWTException, InterruptedException {
-//		if (filePath.endsWith("/")) {
-//			filePath = filePath.replace(Character.toString(filePath.charAt(filePath.length() - 1)), "");
-//		}
-//		System.out.println(filePath);
+		// if (filePath.endsWith("/")) {
+		// filePath =
+		// filePath.replace(Character.toString(filePath.charAt(filePath.length()
+		// - 1)), "");
+		// }
+		// System.out.println(filePath);
 		setClipboardData(filePath);
 		Robot robot = new Robot();
 		robot.keyPress(KeyEvent.VK_CONTROL);
@@ -87,9 +90,9 @@ public class LoginAction {
 		robot.keyRelease(KeyEvent.VK_ENTER);
 		Thread.sleep(1000);
 	}
-	
+
 	public void clickLoadBtn(WebDriver driver) {
 		driver.findElement(By.xpath("//*[@id=\"content-layout\"]/div/div/form/section[2]/button/span")).click();
 	}
-	
+
 }

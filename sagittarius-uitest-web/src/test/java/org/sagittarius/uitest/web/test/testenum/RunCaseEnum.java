@@ -1,7 +1,7 @@
 package org.sagittarius.uitest.web.test.testenum;
 
-import org.sagittarius.uitest.web.test.TestKMXDemo;
-import org.sagittarius.uitest.web.test.TestCRUD;
+import org.sagittarius.uitest.web.test.demo.TestCRUD;
+import org.sagittarius.uitest.web.test.testcase.TestKMXDemo;
 
 public enum RunCaseEnum {
 

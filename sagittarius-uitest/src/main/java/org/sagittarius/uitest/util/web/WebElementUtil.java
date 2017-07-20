@@ -1,6 +1,5 @@
 package org.sagittarius.uitest.util.web;
 
-import java.awt.AWTException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,7 +130,7 @@ public class WebElementUtil {
 		});
 	}
 
-	public static void saveCurrentWebPage(String savePath) throws AWTException {
+	public static void saveCurrentWebPage(String savePath) {
 		RobotUtil.setClipboardData(savePath);
 		RobotUtil.action_CONTROL_S_CONTROL_V_ENTER();
 	}

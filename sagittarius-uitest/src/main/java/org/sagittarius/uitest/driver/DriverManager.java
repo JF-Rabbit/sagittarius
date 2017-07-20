@@ -1,6 +1,5 @@
 package org.sagittarius.uitest.driver;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -38,7 +37,7 @@ public class DriverManager {
 	private static final String DRIVER_KEY = "driver.key";
 	private static final String DRIVER_LOCATION = "driver.path";
 	private static final String REMOTE_HUB = "remote.hub";
-	
+
 	public static final int DEFAULT_FIND_ELEMENT_TIMEOUT = 3;
 
 	public enum DriverType {
@@ -49,7 +48,7 @@ public class DriverManager {
 		Properties properties = new Properties();
 		try {
 			properties = PropertiesUtil.load(SELENIUM_PROPERTIES_PATH);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new DriverInitException(LOAD_FILE_FAIL, e);
 		}
 
@@ -91,8 +90,7 @@ public class DriverManager {
 		return remoteHub;
 	}
 
-	private RemoteWebDriver setRemoteWebDriver(DesiredCapabilities capabilities, Properties properties)
-			throws DriverInitException {
+	private RemoteWebDriver setRemoteWebDriver(DesiredCapabilities capabilities, Properties properties) throws DriverInitException {
 		capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 		capabilities.setCapability("name", "Remote File Upload using Selenium 2's FileDetectors");
 		RemoteWebDriver remoteWebDriver = null;
