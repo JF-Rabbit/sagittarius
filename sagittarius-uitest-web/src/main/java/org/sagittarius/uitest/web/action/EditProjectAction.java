@@ -248,7 +248,6 @@ public class EditProjectAction {
 		PageElementUtil.clearAndSendKey(hdfsConfigPage.hdfsPath, String.valueOf(componmentInfo.get(ComponentInfoConstant.HDFS_PATH)));
 	}
 	
-	// FIXME
 	private void editObjectType(WebDriver driver, Map<String, Object> componmentInfo, KmxObjectConfigPage kmxObjectConfigPage) {
 		@SuppressWarnings("unchecked") 
 		List<ObjectConfig> objectConfigList= (List<ObjectConfig>) componmentInfo.get(ComponentInfoConstant.OBJECT_TYPE_LIST);
@@ -334,6 +333,8 @@ public class EditProjectAction {
 		case DATA_TRAIN:
 			scriptConfigPage.dataTrain.click();
 			// TODO 模型训练
+			
+			scriptConfigPage.uploadScriptBtn.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstant.SCRIPT_PATH)));
 			break;
 		case DATA_GRADE:
 			scriptConfigPage.dataGrade.click();
