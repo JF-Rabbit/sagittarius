@@ -1,4 +1,4 @@
-package org.sagittarius.uitest.web.test;
+package org.sagittarius.uitest.web.test.demo;
 
 import org.bson.Document;
 import org.junit.Test;
