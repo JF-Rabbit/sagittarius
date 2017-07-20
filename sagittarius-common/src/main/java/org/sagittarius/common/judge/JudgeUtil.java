@@ -7,6 +7,16 @@ public class JudgeUtil {
 	public static boolean isNotNullStr(String obj) {
 		return (obj != null && !obj.equals(""));
 	}
+	
+	public static boolean objEqualsStr(Object actual, String expect){
+		if(actual == null) {
+			return false;
+		}
+		if(String.valueOf(actual).equals(expect)) {
+			return true;
+		}
+		return false;
+	}
 
 	public static int compareAmout(String value1, String value2) {
 

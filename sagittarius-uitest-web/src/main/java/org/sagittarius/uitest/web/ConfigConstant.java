@@ -12,8 +12,9 @@ public interface ConfigConstant {
 	String RUN_TYPE_NORMAL = "normal";
 	String RUN_TYPE_DEBUG = "debug";
 	
-	String DEBUG_TYPE_ERROR_DEBUG = "error.debug";
-	String DEBUG_TYPE_EVERY_ACTION_DEBUG = "every.action.debug";
+	String DEBUG_TYPE_ERROR = "debug.error";
+	String DEBUG_TYPE_ANNOTATION = "debug.annotation";
+	String DEBUG_TYPE_EVERY_ACTION= "debug.every.action";
 	
 	String ENV = "env";
 	String ENV_QA = "env.qa.";

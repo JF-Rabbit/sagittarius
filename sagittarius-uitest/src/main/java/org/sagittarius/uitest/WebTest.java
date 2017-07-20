@@ -20,8 +20,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class WebTest extends AbstractJUnit4SpringContextTests {
 	
 	private static final Logger logger = LoggerFactory.getLogger(WebTest.class);
-	private static final String TEST_START = "---------- TEST_START ----------";
-	private static final String TEST_END = "---------- TEST_END ----------";
+	private static final String TEST_START = "========== TEST_START ==========\n";
+	private static final String TEST_END = "========== TEST_END ==========\n";
 
 	@Resource
 	DriverManager manager;

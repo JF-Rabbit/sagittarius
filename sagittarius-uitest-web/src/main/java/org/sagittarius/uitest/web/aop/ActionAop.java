@@ -9,9 +9,10 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.sagittarius.common.Delay;
-import org.sagittarius.common.annotation.DebugSuspendResolver;
+import org.sagittarius.common.annotation.DebugSuspend;
 import org.sagittarius.common.aop.AopUtil;
 import org.sagittarius.common.date.DateUtil;
+import org.sagittarius.common.judge.JudgeUtil;
 import org.sagittarius.common.properties.PropertiesUtil;
 import org.sagittarius.uitest.CommonConstant;
 import org.sagittarius.uitest.exception.ManualConfirmException;
@@ -28,11 +29,11 @@ public class ActionAop implements ConfigConstant, CommonConstant {
 	private static final Logger logger = LoggerFactory.getLogger(ActionAop.class);
 
 	private static final String ACTION_AOP_RULE = "execution(public * org.sagittarius.uitest.web.action..*.*(..))";
-	
-	private static final String ACTION_START = "ACTION_START ";
-	private static final String ACTION_END = "ACTION_END ";
-	private static final String FOO_L = "---------- ";
-	private static final String FOO_R = " ----------";
+
+	private static final String ACTION_START = "==> ";
+	private static final String ACTION_END = "<== ";
+
+	private static final String DEBUG_MSG = "=====DEBUG SUSPEND=====";
 
 	private Properties properties;
 
@@ -45,13 +46,13 @@ public class ActionAop implements ConfigConstant, CommonConstant {
 		Object obj = null;
 		Method method = AopUtil.getMethodFromProceedingJoinPoint(p);
 		try {
-			logger.info(FOO_L + ACTION_START + method.getName() + FOO_R);
+			logger.info(ACTION_START + method.getName());
 			obj = p.proceed();
-			logger.info(FOO_L + ACTION_END + method.getName() + FOO_R);
+			logger.info(ACTION_END + method.getName());
 			// TODO handle result
 			everyActionDebug();
-			
-			DebugSuspendResolver.suspend(method);
+			suspendAnnotation(method);
+
 			return obj;
 		} catch (ManualConfirmException e) {
 			// TODO set manual status
@@ -66,26 +67,43 @@ public class ActionAop implements ConfigConstant, CommonConstant {
 	}
 
 	private void saveWebPage() {
-		String fileName = properties.getProperty(LOG_PATH) + DateUtil.dateFormat(new Date(), DateUtil.YYYY_MM_DD_HH_MM_SS_FILE_TYPE) + FILE_TYPE_HTML;
+		String fileName = properties.getProperty(LOG_PATH) + DateUtil.dateFormat(new Date(), DateUtil.YYYY_MM_DD_HH_MM_SS_FILE_TYPE)
+				+ FILE_TYPE_HTML;
 		WebElementUtil.saveCurrentWebPage(fileName);
 		Delay.sleep(5000);
 	}
 
 	private void errorDebug(Exception e) {
-		if(properties.get(RUN_TYPE).equals(RUN_TYPE_NORMAL)){
+		if (properties.get(RUN_TYPE).equals(RUN_TYPE_NORMAL)) {
 			return;
-		}else if (properties.get(RUN_TYPE).equals(RUN_TYPE_DEBUG) && properties.get(DEBUG_TYPE_ERROR_DEBUG).equals(TRUE)) {
-			logger.error(DebugSuspendResolver.DEBUG_MSG, e);
+		} else if (JudgeUtil.objEqualsStr(properties.get(RUN_TYPE), RUN_TYPE_DEBUG)
+				&& JudgeUtil.objEqualsStr(properties.get(DEBUG_TYPE_ERROR), TRUE)) {
+			logger.error(DEBUG_MSG, e);
+			Delay.suspend();
+		}
+
+	}
+
+	private void everyActionDebug() {
+		if (properties.get(RUN_TYPE).equals(RUN_TYPE_NORMAL)) {
+			return;
+		} else if (JudgeUtil.objEqualsStr(properties.get(RUN_TYPE), RUN_TYPE_DEBUG)
+				&& JudgeUtil.objEqualsStr(properties.get(DEBUG_TYPE_EVERY_ACTION), TRUE)) {
+			logger.info(DEBUG_MSG);
 			Delay.suspend();
 		}
 	}
 
-	private void everyActionDebug() {
-		if(properties.get(RUN_TYPE).equals(RUN_TYPE_NORMAL)){
+	private void suspendAnnotation(Method method) {
+		if (properties.get(RUN_TYPE).equals(RUN_TYPE_NORMAL)) {
 			return;
-		}else if (properties.get(RUN_TYPE).equals(RUN_TYPE_DEBUG) && properties.get(DEBUG_TYPE_EVERY_ACTION_DEBUG).equals(TRUE)) {
-			logger.info(DebugSuspendResolver.DEBUG_MSG);
-			Delay.suspend();
+		} else if (JudgeUtil.objEqualsStr(properties.get(RUN_TYPE), RUN_TYPE_DEBUG)
+				&& JudgeUtil.objEqualsStr(properties.get(DEBUG_TYPE_ANNOTATION), TRUE)) {
+
+			if (method.isAnnotationPresent(DebugSuspend.class)) {
+				logger.info(DEBUG_MSG);
+				Delay.suspend();
+			}
 		}
 	}
 }
