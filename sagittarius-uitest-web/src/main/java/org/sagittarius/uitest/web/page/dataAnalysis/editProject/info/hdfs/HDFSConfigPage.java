@@ -1,4 +1,4 @@
-package org.sagittarius.uitest.web.page.dataAnalysis.editProject.info;
+package org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.hdfs;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

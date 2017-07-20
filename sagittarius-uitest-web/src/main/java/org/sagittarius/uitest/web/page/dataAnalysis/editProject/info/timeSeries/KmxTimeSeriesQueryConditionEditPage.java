@@ -1,4 +1,4 @@
-package org.sagittarius.uitest.web.page.dataAnalysis.editProject.info;
+package org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.timeSeries;
 
 import java.util.List;
 

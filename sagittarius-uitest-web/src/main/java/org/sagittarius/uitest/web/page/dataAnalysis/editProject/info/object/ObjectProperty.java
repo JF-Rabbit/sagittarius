@@ -1,4 +1,6 @@
-package org.sagittarius.uitest.web.page.dataAnalysis.editProject.info;
+package org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.object;
+
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.DataTypeEnum;
 
 public class ObjectProperty {
 	private String propertyName;

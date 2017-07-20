@@ -1,4 +1,4 @@
-package org.sagittarius.uitest.web.page.dataAnalysis.editProject.info;
+package org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.object;
 
 import java.util.List;
 

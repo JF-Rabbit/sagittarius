@@ -18,8 +18,8 @@ import org.sagittarius.uitest.web.action.LoginAction;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.component.ComponentEnum;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.DataTypeEnum;
-import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ObjectConfig;
-import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ObjectProperty;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.object.ObjectConfig;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.object.ObjectProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
