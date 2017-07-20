@@ -19,8 +19,11 @@ import org.sagittarius.uitest.web.page.dataAnalysis.editProject.component.Compon
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant.ScriptTypeEnum;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.HDFSConfigPage;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.KmxObjectConfigPage;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.KmxTimeSeriesConfigPage;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.KmxTimeSeriesQueryConditionEditPage;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ObjectConfig;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ObjectProperty;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ScriptConfigPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +43,7 @@ public class EditProjectAction {
 	 * @param multipleX
 	 *            x轴偏移倍数
 	 * @param multipleY
-	 *            y轴偏移倍数 
+	 *            y轴偏移倍数
 	 */
 	public String createComponent(WebDriver driver, ComponentEnum componentEnum, String projectName, int multipleX, int multipleY) {
 		Delay.sleep(1000);
@@ -104,17 +107,23 @@ public class EditProjectAction {
 			editKmxTimeSeriesQueryCondition(driver, componmentInfo, kmxTimeSeriesConfigPage, kmxTimeSeriesQueryConditionEditPage);
 
 			editGroup(driver, componmentInfo, kmxTimeSeriesConfigPage);
-			
+
 			break;
 		case HDFS_DATASOURC:
 			HDFSConfigPage hdfsConfigPage = new HDFSConfigPage();
 			PageElementUtil.initPages(driver, hdfsConfigPage);
-			
+
 			editHDFSPath(componmentInfo, hdfsConfigPage);
-			
+
 			break;
 		case KMX_OBJECT_DATASOURC:
-			// TODO 对象数据源
+			KmxObjectConfigPage kmxObjectConfigPage = new KmxObjectConfigPage();
+			PageElementUtil.initPages(driver, kmxObjectConfigPage);
+
+			editObjectType(driver, componmentInfo, kmxObjectConfigPage);
+
+			editGroup(driver, componmentInfo, kmxObjectConfigPage);
+			
 			break;
 		case SCRIPT:
 			ScriptConfigPage scriptConfigPage = new ScriptConfigPage();
@@ -122,12 +131,14 @@ public class EditProjectAction {
 			scriptConfigPage.secletScriptBtn.click();
 			Delay.sleep(500);
 			ComponentInfoConstant.ScriptTypeEnum scriptType = (ScriptTypeEnum) componmentInfo.get(ComponentInfoConstant.SCRIPT_TYPE);
-			
+
 			selectScriptType(scriptConfigPage, scriptType);
-			
+
 			break;
 		}
 	}
+
+	
 
 	private void editKmxTimeSeriesField(WebDriver driver, Map<String, Object> componmentInfo,
 			KmxTimeSeriesConfigPage kmxTimeSeriesConfigPage) {
@@ -142,18 +153,20 @@ public class EditProjectAction {
 		for (String fieldName : fieldArray) {
 			try {
 				field = driver.findElement(By.xpath("//span[@title='" + fieldName + "']/preceding-sibling::label/span/input"));
-				//field = WebElementUtil.findElementByWait(driver, 10, FindWebElementEnum.X_PATH, "//span[@title='" + fieldName + "']/preceding-sibling::label/span/input");
+				// field = WebElementUtil.findElementByWait(driver, 10,
+				// FindWebElementEnum.X_PATH, "//span[@title='" + fieldName +
+				// "']/preceding-sibling::label/span/input");
 			} catch (WebDriverException e) {
 				List<WebElement> eMenus = driver.findElements(By.xpath("//span[@ref='eMenu']"));
-				 eMenus.get(3).click();
-				//WebElementUtil.clickDisableElement(driver, eMenus.get(3));
+				eMenus.get(3).click();
+				// WebElementUtil.clickDisableElement(driver, eMenus.get(3));
 				driver.findElement(By.xpath("//input[@placeholder='字段查询']")).sendKeys(fieldName);
 				field = driver.findElement(By.xpath("//span[@title='" + fieldName + "']/preceding-sibling::label/span/input"));
 			}
 			field.click();
 		}
 		Delay.sleep(500);
-		WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesConfigPage.allConfirmBtn);
+		WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesConfigPage.ultiConfirBtnByTagSpan);
 		Delay.sleep(500);
 	}
 
@@ -169,7 +182,7 @@ public class EditProjectAction {
 					.equals(ComponentInfoConstant.TRUE)) {
 				kmxTimeSeriesQueryConditionEditPage.staticTimeRangeSwitch.click();
 				Delay.sleep(500);
-				// TODO 固定时间范围 
+				// TODO 固定时间范围
 			}
 
 			if (JudgeUtil.isNotNullStr(String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_TIME_START)))) {
@@ -188,19 +201,20 @@ public class EditProjectAction {
 				Delay.sleep(500);
 			}
 
-			if ((componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_ID) != null) && ((Map<String, String>)(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_ID))).size() != 0) {
-				Map<String, String> map = (Map<String, String>)(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_ID));
-				
+			if ((componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_ID) != null)
+					&& ((Map<String, String>) (componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_ID))).size() != 0) {
+				Map<String, String> map = (Map<String, String>) (componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_ID));
+
 				int index = 0;
 				Set<String> keys = map.keySet();
-				
-				for(String key :keys){
+
+				for (String key : keys) {
 					kmxTimeSeriesQueryConditionEditPage.multiSelectDiv.get(index).click();
 					Delay.sleep(500);
 
 					WebElementUtil.clickOneDisplayedElementofList(driver.findElements(By.xpath("//li[contains(text(), '" + key + "')]")));
 					Delay.sleep(500);
-					
+
 					kmxTimeSeriesQueryConditionEditPage.idInput.get(index).sendKeys(map.get(key));
 					Delay.sleep(500);
 					index++;
@@ -212,25 +226,95 @@ public class EditProjectAction {
 						.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_OTHER)));
 			}
 
-			WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesQueryConditionEditPage.allConfirmBtn);
+			WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesQueryConditionEditPage.ultiConfirBtnByTagSpan);
 			Delay.sleep(500);
 		}
 	}
-	
+
 	private void editGroup(WebDriver driver, Map<String, Object> componmentInfo, KmxTimeSeriesConfigPage kmxTimeSeriesConfigPage) {
 		if (JudgeUtil.isNotNullStr(ComponentInfoConstant.GROUP_VALUE)) {
 			kmxTimeSeriesConfigPage.groupEditBtn.click();
 			Delay.sleep(500);
 			WebElementUtil.clickOneDisplayedElementofList(driver.findElements(By.className("ant-select-selection__rendered")));
 			Delay.sleep(500);
-			driver.findElement(By.xpath("//li[text()='" + String.valueOf(componmentInfo.get(ComponentInfoConstant.GROUP_VALUE)) + "']")).click();
-			WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesConfigPage.allConfirmBtn);
+			driver.findElement(By.xpath("//li[text()='" + String.valueOf(componmentInfo.get(ComponentInfoConstant.GROUP_VALUE)) + "']"))
+					.click();
+			WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesConfigPage.ultiConfirBtnByTagSpan);
 			Delay.sleep(500);
 		}
 	}
 
 	private void editHDFSPath(Map<String, Object> componmentInfo, HDFSConfigPage hdfsConfigPage) {
 		PageElementUtil.clearAndSendKey(hdfsConfigPage.hdfsPath, String.valueOf(componmentInfo.get(ComponentInfoConstant.HDFS_PATH)));
+	}
+	
+	// FIXME
+	private void editObjectType(WebDriver driver, Map<String, Object> componmentInfo, KmxObjectConfigPage kmxObjectConfigPage) {
+		@SuppressWarnings("unchecked") 
+		List<ObjectConfig> objectConfigList= (List<ObjectConfig>) componmentInfo.get(ComponentInfoConstant.OBJECT_TYPE_LIST);
+		for (ObjectConfig objectConfig : objectConfigList) {
+			kmxObjectConfigPage.objectTypeEditBtn.click();
+			Delay.sleep(500);
+			
+			WebElement checkbox = driver.findElement(By.xpath(
+					"//div[text()='" + objectConfig.getObjectName() + "']/../../../preceding-sibling::span[@class='ant-tree-checkbox']"));
+			checkbox.click();
+			
+			WebElementUtil.clickOneDisplayedElementofList(kmxObjectConfigPage.ultiConfirBtnByTagSpan);
+			Delay.sleep(500);
+			
+			List<ObjectProperty> objectPropertyList = objectConfig.getObjectProperty();
+			
+			for (ObjectProperty objectProperty : objectPropertyList) {
+				// XXX 未做兼容多组测试
+				driver.findElement(By.xpath("//div[@class='ProjectDataSource__selected-object___DGx5i']/../../following-sibling::div[2]")).click();;
+				Delay.sleep(500);
+				
+				driver.findElement(By.xpath("//li[text()='" + objectProperty.getPropertyName() + "']")).click();
+				Delay.sleep(500);
+				
+				switch (objectProperty.getDataType()) {
+				case STR:
+					// TODO STR
+					break;
+				case INT:
+					// TODO INT
+					break;
+				case DATE:
+					String[] dateTime = objectProperty.getFieldValue().split("&");
+					
+					kmxObjectConfigPage.startTimeReadOnly.click();
+					Delay.sleep(500);
+					// XXX 未做兼容多组测试
+					PageElementUtil.clearAndSendKey(kmxObjectConfigPage.timeInput,dateTime[0]);
+					Delay.sleep(500);
+					WebElementUtil.clickOneDisplayedElementofList(kmxObjectConfigPage.ultiConfirBtnByTagA);
+					Delay.sleep(500);
+					
+					kmxObjectConfigPage.endTimeReadOnly.click();
+					Delay.sleep(500);
+					PageElementUtil.clearAndSendKey(kmxObjectConfigPage.timeInput,dateTime[1]);
+					Delay.sleep(500);
+					WebElementUtil.clickOneDisplayedElementofList(kmxObjectConfigPage.ultiConfirBtnByTagA);
+					Delay.sleep(500);
+					break;
+				}
+			}
+			Delay.sleep(500);
+		}
+	}
+	
+	private void editGroup(WebDriver driver, Map<String, Object> componmentInfo, KmxObjectConfigPage kmxObjectConfigPage) {
+		if (JudgeUtil.isNotNullStr(ComponentInfoConstant.GROUP_VALUE)) {
+			kmxObjectConfigPage.groupEditBtn.click();
+			Delay.sleep(500);
+			WebElementUtil.clickOneDisplayedElementofList(driver.findElements(By.xpath("//div[@class='ag-body-container']//div[@class='ant-select-selection__rendered']")));
+			Delay.sleep(500);
+			driver.findElement(By.xpath("//li[text()='" + String.valueOf(componmentInfo.get(ComponentInfoConstant.GROUP_VALUE)) + "']"))
+					.click();
+			WebElementUtil.clickOneDisplayedElementofList(kmxObjectConfigPage.ultiConfirBtnByTagSpan);
+			Delay.sleep(500);
+		}
 	}
 
 	private void selectScriptType(ScriptConfigPage scriptConfigPage, ComponentInfoConstant.ScriptTypeEnum scriptType) {

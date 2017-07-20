@@ -1,7 +1,9 @@
 package org.sagittarius.uitest.web.test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -15,6 +17,9 @@ import org.sagittarius.uitest.web.action.EditProjectAction;
 import org.sagittarius.uitest.web.action.LoginAction;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.component.ComponentEnum;
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ComponentInfoConstant;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.DataTypeEnum;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ObjectConfig;
+import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.ObjectProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +71,7 @@ public class TestKMXDemo extends WebTest {
 	 * @throws @throws
 	 *             IOException
 	 */
-	// @Test
+	@Test
 	public void create_HDFS$Script() throws IOException {
 		loginAction.login(driver);
 
@@ -109,7 +114,7 @@ public class TestKMXDemo extends WebTest {
 	 * @throws @throws
 	 *             IOException
 	 */
-	@Test
+	//@Test
 	public void create_KMX_T$Script() throws IOException {
 		
 		loginAction.login(driver);
@@ -134,6 +139,59 @@ public class TestKMXDemo extends WebTest {
 		kmxTimeseriesMap.put(ComponentInfoConstant.GROUP_VALUE, ComponentInfoConstant.GROUP_YEAR_MONTH_DAY);
 		editProjectAction.editCompoment(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, dataSource, kmxTimeseriesMap);
 
+		Map<String, Object> scriptMap = new HashMap<String, Object>();
+		scriptMap.put(ComponentInfoConstant.SCRIPT_TYPE, ComponentInfoConstant.ScriptTypeEnum.DATA_EXTRACT);
+		editProjectAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);
+		editProjectAction.clickSaveBtn(driver);
+		Delay.suspend();
+	}
+	
+	@SuppressWarnings("unused")
+	//@Test
+	public void testMultiLink() throws IOException {
+		loginAction.login(driver);
+
+		createProjectInfoAction.clickCreateProject(driver);
+		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
+		String dataSource1 = editProjectAction.createComponent(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, RandomUtil.randomUUID(), 0, 0);
+		String dataSource2 = editProjectAction.createComponent(driver, ComponentEnum.HDFS_DATASOURC, RandomUtil.randomUUID(), 2, 0);
+		String dataSource3 = editProjectAction.createComponent(driver, ComponentEnum.KMX_OBJECT_DATASOURC, RandomUtil.randomUUID(), -2, 0);
+		String script = editProjectAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
+		Delay.suspend();
+	}
+	
+	List<ObjectConfig> objectConfigList = getObjectConfigList();
+	private List<ObjectConfig> getObjectConfigList(){
+		List<ObjectProperty> objectProperty = new ArrayList<>();
+		objectProperty.add(new ObjectProperty("ts", DataTypeEnum.DATE, "2016-06-18 20:00:00&2016-06-20 20:00:00"));
+		
+		ObjectConfig objectConfig = new ObjectConfig("Windfarm_hwSkZ_bfile", objectProperty);
+		
+		List<ObjectConfig> objectConfigList = new ArrayList<>();
+		objectConfigList.add(objectConfig);
+		
+		return objectConfigList;
+	}
+	
+	//@Test
+	public void create_KMX_O$Script() throws IOException {
+		loginAction.login(driver);
+
+		createProjectInfoAction.clickCreateProject(driver);
+		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
+		String dataSource = editProjectAction.createComponent(driver, ComponentEnum.KMX_OBJECT_DATASOURC, RandomUtil.randomUUID(), 2,
+				0);
+		String script = editProjectAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
+		editProjectAction.linkPoint(driver, 0, 1);
+		
+		logger.info("dataSource:{}, script:{}", dataSource, script);
+		
+		Map<String, Object> kmxObjectDatasourc = new HashMap<String, Object>();
+		kmxObjectDatasourc.put(ComponentInfoConstant.OBJECT_TYPE_LIST, objectConfigList);
+		kmxObjectDatasourc.put(ComponentInfoConstant.GROUP_VALUE, ComponentInfoConstant.GROUP_YEAR_MONTH_DAY);
+		
+		editProjectAction.editCompoment(driver, ComponentEnum.KMX_OBJECT_DATASOURC, dataSource, kmxObjectDatasourc);
+		
 		Map<String, Object> scriptMap = new HashMap<String, Object>();
 		scriptMap.put(ComponentInfoConstant.SCRIPT_TYPE, ComponentInfoConstant.ScriptTypeEnum.DATA_EXTRACT);
 		editProjectAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);

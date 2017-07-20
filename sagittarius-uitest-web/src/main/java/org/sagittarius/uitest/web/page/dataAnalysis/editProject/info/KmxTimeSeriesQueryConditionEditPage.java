@@ -12,15 +12,6 @@ public class KmxTimeSeriesQueryConditionEditPage extends CommonPage {
 	@FindBy(className = "ant-switch-inner")
 	public WebElement staticTimeRangeSwitch;
 	
-	@FindBy(xpath = "//input[@placeholder='起始时间']")
-	public WebElement startTimeReadOnly;
-	
-	@FindBy(xpath = "//input[@placeholder='结束时间']")
-	public WebElement endTimeReadOnly;
-	
-	@FindBy(className = "ant-calendar-input ")
-	public WebElement timeInput;
-	
 	@FindAll(@FindBy(xpath = "//input[@placeholder='请输入']"))
 	public List<WebElement> idInput;
 	

@@ -58,7 +58,7 @@ public class ActionAop implements ConfigConstant, CommonConstant{
 			Delay.sleep(5000);
 			
 			if (getRunType().equals(RUN_TYPE_DEBUG)){
-				logger.error("-----DEBUG SUSPEND-----:/n{}", e);
+				logger.error("-----DEBUG SUSPEND-----", e);
 				Delay.suspend();
 			}
 			throw e;

@@ -22,6 +22,8 @@ public interface ComponentInfoConstant {
 	String GROUP_YEAR_MONTH = "Year-Month";
 	String GROUP_YEAR = "Year";
 	
+	String OBJECT_TYPE_LIST = "object_type_list";
+	
 	String SCRIPT_TYPE = "script_type";
 
 	enum ScriptTypeEnum {
