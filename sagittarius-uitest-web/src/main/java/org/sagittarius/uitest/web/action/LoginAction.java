@@ -5,7 +5,6 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.Properties;
 
 import org.openqa.selenium.By;
@@ -27,7 +26,7 @@ public class LoginAction {
 		return PropertiesUtil.getSingleValue(ConfigConstant.CONFIG_FILE_PATH, getCurrentEnv() + ConfigConstant.URL);
 	}
 
-	public void login(WebDriver driver, String username, String password) throws IOException {
+	public void login(WebDriver driver, String username, String password) {
 		driver.get(getTargetURL());
 		LoginPage loginPage = new LoginPage();
 		PageElementUtil.initPages(driver, loginPage);
