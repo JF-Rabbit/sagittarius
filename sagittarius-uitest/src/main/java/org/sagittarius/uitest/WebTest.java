@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
 @ContextConfiguration(locations = CommonConstant.SPRING_PATH)
 public class WebTest extends AbstractTestNGSpringContextTests {
@@ -24,13 +24,13 @@ public class WebTest extends AbstractTestNGSpringContextTests {
 	DriverManager manager;
 	public WebDriver driver;
 
-	@BeforeClass
+	@BeforeMethod
 	public void setup() throws DriverInitException {
 		logger.info(TEST_START);
 		driver = manager.getDriver();
 	}
 
-	@AfterClass
+	@AfterMethod
 	public void teardown() {
 		manager.quitDriver(driver);
 		logger.info(TEST_END);
