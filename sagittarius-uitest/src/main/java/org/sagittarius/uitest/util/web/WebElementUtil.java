@@ -30,6 +30,7 @@ public class WebElementUtil {
 	private static final String ELEMENT_NOT_VISIBLE_MSG = "element is not visible:";
 	private static final String ELEMENT_IS_VISIBLE_MSG = "element is visible, please inspect:";
 
+	@Deprecated
 	public static void clickDisableElement(WebDriver driver, WebElement element) {
 		if (element.isDisplayed() == false) {
 			logger.warn(ELEMENT_NOT_VISIBLE_MSG + "{}", element);

@@ -78,7 +78,7 @@ public class EditProjectAction {
 	}
 
 	private int getX(WebDriver driver, WebElement element) {
-		return element.getLocation().x + element.getSize().width / 2;
+		return JsUtil.getActualX(driver) + element.getLocation().x + element.getSize().width / 2;
 	}
 
 	private int getY(WebDriver driver, WebElement element) {
