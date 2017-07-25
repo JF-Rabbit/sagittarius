@@ -7,6 +7,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.interactions.Actions;
+import org.sagittarius.common.Delay;
 import org.sagittarius.common.random.RandomUtil;
 import org.sagittarius.uitest.WebTest;
 import org.sagittarius.uitest.web.action.CreateProjectInfoAction;
@@ -30,7 +33,7 @@ public class TestKMXDemo extends WebTest{
 
 	String filePath = "D:\\project\\selenium\\chromedriver\\v2.9\\1.txt";
 
-	// @Test
+	@Test
 	public void test01() {
 
 		loginAction.login(driver);
@@ -46,9 +49,14 @@ public class TestKMXDemo extends WebTest{
 	@Resource
 	CreateProjectInfoAction createProjectInfoAction;
 
-	// @Test
+	@Test
 	public void login() {
 		loginAction.login(driver);
+		Actions actions = new Actions(driver);
+		Delay.sleep(2000);
+		actions.moveToElement(driver.findElement(By.xpath("//*[@id=\"innerContainer\"]/div/div[3]/div[1]/div[2]/div[4]/a")));
+		actions.perform();
+		Delay.suspend();
 		// createProjectInfoAction.clickCreateProject(driver);
 		// createProjectInfoAction.inputProjectInfo(driver, projectName,
 		// projectDesc);
@@ -68,7 +76,7 @@ public class TestKMXDemo extends WebTest{
 	 * @throws @throws
 	 *             IOException
 	 */
-	// @Test
+	@Test
 	public void create_HDFS$Script() {
 		loginAction.login(driver);
 
@@ -112,7 +120,7 @@ public class TestKMXDemo extends WebTest{
 	 * @throws @throws
 	 *             IOException
 	 */
-	// @Test
+	@Test
 	public void create_KMX_T$Script() {
 
 		loginAction.login(driver);
@@ -173,7 +181,7 @@ public class TestKMXDemo extends WebTest{
 		return objectConfigList;
 	}
 
-	// @Test
+	@Test
 	public void create_KMX_O$Script() {
 		loginAction.login(driver);
 
@@ -199,7 +207,7 @@ public class TestKMXDemo extends WebTest{
 
 	String scriptPath = "D:\\project\\script\\R\\example.R";
 
-	//@Test
+	@Test
 	public void testCreateScript() {
 		loginAction.login(driver);
 

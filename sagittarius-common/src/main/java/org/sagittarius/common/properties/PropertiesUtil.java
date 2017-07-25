@@ -34,5 +34,9 @@ public class PropertiesUtil {
 	public static String getSingleValue(String path, String key) {
 		return load(path).getProperty(key);
 	}
+	
+	public static int getInt(Properties properties, String key){
+		return Integer.valueOf(properties.getProperty(key));
+	}
 
 }

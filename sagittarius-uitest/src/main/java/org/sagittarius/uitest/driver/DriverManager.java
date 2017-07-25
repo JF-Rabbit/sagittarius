@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.CapabilityType;
@@ -127,8 +129,32 @@ public class DriverManager {
 			throw new DriverInitException(DRIVER_IS_NULL);
 		}
 
-		driver.manage().window().maximize();
+		// driver.manage().window().maximize();
+		driver = setDriver(driver, properties);
 		driver.manage().timeouts().implicitlyWait(DEFAULT_FIND_ELEMENT_TIMEOUT, TimeUnit.SECONDS);
+
+		return driver;
+	}
+
+	private static final String WEBDRIVER_POINT_X = "webdriver.point.x";
+	private static final String WEBDRIVER_POINT_Y = "webdriver.point.y";
+	private static final String WEBDRIVER_Dimension_WIDTH = "webdriver.dimension.width";
+	private static final String WEBDRIVER_Dimension_HEIGHT = "webdriver.dimension.height";
+
+	private WebDriver setDriver(WebDriver driver, Properties properties) {
+
+		WebDriver.Window window = driver.manage().window();
+		if (properties.get(WEBDRIVER_POINT_X) != null && properties.get(WEBDRIVER_POINT_Y) != null) {
+			window.setPosition(
+					new Point(PropertiesUtil.getInt(properties, WEBDRIVER_POINT_X), PropertiesUtil.getInt(properties, WEBDRIVER_POINT_Y)));
+		}
+
+		if (properties.get(WEBDRIVER_Dimension_WIDTH) != null && properties.get(WEBDRIVER_Dimension_HEIGHT) != null) {
+			window.setSize(new Dimension(PropertiesUtil.getInt(properties, WEBDRIVER_Dimension_WIDTH),
+					PropertiesUtil.getInt(properties, WEBDRIVER_Dimension_HEIGHT)));
+		} else {
+			window.maximize();
+		}
 
 		return driver;
 	}
