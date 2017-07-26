@@ -15,6 +15,7 @@ public interface ConfigConstant {
 	String DEBUG_TYPE_ERROR = "debug.error";
 	String DEBUG_TYPE_ANNOTATION = "debug.annotation";
 	String DEBUG_TYPE_EVERY_ACTION= "debug.every.action";
+	String DEBUG_SAVE_WEB_HTML = "debug.save.web.html";
 	
 	String ENV = "env";
 	String ENV_QA = "env.qa.";

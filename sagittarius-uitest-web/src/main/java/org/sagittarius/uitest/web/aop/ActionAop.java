@@ -67,10 +67,12 @@ public class ActionAop implements ConfigConstant, CommonConstant {
 	}
 
 	private void saveWebPage() {
-		String fileName = properties.getProperty(LOG_PATH) + DateUtil.dateFormat(new Date(), DateUtil.YYYY_MM_DD_HH_MM_SS_FILE_TYPE)
-				+ FILE_TYPE_HTML;
-		WebElementUtil.saveCurrentWebPage(fileName);
-		Delay.sleep(5000);
+		if (properties.get(DEBUG_SAVE_WEB_HTML).equals(TRUE)) {
+			String fileName = properties.getProperty(LOG_PATH) + DateUtil.dateFormat(new Date(), DateUtil.YYYY_MM_DD_HH_MM_SS_FILE_TYPE)
+					+ FILE_TYPE_HTML;
+			WebElementUtil.saveCurrentWebPage(fileName);
+			Delay.sleep(5000);
+		}
 	}
 
 	private void errorDebug(Exception e) {

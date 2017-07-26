@@ -196,6 +196,7 @@
 		<module>sagittarius-junit</module>
 		<module>sagittarius-mybatis-generator</module>
     <module>sagittarius-web-server</module>
+    <module>sagittarius-jmeter</module>
   </modules>
 
 	<name>sagittarius-parent</name>
