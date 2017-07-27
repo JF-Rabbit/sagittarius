@@ -3,7 +3,7 @@ package org.sagittarius.common.test;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

@@ -45,8 +45,9 @@ public class HttpUtil {
 
 			long start = System.currentTimeMillis();
 			HttpResponse httpResponse = closeableHttpClient.execute(httpRequest);
-			httpResponseConfig.setResponseTime(System.currentTimeMillis() - start);
-
+			long end = System.currentTimeMillis();
+			httpResponseConfig.setResponseTime(end - start);
+			
 			httpResponseConfig.setStatusCode(httpResponse.getStatusLine().getStatusCode());
 
 			if (httpResponse.getEntity() != null) {

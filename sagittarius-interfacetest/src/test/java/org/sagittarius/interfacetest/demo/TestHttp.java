@@ -3,7 +3,6 @@ package org.sagittarius.interfacetest.demo;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
 import org.sagittarius.common.http.HttpException;
 import org.sagittarius.common.http.HttpMethodEnum;
 import org.sagittarius.common.http.HttpRequsetConfig;
@@ -11,8 +10,12 @@ import org.sagittarius.common.http.HttpResponseConfig;
 import org.sagittarius.common.http.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.Test;
 
-public class TestHttp {
+@ContextConfiguration(locations = "classpath:spring.xml")
+public class TestHttp extends AbstractTestNGSpringContextTests {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TestHttp.class);
 	

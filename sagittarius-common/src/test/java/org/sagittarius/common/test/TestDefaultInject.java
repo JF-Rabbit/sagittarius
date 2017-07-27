@@ -1,8 +1,8 @@
 package org.sagittarius.common.test;
 
-import org.junit.Test;
 import org.sagittarius.common.annotation.DefaultInjectResolver;
 import org.sagittarius.common.test.entity.Person;
+import org.testng.annotations.Test;
 
 public class TestDefaultInject {
 	@Test // 已经赋值

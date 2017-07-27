@@ -2,7 +2,8 @@ package org.sagittarius.common.test;
 
 import java.lang.reflect.Method;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
+
 
 public class ReflectTest {
 
