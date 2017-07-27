@@ -29,7 +29,7 @@ public class GsonUtil {
 	
 	public static String jsonStrFormat(String str) {
 		JsonObject jsonObject = strToJsonObj(str);
-		return jsonObjFormat(jsonObject);
+		return "\n" + jsonObjFormat(jsonObject) + "\n";
 	}
 
 	/**
