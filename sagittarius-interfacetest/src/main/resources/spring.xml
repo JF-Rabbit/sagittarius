@@ -16,5 +16,6 @@
 
 	<context:component-scan base-package="org.sagittarius.interfacetest"></context:component-scan>
 	<aop:aspectj-autoproxy proxy-target-class="false" />
+	
 
 </beans>
