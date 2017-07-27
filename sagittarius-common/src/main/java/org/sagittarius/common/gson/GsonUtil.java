@@ -9,6 +9,7 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class GsonUtil {
 
@@ -18,8 +19,17 @@ public class GsonUtil {
 	 * @param jsonObject
 	 * @return
 	 */
-	public String jsonFommat(JsonObject jsonObject) {
+	public static String jsonObjFormat(JsonObject jsonObject) {
 		return new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject);
+	}
+	
+	public static JsonObject strToJsonObj(String str){
+		return new JsonParser().parse(str).getAsJsonObject();
+	}
+	
+	public static String jsonStrFormat(String str) {
+		JsonObject jsonObject = strToJsonObj(str);
+		return jsonObjFormat(jsonObject);
 	}
 
 	/**
@@ -28,7 +38,7 @@ public class GsonUtil {
 	 * @param jsonFilePath
 	 * @return
 	 */
-	public JsonObject getJsonObjFromJsonFile(String jsonFilePath) {
+	public static JsonObject getJsonObjFromJsonFile(String jsonFilePath) {
 		BufferedReader reader = null;
 		JsonObject jsonObj = null;
 		try {

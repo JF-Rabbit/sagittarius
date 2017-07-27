@@ -1,5 +1,7 @@
 package org.sagittarius.common.http;
 
+import org.sagittarius.common.gson.GsonUtil;
+
 public class HttpResponseConfig {
 
 	private int statusCode;
@@ -43,7 +45,7 @@ public class HttpResponseConfig {
 
 	@Override
 	public String toString() {
-		return "HttpResponseConfig [statusCode=" + statusCode + ", content=" + content + ", responseTime=" + responseTime + "]";
+		return "HttpResponseConfig [statusCode=" + statusCode + ", content=" + GsonUtil.jsonStrFormat(content) + ", responseTime=" + responseTime + "]";
 	}
 
 }
