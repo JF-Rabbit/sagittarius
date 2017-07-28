@@ -48,4 +48,34 @@ public class HttpResponseConfig {
 		return "HttpResponseConfig [statusCode=" + statusCode + ", content=" + GsonUtil.jsonStrFormat(content) + ", responseTime=" + responseTime + "]";
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
+		result = prime * result + statusCode;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HttpResponseConfig other = (HttpResponseConfig) obj;
+		if (content == null) {
+			if (other.content != null)
+				return false;
+		} else if (!content.equals(other.content))
+			return false;
+		if (statusCode != other.statusCode)
+			return false;
+		return true;
+	}
+	
+	
+
 }
