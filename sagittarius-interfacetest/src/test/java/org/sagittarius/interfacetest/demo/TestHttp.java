@@ -40,14 +40,13 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 
 	@DataProvider
 	public Object[][] dataProvider2(ITestContext context) {
-		Object[][] objects = new Object[][] { new Object[] { 
-				TestCaseEnum.GET_ANALYSIS_TYPES.getConfig(),
-				TestCaseEnum.GET_PROJECTS_SIZE_2_PAGE_1.getConfig() }, };
+		Object[][] objects = new Object[][] {
+				new Object[] { TestCaseEnum.GET_ANALYSIS_TYPES.getConfig(), TestCaseEnum.GET_PROJECTS_SIZE_2_PAGE_1.getConfig() }, };
 
 		return objects;
 	}
 
-	@Test(dataProvider = "dataProvider2")
+	// @Test(dataProvider = "dataProvider2")
 	public void test2(HttpRequsetConfig res1, HttpRequsetConfig res2) throws HttpException {
 		HttpResponseConfig httpResponseConfig1 = HttpUtil.service(res1);
 		logger.info("httpResponseConfig:\t{}", httpResponseConfig1);
@@ -61,6 +60,25 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 		JsonCompareRecorder recorder = new JsonCompareRecorder();
 		Map<String, IgnoreRuleEnum> map = new HashMap<>();
 		recorder.compare(httpResponseConfig2, httpResponseConfig1, map);
+		System.out.println(recorder);
+	}
+
+	@Test
+	public void test3() throws HttpException {
+		HttpResponseConfig httpResponseConfig1 = new HttpResponseConfig();
+		JsonObject jsonObject1 = GsonUtil.getJsonObjFromJsonFile("/Users/jasonzhang/Desktop/a.json");
+		httpResponseConfig1.setStatusCode(200);
+		httpResponseConfig1.setContent(GsonUtil.jsonObjToStr(jsonObject1));
+		logger.info("httpResponseConfig:\t{}", httpResponseConfig1);
+		HttpResponseConfig httpResponseConfig2 = new HttpResponseConfig();
+		httpResponseConfig2.setStatusCode(200);
+		JsonObject jsonObject2 = GsonUtil.getJsonObjFromJsonFile("/Users/jasonzhang/Desktop/b.json");
+		httpResponseConfig2.setContent(GsonUtil.jsonObjToStr(jsonObject2));
+		logger.info("httpResponseConfig:\t{}", httpResponseConfig2);
+
+		JsonCompareRecorder recorder = new JsonCompareRecorder();
+		Map<String, IgnoreRuleEnum> map = new HashMap<>();
+		recorder.compare(httpResponseConfig1, httpResponseConfig2, map);
 		System.out.println(recorder);
 	}
 

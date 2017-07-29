@@ -54,13 +54,13 @@ public class JsonCompareRecorder {
 
 		if (!compareStatusCode(expect, response)) {
 			this.compareResult = false;
+			this.errorRecorder = builder.toString();
 			return;
 		}
 
 		pathBuilder.append(PATH_ROOT);
 
-		compareJsonEquals(GsonUtil.strToJsonElement(expect.getContent()),
-				GsonUtil.strToJsonElement(response.getContent()));
+		compareJsonEquals(GsonUtil.strToJsonElement(expect.getContent()), GsonUtil.strToJsonElement(response.getContent()));
 
 		if (builder.toString().equals("")) {
 			this.compareResult = true;
@@ -75,10 +75,12 @@ public class JsonCompareRecorder {
 		if (expect.getStatusCode() == response.getStatusCode()) {
 			return true;
 		} else {
+			builder.append(RESPONSE_STATUS_MISS_MATCH).append(setErrorMsg(expect.getStatusCode(), response.getStatusCode()));
 			return false;
 		}
 	}
 
+	private static final String RESPONSE_STATUS_MISS_MATCH = "\nRESPONSE_STATUS_MISS_MATCH:\t";
 	private static final String KEY_NOT_FOUND = "\nKEY_NOT_FOUND:\t";
 	private static final String VALUE_MISS_MATCH = "\nVALUE_MISS_MATCH:\n";
 	private static final String JSON_TYPE_MISS_MATCH = "\nJSON_TYPE_MISS_MATCH:\n";
@@ -88,25 +90,20 @@ public class JsonCompareRecorder {
 	private static final String PATH_ROOT = "root";
 	private static final String PATH_ARRAY = "-array";
 	private static final String PATH_OBJECT = "-obj";
-	private static final String PATH_PRIMITIVE = "-primitive";
-	private static final String PATH_KEY = "-key";
 
 	private static final String DEBUG_LINE = "\n----------\n";
 
 	private void compareJsonEquals(JsonElement expect, JsonElement other) {
 
 		if (!GsonUtil.isSameJsonType(expect, other)) {
-			builder.append(JSON_TYPE_MISS_MATCH).append(pathBuilder).append("\n").append(
-					setErrorMsg(GsonUtil.checkJsonType(expect).toString(), GsonUtil.checkJsonType(other).toString()))
-					.append(DEBUG_LINE);
+			builder.append(JSON_TYPE_MISS_MATCH).append(pathBuilder).append("\n")
+					.append(setErrorMsg(GsonUtil.checkJsonType(expect), GsonUtil.checkJsonType(other))).append(DEBUG_LINE);
 			return;
 		}
 
 		if (expect.isJsonPrimitive()) {
-			pathBuilder.append(PATH_PRIMITIVE);
 			if (!expect.getAsString().equals(other.getAsString())) {
-				builder.append(VALUE_MISS_MATCH).append(pathBuilder).append("\n")
-						.append(setErrorMsg(expect.getAsString(), other.getAsString())).append(DEBUG_LINE);
+				builder.append(VALUE_MISS_MATCH).append(pathBuilder).append("\n").append(setErrorMsg(expect, other)).append(DEBUG_LINE);
 			}
 			return;
 		}
@@ -132,9 +129,7 @@ public class JsonCompareRecorder {
 	private void checkJsonArray(JsonElement expect, JsonElement other) {
 		if (expect.getAsJsonArray().size() != other.getAsJsonArray().size()) {
 			builder.append(JSON_ARRAY_SIZE_MISS_MATCH).append(pathBuilder)
-					.append(setErrorMsg(String.valueOf(expect.getAsJsonArray().size()),
-							String.valueOf(other.getAsJsonArray().size())))
-					.append(DEBUG_LINE);
+					.append(setErrorMsg(expect.getAsJsonArray().size(), other.getAsJsonArray().size())).append(DEBUG_LINE);
 			return;
 		}
 
@@ -170,77 +165,70 @@ public class JsonCompareRecorder {
 			missMatch.append(expectKeySet);
 			unnecessary.append(otherKeySet);
 
-			builder.append(JSON_OBJECT_SIZE_MATCH).append(pathBuilder)
-					.append(setErrorMsg(String.valueOf(expectSet.size()), String.valueOf(otherSet.size())))
-					.append("\n\tMiss:").append(missMatch).append("\n\tUnnecessary:").append(unnecessary)
-					.append(DEBUG_LINE);
+			builder.append(JSON_OBJECT_SIZE_MATCH).append(pathBuilder).append(setErrorMsg(expectSet.size(), otherSet.size())).append("\n\tMiss:")
+					.append(missMatch).append("\n\tUnnecessary:").append(unnecessary).append(DEBUG_LINE);
 			return;
 		}
 
-		int i = 0;
+		int i = -1;
+		String currentPath = pathBuilder.toString();
 		for (Entry<String, JsonElement> entry : expectSet) {
 
-			String currentPath = pathBuilder.toString();
-			pathBuilder.append("[").append(i).append("]");
+			pathBuilder.setLength(0);
+			pathBuilder.append(currentPath).toString();
 			i++;
 			JsonElement jsonElement = other.getAsJsonObject().get(entry.getKey());
 
 			if (jsonElement == null) {
-				builder.append(KEY_NOT_FOUND).append("\n").append(pathBuilder).append(PATH_KEY).append("[")
-						.append(entry.getKey()).append("]\n").append(DEBUG_LINE);
-				resetJsonObjPath(currentPath);
+				setIndex(i);
+				builder.append(KEY_NOT_FOUND).append("\n").append(pathBuilder).append("[").append(entry.getKey()).append("]\n").append(DEBUG_LINE);
 				continue;
 			}
 
 			if (!GsonUtil.isSameJsonType(entry.getValue(), jsonElement)) {
+				setIndex(i);
 				builder.append(JSON_TYPE_MISS_MATCH).append(pathBuilder)
-						.append(setErrorMsg(GsonUtil.checkJsonType(entry.getValue()).toString(),
-								GsonUtil.checkJsonType(jsonElement).toString()))
-						.append(DEBUG_LINE);
-				resetJsonObjPath(currentPath);
+						.append(setErrorMsg(GsonUtil.checkJsonType(entry.getValue()), GsonUtil.checkJsonType(jsonElement))).append(DEBUG_LINE);
 				continue;
 			}
 
 			if (entry.getValue().isJsonPrimitive()) {
-				pathBuilder.append(PATH_PRIMITIVE).append("[").append(entry.getKey()).append("]");
 				if (!entry.getValue().getAsString().equals(jsonElement.getAsString())) {
-					builder.append(VALUE_MISS_MATCH).append(pathBuilder)
-							.append(setErrorMsg(entry.getValue().getAsString(), jsonElement.getAsString()))
-							.append(DEBUG_LINE);
-					resetJsonObjPath(currentPath);
+					setIndex(i);
+					pathBuilder.append("[").append(entry.getKey()).append("]");
+					builder.append(VALUE_MISS_MATCH).append(pathBuilder).append(setErrorMsg(entry.getValue(), jsonElement)).append(DEBUG_LINE);
 					continue;
 				}
 			}
 
 			if (entry.getValue().isJsonObject()) {
+				setIndex(i);
 				pathBuilder.append(PATH_OBJECT).append("[").append(entry.getKey()).append("]");
 				checkJsonObj(entry.getValue().getAsJsonObject(), jsonElement.getAsJsonObject());
-				resetJsonObjPath(currentPath);
 				continue;
 			}
 
 			if (entry.getValue().isJsonArray()) {
+				setIndex(i);
 				pathBuilder.append(PATH_ARRAY).append("[").append(entry.getKey()).append("]");
 				checkJsonArray(entry.getValue(), jsonElement);
-				resetJsonObjPath(currentPath);
 				continue;
 			}
 
 			if (entry.getValue().isJsonNull()) {
-				resetJsonObjPath(currentPath);
+				setIndex(i);
 				continue;
 			}
 		}
 	}
 
-	private void resetJsonObjPath(String currentPath) {
-		pathBuilder.setLength(0);
-		pathBuilder.append(currentPath);
+	private void setIndex(int i) {
+		pathBuilder.append("[").append(i).append("]");
 	}
 
-	private String setErrorMsg(String expect, String result) {
+	private String setErrorMsg(Object expect, Object result) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("\n").append("\tExpect: ").append(expect).append("\n\tActually: ").append(result);
+		builder.append("\n").append("\tExpect: ").append(String.valueOf(expect)).append("\n\tActually: ").append(String.valueOf(result));
 		return builder.toString();
 	}
 }
