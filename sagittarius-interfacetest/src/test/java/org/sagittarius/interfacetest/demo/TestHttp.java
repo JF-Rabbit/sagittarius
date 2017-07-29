@@ -1,15 +1,15 @@
 package org.sagittarius.interfacetest.demo;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.apache.commons.lang.StringUtils;
 import org.sagittarius.common.gson.GsonUtil;
 import org.sagittarius.common.http.HttpException;
 import org.sagittarius.common.http.HttpRequsetConfig;
 import org.sagittarius.common.http.HttpResponseConfig;
 import org.sagittarius.common.http.HttpUtil;
-import org.sagittarius.common.jsoncompare.IgnoreRuleEnum;
 import org.sagittarius.common.jsoncompare.JsonCompareRecorder;
+import org.sagittarius.common.jsoncompare.JsonDiff;
+import org.sagittarius.common.jsoncompare.JsonDiffErrorCode;
+import org.sagittarius.common.jsoncompare.RuleEnum;
 import org.sagittarius.interfacetest.caseEnum.TestCaseEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +58,8 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 		logger.info("httpResponseConfig:\t{}", httpResponseConfig2);
 
 		JsonCompareRecorder recorder = new JsonCompareRecorder();
-		Map<String, IgnoreRuleEnum> map = new HashMap<>();
-		recorder.compare(httpResponseConfig2, httpResponseConfig1, map);
+		
+		recorder.compare(httpResponseConfig2, httpResponseConfig1);
 		System.out.println(recorder);
 	}
 
@@ -67,7 +67,7 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 	public void test3() throws HttpException {
 		HttpResponseConfig httpResponseConfig1 = new HttpResponseConfig();
 		JsonObject jsonObject1 = GsonUtil.getJsonObjFromJsonFile("/Users/jasonzhang/Desktop/a.json");
-		httpResponseConfig1.setStatusCode(200);
+		httpResponseConfig1.setStatusCode(100);
 		httpResponseConfig1.setContent(GsonUtil.jsonObjToStr(jsonObject1));
 		logger.info("httpResponseConfig:\t{}", httpResponseConfig1);
 		HttpResponseConfig httpResponseConfig2 = new HttpResponseConfig();
@@ -77,9 +77,22 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 		logger.info("httpResponseConfig:\t{}", httpResponseConfig2);
 
 		JsonCompareRecorder recorder = new JsonCompareRecorder();
-		Map<String, IgnoreRuleEnum> map = new HashMap<>();
-		recorder.compare(httpResponseConfig1, httpResponseConfig2, map);
+		recorder.setOption(RuleEnum.IGNORE_RESPONSE_CODE);
+		//recorder.setOption(JsonDiffErrorCode.JSON_ARRAY_SIZE_MISS_MATCH, "root-obj[2]-array[result]");
+		recorder.setOption("result", RuleEnum.CHECK_ARRAY_NO1);
+		recorder.setOption("no", RuleEnum.IS_ANY_INTEGER);
+		recorder.setOption(new JsonDiff(JsonDiffErrorCode.VALUE_MISS_MATCH, "root-obj[1][message]"));
+		recorder.setOption(new JsonDiff(JsonDiffErrorCode.VALUE_MISS_MATCH, "root-obj[2]-array[result][0]-obj[2][status]"));
+		
+		recorder.compare(httpResponseConfig1, httpResponseConfig2);
 		System.out.println(recorder);
 	}
+	
+	//@Test
+	public void test4() {
+		System.out.println(StringUtils.isNumeric("109.8098"));
+		System.out.println(StringUtils.isNumericSpace("1098.098"));
+	}
+	
 
 }
