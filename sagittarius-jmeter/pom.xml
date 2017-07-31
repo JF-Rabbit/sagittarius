@@ -102,6 +102,12 @@
 			<artifactId>fluent-hc</artifactId>
 			<version>${httpcomponents.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>sagittarius-common</groupId>
+			<artifactId>sagittarius-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 	</dependencies>
 </project>
