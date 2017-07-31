@@ -2,6 +2,7 @@ package org.sagittarius.interfacetest.caseEnum;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.sagittarius.common.http.HttpMethodEnum;
 import org.sagittarius.common.http.HttpRequsetConfig;
@@ -22,7 +23,7 @@ public enum TestCaseEnum {
 			return httpRequsetConfig;
 		}
 	},
-	
+
 	GET_PROJECTS_SIZE_2_PAGE_1 {
 		public HttpRequsetConfig getConfig() {
 			HttpRequsetConfig httpRequsetConfig = new HttpRequsetConfig();
@@ -47,7 +48,8 @@ public enum TestCaseEnum {
 		}
 	};
 
-	private static final String pasUrl = PropertiesUtil.getSingleValue(ConfigConstant.CONFIG_FILE_PATH, ConfigConstant.MODUAL_PAS);
+	private static final String pasUrl = PropertiesUtil.getSingleValue(ConfigConstant.CONFIG_FILE_PATH,
+			ConfigConstant.MODUAL_PAS);
 
 	public abstract HttpRequsetConfig getConfig();
 
@@ -58,6 +60,11 @@ public enum TestCaseEnum {
 		}
 		return objects;
 
+	}
+
+	public Object[][] getRandomOne() {
+		return new Object[][] {
+				new Object[] { TestCaseEnum.values()[new Random().nextInt(TestCaseEnum.values().length - 1)] } };
 	}
 
 }
