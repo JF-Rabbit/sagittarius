@@ -28,7 +28,7 @@ import com.google.gson.JsonObject;
  * @author jasonzhang 2017年7月29日 下午6:34:42
  *
  */
-public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath {
+public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleConstant {
 
 	private boolean compareResult;
 	private String errorRecorder;
@@ -98,7 +98,8 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath {
 
 		pathBuilder.append(PATH_ROOT);
 
-		compareJsonEquals(GsonUtil.strToJsonElement(expect.getContent()), GsonUtil.strToJsonElement(response.getContent()));
+		compareJsonEquals(GsonUtil.strToJsonElement(expect.getResponseContent()),
+				GsonUtil.strToJsonElement(response.getResponseContent()));
 
 		if (builder.toString().equals("")) {
 			this.compareResult = true;
@@ -113,10 +114,11 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath {
 		if (checkIgnoreGlobalList(RuleEnum.IGNORE_RESPONSE_CODE)) {
 			return true;
 		}
-		if (expect.getStatusCode() == response.getStatusCode()) {
+		if (expect.getResponseStatusCode() == response.getResponseStatusCode()) {
 			return true;
 		} else {
-			builder.append(RESPONSE_STATUS_MISS_MATCH).append(setErrorMsg(expect.getStatusCode(), response.getStatusCode()));
+			builder.append(RESPONSE_STATUS_MISS_MATCH)
+					.append(setErrorMsg(expect.getResponseStatusCode(), response.getResponseStatusCode()));
 			return false;
 		}
 	}
@@ -172,7 +174,8 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath {
 			return;
 		} else if (expect.getAsJsonArray().size() != other.getAsJsonArray().size()) {
 			builder.append(JSON_ARRAY_SIZE_MISS_MATCH).append(pathBuilder)
-					.append(setErrorMsg(expect.getAsJsonArray().size(), other.getAsJsonArray().size())).append(DEBUG_LINE);
+					.append(setErrorMsg(expect.getAsJsonArray().size(), other.getAsJsonArray().size()))
+					.append(DEBUG_LINE);
 			return;
 		}
 
@@ -232,8 +235,9 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath {
 			missMatch.append(expectKeySet);
 			unnecessary.append(otherKeySet);
 
-			builder.append(JSON_OBJECT_SIZE_MATCH).append(pathBuilder).append(setErrorMsg(expectSet.size(), otherSet.size())).append("\n\tMiss:")
-					.append(missMatch).append("\n\tUnnecessary:").append(unnecessary).append(DEBUG_LINE);
+			builder.append(JSON_OBJECT_SIZE_MATCH).append(pathBuilder)
+					.append(setErrorMsg(expectSet.size(), otherSet.size())).append("\n\tMiss:").append(missMatch)
+					.append("\n\tUnnecessary:").append(unnecessary).append(DEBUG_LINE);
 			return;
 		}
 
@@ -261,12 +265,14 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath {
 				if (checkIgnoreJsonPath(new JsonDiff(JSON_TYPE_MISS_MATCH, pathBuilder.toString()))) {
 					continue;
 				}
-				builder.append(JSON_TYPE_MISS_MATCH).append(pathBuilder)
-						.append(setErrorMsg(GsonUtil.checkJsonType(entry.getValue()), GsonUtil.checkJsonType(jsonElement))).append(DEBUG_LINE);
+				builder.append(JSON_TYPE_MISS_MATCH).append(pathBuilder).append(
+						setErrorMsg(GsonUtil.checkJsonType(entry.getValue()), GsonUtil.checkJsonType(jsonElement)))
+						.append(DEBUG_LINE);
 				continue;
 			}
 
-			if (checkRuleMap(entry.getKey(), RuleEnum.IGNORE_KEY_VALUE)) {
+			if (checkRuleMap(entry.getKey(), RuleEnum.IGNORE_KEY_VALUE)
+					|| checkRuleConstant(entry.getValue().getAsString(), IGNORE_VALUE)) {
 				continue;
 			}
 
@@ -275,22 +281,22 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath {
 				if (checkRuleMap(entry.getKey())) {
 					boolean isError = false;
 					switch (ruleMap.get(entry.getKey())) {
-						case IS_ANY_INTEGER:
-							// XXX 负数 double
-							if (!StringUtils.isNumeric(entry.getValue().toString()))
-								isError = true;
-							break;
-						case IS_ANY_STRING:
-							if (StringUtils.isEmpty(entry.getValue().toString()))
-								isError = true;
-							break;
-						case IS_TIMESTEMP:
-							if (!entry.getValue().toString().matches(DateUtil.YYYY_MM_DD_HH_MM_SS))
-								isError = true;
-							break;
+					case IS_ANY_INTEGER:
+						// XXX 负数 double
+						if (!StringUtils.isNumeric(entry.getValue().getAsString()))
+							isError = true;
+						break;
+					case IS_ANY_STRING:
+						if (StringUtils.isEmpty(entry.getValue().getAsString()))
+							isError = true;
+						break;
+					case IS_TIMESTEMP:
+						if (!entry.getValue().getAsString().matches(DateUtil.YYYY_MM_DD_HH_MM_SS))
+							isError = true;
+						break;
 
-						default:
-							break;
+					default:
+						break;
 					}
 
 					if (isError) {
@@ -299,14 +305,39 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath {
 						if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_REGEX, pathBuilder.toString()))) {
 							continue;
 						}
-						builder.append(VALUE_MISS_REGEX).append(pathBuilder).append(setErrorMsg(entry.getValue(), jsonElement)).append(DEBUG_LINE);
+						builder.append(VALUE_MISS_REGEX).append(pathBuilder)
+								.append(setErrorMsg(entry.getValue().getAsString(), jsonElement)).append(DEBUG_LINE);
 					}
 
 					continue;
 				}
 
-				if (checkRegexMap(entry.getKey(), String.valueOf(entry.getValue()))) {
+				if (checkRegexMap(entry.getKey(), entry.getValue().getAsString())) {
 					continue;
+				}
+
+				if (entry.getValue().getAsString().equals(IS_NUMBER)) {
+					if (!StringUtils.isNumeric(entry.getValue().getAsString())) {
+						setIndex(i);
+						pathBuilder.append("[").append(entry.getKey()).append("]");
+						if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_REGEX, pathBuilder.toString()))) {
+							continue;
+						}
+						builder.append(VALUE_MISS_REGEX).append(pathBuilder)
+								.append(setErrorMsg(entry.getValue().getAsString(), jsonElement)).append(DEBUG_LINE);
+					}
+				}
+
+				if (entry.getValue().getAsString().equals(IS_STRING)) {
+					if (StringUtils.isEmpty(entry.getValue().getAsString())) {
+						setIndex(i);
+						pathBuilder.append("[").append(entry.getKey()).append("]");
+						if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_REGEX, pathBuilder.toString()))) {
+							continue;
+						}
+						builder.append(VALUE_MISS_REGEX).append(pathBuilder)
+								.append(setErrorMsg(entry.getValue().getAsString(), jsonElement)).append(DEBUG_LINE);
+					}
 				}
 
 				if (!entry.getValue().getAsString().equals(jsonElement.getAsString())) {
@@ -315,7 +346,8 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath {
 					if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_MATCH, pathBuilder.toString()))) {
 						continue;
 					}
-					builder.append(VALUE_MISS_MATCH).append(pathBuilder).append(setErrorMsg(entry.getValue(), jsonElement)).append(DEBUG_LINE);
+					builder.append(VALUE_MISS_MATCH).append(pathBuilder)
+							.append(setErrorMsg(entry.getValue().getAsString(), jsonElement)).append(DEBUG_LINE);
 					continue;
 				}
 			}
@@ -350,7 +382,8 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath {
 
 	private String setErrorMsg(Object expect, Object result) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("\n").append("\tExpect: ").append(String.valueOf(expect)).append("\n\tActually: ").append(String.valueOf(result));
+		builder.append("\n").append("\tExpect: ").append(String.valueOf(expect)).append("\n\tActually: ")
+				.append(String.valueOf(result));
 		return builder.toString();
 	}
 
@@ -398,12 +431,20 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath {
 		return false;
 	}
 
+	private boolean checkRuleConstant(String entryKey, String constant) {
+		if (entryKey.equals(constant)) {
+			return true;
+		}
+		return false;
+	}
+
 	private boolean checkRuleMap(String entryKey) {
 		if (ruleMap.size() == 0) {
 			return false;
 		}
 		if (ruleMap.containsKey(entryKey) && (ruleMap.get(entryKey).equals(RuleEnum.IS_ANY_INTEGER)
-				|| ruleMap.get(entryKey).equals(RuleEnum.IS_ANY_STRING) || ruleMap.get(entryKey).equals(RuleEnum.IS_TIMESTEMP))) {
+				|| ruleMap.get(entryKey).equals(RuleEnum.IS_ANY_STRING)
+				|| ruleMap.get(entryKey).equals(RuleEnum.IS_TIMESTEMP))) {
 			return true;
 		}
 

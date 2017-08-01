@@ -1,15 +1,22 @@
 package org.sagittarius.interfacetest.demo;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.sagittarius.common.gson.GsonUtil;
 import org.sagittarius.common.http.HttpException;
-import org.sagittarius.common.http.HttpRequsetConfig;
+import org.sagittarius.common.http.HttpRequestConfig;
 import org.sagittarius.common.http.HttpResponseConfig;
 import org.sagittarius.common.http.HttpUtil;
 import org.sagittarius.common.jsoncompare.JsonCompareRecorder;
 import org.sagittarius.common.jsoncompare.JsonDiff;
 import org.sagittarius.common.jsoncompare.JsonDiffErrorCode;
 import org.sagittarius.common.jsoncompare.RuleEnum;
+import org.sagittarius.common.map.MapUtil;
 import org.sagittarius.interfacetest.caseEnum.TestCaseEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,68 +38,89 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 		return TestCaseEnum.GET_PROJECTS.getAllEnum();
 	}
 
-	// @Test(dataProvider = "dataProvider1")
-	public void test1(HttpRequsetConfig httpRequsetConfig) throws HttpException {
-		logger.info("httpRequsetConfig:\t{}", httpRequsetConfig);
-		HttpResponseConfig httpResponseConfig = HttpUtil.service(httpRequsetConfig);
+	// @Test(dataProvider = "dataProvider1") // 测试发送所有枚举类中的数据
+	public void test1(HttpRequestConfig httpRequestConfig) throws HttpException {
+		logger.info("httpRequestConfig:\t{}", httpRequestConfig);
+		HttpResponseConfig httpResponseConfig = HttpUtil.service(httpRequestConfig);
 		logger.info("httpResponseConfig:\t{}", httpResponseConfig);
 	}
 
 	@DataProvider
 	public Object[][] dataProvider2(ITestContext context) {
-		Object[][] objects = new Object[][] {
-				new Object[] { TestCaseEnum.GET_ANALYSIS_TYPES.getConfig(), TestCaseEnum.GET_PROJECTS_SIZE_2_PAGE_1.getConfig() }, };
+		Object[][] objects = new Object[][] { new Object[] { TestCaseEnum.GET_ANALYSIS_TYPES.getConfig(),
+				TestCaseEnum.GET_PROJECTS_SIZE_2_PAGE_1.getConfig() }, };
 
 		return objects;
 	}
 
-	// @Test(dataProvider = "dataProvider2")
-	public void test2(HttpRequsetConfig res1, HttpRequsetConfig res2) throws HttpException {
+	// @Test(dataProvider = "dataProvider2") // 测试获取JSessionId
+	public void test2(HttpRequestConfig res1, HttpRequestConfig res2) throws HttpException {
+		System.out.println(res1);
+		BasicClientCookie cookie1 = new BasicClientCookie("aaa", UUID.randomUUID().toString());
+		BasicClientCookie cookie2 = new BasicClientCookie("aaa", UUID.randomUUID().toString());
+		List<BasicClientCookie> list = new ArrayList<>();
+		list.add(cookie1);
+		list.add(cookie2);
+
+		res1.getContext().setCookieStore(HttpUtil.buildCookieStore(list));
 		HttpResponseConfig httpResponseConfig1 = HttpUtil.service(res1);
 		logger.info("httpResponseConfig:\t{}", httpResponseConfig1);
-
-		HttpResponseConfig httpResponseConfig2 = new HttpResponseConfig();
-		httpResponseConfig2.setStatusCode(200);
-		JsonObject jsonObject = GsonUtil.getJsonObjFromJsonFile("C:/Users/kzdatd/Desktop/a.json");
-		httpResponseConfig2.setContent(GsonUtil.jsonObjToStr(jsonObject));
-		logger.info("httpResponseConfig:\t{}", httpResponseConfig2);
-
-		JsonCompareRecorder recorder = new JsonCompareRecorder();
-		
-		recorder.compare(httpResponseConfig2, httpResponseConfig1);
-		System.out.println(recorder);
+		logger.info("JSESSIONID:\t{}", HttpUtil.getJSessionID(httpResponseConfig1));
 	}
 
-	@Test
+	// @Test // 测试过滤条件
 	public void test3() throws HttpException {
 		HttpResponseConfig httpResponseConfig1 = new HttpResponseConfig();
 		JsonObject jsonObject1 = GsonUtil.getJsonObjFromJsonFile("/Users/jasonzhang/Desktop/a.json");
-		httpResponseConfig1.setStatusCode(100);
-		httpResponseConfig1.setContent(GsonUtil.jsonObjToStr(jsonObject1));
+		httpResponseConfig1.setResponseStatusCode(100);
+		httpResponseConfig1.setResponseContent(GsonUtil.jsonObjToStr(jsonObject1));
 		logger.info("httpResponseConfig:\t{}", httpResponseConfig1);
 		HttpResponseConfig httpResponseConfig2 = new HttpResponseConfig();
-		httpResponseConfig2.setStatusCode(200);
+		httpResponseConfig2.setResponseStatusCode(200);
 		JsonObject jsonObject2 = GsonUtil.getJsonObjFromJsonFile("/Users/jasonzhang/Desktop/b.json");
-		httpResponseConfig2.setContent(GsonUtil.jsonObjToStr(jsonObject2));
+		httpResponseConfig2.setResponseContent(GsonUtil.jsonObjToStr(jsonObject2));
 		logger.info("httpResponseConfig:\t{}", httpResponseConfig2);
 
 		JsonCompareRecorder recorder = new JsonCompareRecorder();
 		recorder.setOption(RuleEnum.IGNORE_RESPONSE_CODE);
-		//recorder.setOption(JsonDiffErrorCode.JSON_ARRAY_SIZE_MISS_MATCH, "root-obj[2]-array[result]");
+		// recorder.setOption(JsonDiffErrorCode.JSON_ARRAY_SIZE_MISS_MATCH,
+		// "root-obj[2]-array[result]");
 		recorder.setOption("result", RuleEnum.CHECK_ARRAY_NO1);
 		recorder.setOption("no", RuleEnum.IS_ANY_INTEGER);
 		recorder.setOption(new JsonDiff(JsonDiffErrorCode.VALUE_MISS_MATCH, "root-obj[1][message]"));
-		recorder.setOption(new JsonDiff(JsonDiffErrorCode.VALUE_MISS_MATCH, "root-obj[2]-array[result][0]-obj[2][status]"));
-		
-		recorder.compare(httpResponseConfig1, httpResponseConfig2);
-		System.out.println(recorder);
-	}
-	
-	//@Test
-	public void test4() {
-		System.out.println(StringUtils.isNumeric("109.8098"));
-		System.out.println(StringUtils.isNumericSpace("1098.098"));
-	}
-	
+		recorder.setOption(
+				new JsonDiff(JsonDiffErrorCode.VALUE_MISS_MATCH, "root-obj[2]-array[result][0]-obj[2][status]"));
 
+		recorder.compare(httpResponseConfig1, httpResponseConfig2);
+		logger.info("recorder:{}" + recorder);
+	}
+
+	@DataProvider
+	public Object[][] dataProvider3(ITestContext context) {
+		Object[][] objects = new Object[][] { new Object[] { TestCaseEnum.POST_PROJECT_INFO.getConfig() } };
+
+		return objects;
+	}
+
+	@Test(dataProvider = "dataProvider3") // 测试Post Entity
+	public void test4(HttpRequestConfig res2) throws HttpException {
+		logger.info("httpResponseConfig:\t{}", res2);
+
+		HttpResponseConfig httpResponseConfig1 = HttpUtil.service(res2);
+
+		logger.info("httpResponseConfig:\t{}", httpResponseConfig1);
+
+		HttpResponseConfig expect = new HttpResponseConfig();
+		expect.setResponseStatusCode(201);
+		Map<String, Object> map = new HashMap<>();
+		map.put("code", 0);
+		map.put("message", "");
+		map.put("result", "%IGNORE_VALUE%");
+		expect.setResponseContent(MapUtil.mapToJsonStr(map));
+
+		JsonCompareRecorder recorder = new JsonCompareRecorder();
+		recorder.compare(expect, httpResponseConfig1);
+		logger.info("recorder:{}" + recorder);
+	}
+	
 }

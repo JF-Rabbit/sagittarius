@@ -11,7 +11,7 @@ public class MapUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
 
-	public static String mapToJson(Map<?, ?> map) {
+	public static <T> String mapToJsonStr(Map<String, T> map) {
 		return new Gson().toJson(map);
 	}
 
@@ -20,5 +20,5 @@ public class MapUtil {
 			logger.info("key:{}, value:{}", k, v);
 		});
 	}
-
+	
 }

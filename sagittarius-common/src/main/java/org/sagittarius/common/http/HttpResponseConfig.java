@@ -1,38 +1,34 @@
 package org.sagittarius.common.http;
 
+import java.util.Map;
+
 import org.sagittarius.common.gson.GsonUtil;
 
 public class HttpResponseConfig {
 
-	private int statusCode;
-	private String content;
+	private int responseStatusCode;
+	private String responseContent;
 	private long responseTime;
+	private Map<String, String> responseHeaders;
 
 	public HttpResponseConfig() {
 		super();
 	}
 
-	public HttpResponseConfig(int statusCode, String content, long responseTime) {
-		super();
-		this.statusCode = statusCode;
-		this.content = content;
-		this.responseTime = responseTime;
+	public int getResponseStatusCode() {
+		return responseStatusCode;
 	}
 
-	public int getStatusCode() {
-		return statusCode;
+	public void setResponseStatusCode(int responseStatusCode) {
+		this.responseStatusCode = responseStatusCode;
 	}
 
-	public void setStatusCode(int statusCode) {
-		this.statusCode = statusCode;
+	public String getResponseContent() {
+		return responseContent;
 	}
 
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
+	public void setResponseContent(String responseContent) {
+		this.responseContent = responseContent;
 	}
 
 	public long getResponseTime() {
@@ -43,39 +39,19 @@ public class HttpResponseConfig {
 		this.responseTime = responseTime;
 	}
 
+	public Map<String, String> getResponseHeaders() {
+		return responseHeaders;
+	}
+
+	public void setResponseHeaders(Map<String, String> responseHeaders) {
+		this.responseHeaders = responseHeaders;
+	}
+
 	@Override
 	public String toString() {
-		return "HttpResponseConfig [statusCode=" + statusCode + ", content=" + GsonUtil.jsonStrFormat(content) + ", responseTime=" + responseTime + "]";
+		return "HttpResponseConfig [responseStatusCode=" + responseStatusCode + ", responseContent="
+				+ GsonUtil.jsonStrFormat(responseContent) + ", responseTime=" + responseTime + ", responseHeaders="
+				+ responseHeaders + "]";
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((content == null) ? 0 : content.hashCode());
-		result = prime * result + statusCode;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		HttpResponseConfig other = (HttpResponseConfig) obj;
-		if (content == null) {
-			if (other.content != null)
-				return false;
-		} else if (!content.equals(other.content))
-			return false;
-		if (statusCode != other.statusCode)
-			return false;
-		return true;
-	}
-	
-	
 
 }
