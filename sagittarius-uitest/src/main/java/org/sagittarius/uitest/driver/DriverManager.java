@@ -146,9 +146,8 @@ public class DriverManager {
 		case LOCAL_CHROME:
 			this.setChromeConfig(properties);
 			driver = new ChromeDriver();
-			driver = setBrowserLayout(driver, properties);
-
 			setBrowser(Browser.CHROME);
+			driver = setBrowserLayout(driver, properties);
 			break;
 		case REMOTE_CHROME:
 			capabilities = DesiredCapabilities.chrome();

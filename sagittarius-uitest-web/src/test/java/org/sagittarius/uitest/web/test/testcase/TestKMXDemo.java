@@ -22,9 +22,10 @@ import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.object.Obje
 import org.sagittarius.uitest.web.page.dataAnalysis.editProject.info.object.ObjectProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class TestKMXDemo extends WebTest{
+public class TestKMXDemo extends WebTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(TestKMXDemo.class);
 
@@ -33,7 +34,7 @@ public class TestKMXDemo extends WebTest{
 
 	String filePath = "D:\\project\\selenium\\chromedriver\\v2.9\\1.txt";
 
-	@Test
+	// @Test
 	public void test01() {
 
 		loginAction.login(driver);
@@ -50,11 +51,17 @@ public class TestKMXDemo extends WebTest{
 	CreateProjectInfoAction createProjectInfoAction;
 
 	@Test
+	public void test() {
+
+	}
+
+	// @Test
 	public void login() {
 		loginAction.login(driver);
 		Actions actions = new Actions(driver);
 		Delay.sleep(2000);
-		actions.moveToElement(driver.findElement(By.xpath("//*[@id=\"innerContainer\"]/div/div[3]/div[1]/div[2]/div[4]/a")));
+		actions.moveToElement(
+				driver.findElement(By.xpath("//*[@id=\"innerContainer\"]/div/div[3]/div[1]/div[2]/div[4]/a")));
 		actions.perform();
 		Delay.suspend();
 		// createProjectInfoAction.clickCreateProject(driver);
@@ -65,7 +72,13 @@ public class TestKMXDemo extends WebTest{
 	@Resource
 	EditProjectAction editProjectAction;
 
-	String projectName = "selenium_script" + "_" + RandomUtil.randomUUID();
+	String projectName = "";
+
+	@BeforeMethod
+	public void createName() {
+		projectName = "selenium_script" + "_" + RandomUtil.randomUUID();
+	}
+
 	String projectDesc = "selenium_script";
 
 	String hdfsPath = "/project/workspace";
@@ -73,16 +86,15 @@ public class TestKMXDemo extends WebTest{
 	/**
 	 * 创建HDFS+Script
 	 * 
-	 * @throws @throws
-	 *             IOException
 	 */
 	@Test
-	public void create_HDFS$Script() {
+	public void create_HDFS_Script() {
 		loginAction.login(driver);
 
 		createProjectInfoAction.clickCreateProject(driver);
 		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
-		String dataSource = editProjectAction.createComponent(driver, ComponentEnum.HDFS_DATASOURC, RandomUtil.randomUUID(), 0, 0);
+		String dataSource = editProjectAction.createComponent(driver, ComponentEnum.HDFS_DATASOURC,
+				RandomUtil.randomUUID(), 0, 0);
 		String script = editProjectAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
 		editProjectAction.linkPoint(driver, 0, 1);
 
@@ -117,18 +129,16 @@ public class TestKMXDemo extends WebTest{
 	/**
 	 * 创建KMX时序+Script
 	 * 
-	 * @throws @throws
-	 *             IOException
 	 */
 	@Test
-	public void create_KMX_T$Script() {
+	public void create_KMX_T_Script() {
 
 		loginAction.login(driver);
 
 		createProjectInfoAction.clickCreateProject(driver);
 		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
-		String dataSource = editProjectAction.createComponent(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, RandomUtil.randomUUID(), 0,
-				0);
+		String dataSource = editProjectAction.createComponent(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC,
+				RandomUtil.randomUUID(), 0, 0);
 		String script = editProjectAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
 		editProjectAction.linkPoint(driver, 0, 1);
 
@@ -158,12 +168,14 @@ public class TestKMXDemo extends WebTest{
 
 		createProjectInfoAction.clickCreateProject(driver);
 		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
-		String dataSource1 = editProjectAction.createComponent(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, RandomUtil.randomUUID(), 0,
-				0);
-		String dataSource2 = editProjectAction.createComponent(driver, ComponentEnum.HDFS_DATASOURC, RandomUtil.randomUUID(), 2, 0);
-		String dataSource3 = editProjectAction.createComponent(driver, ComponentEnum.KMX_OBJECT_DATASOURC, RandomUtil.randomUUID(), -2, 0);
+		String dataSource1 = editProjectAction.createComponent(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC,
+				RandomUtil.randomUUID(), 0, 0);
+		String dataSource2 = editProjectAction.createComponent(driver, ComponentEnum.HDFS_DATASOURC,
+				RandomUtil.randomUUID(), 2, 0);
+		String dataSource3 = editProjectAction.createComponent(driver, ComponentEnum.KMX_OBJECT_DATASOURC,
+				RandomUtil.randomUUID(), -2, 0);
 		String script = editProjectAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
-		
+
 		editProjectAction.clickSaveBtn(driver);
 	}
 
@@ -182,12 +194,13 @@ public class TestKMXDemo extends WebTest{
 	}
 
 	@Test
-	public void create_KMX_O$Script() {
+	public void create_KMX_O_Script() {
 		loginAction.login(driver);
 
 		createProjectInfoAction.clickCreateProject(driver);
 		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
-		String dataSource = editProjectAction.createComponent(driver, ComponentEnum.KMX_OBJECT_DATASOURC, RandomUtil.randomUUID(), 2, 0);
+		String dataSource = editProjectAction.createComponent(driver, ComponentEnum.KMX_OBJECT_DATASOURC,
+				RandomUtil.randomUUID(), 2, 0);
 		String script = editProjectAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
 		editProjectAction.linkPoint(driver, 0, 1);
 
@@ -213,8 +226,8 @@ public class TestKMXDemo extends WebTest{
 
 		createProjectInfoAction.clickCreateProject(driver);
 		createProjectInfoAction.inputProjectInfo(driver, projectName, projectDesc);
-		String dataSource = editProjectAction.createComponent(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC, RandomUtil.randomUUID(), 0,
-				0);
+		String dataSource = editProjectAction.createComponent(driver, ComponentEnum.KMX_TIMESERIES_DATASOURC,
+				RandomUtil.randomUUID(), 0, 0);
 		String script = editProjectAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
 		editProjectAction.linkPoint(driver, 0, 1);
 
@@ -227,4 +240,13 @@ public class TestKMXDemo extends WebTest{
 		editProjectAction.editCompoment(driver, ComponentEnum.SCRIPT, script, scriptMap);
 		editProjectAction.clickSaveBtn(driver);
 	}
+
+	/**
+	 * https://github.com/mozilla/geckodriver/issues/744
+	 * 
+	 * The issue you are hitting is either SeleniumHQ/selenium#3808 or is a
+	 * separate Java Bindings issue. Please raise an issue with the Selenium
+	 * project, we are not getting the valid data across the wire and are
+	 * erroring appropriately
+	 */
 }
