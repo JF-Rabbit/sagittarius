@@ -9,7 +9,6 @@ import java.util.UUID;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.sagittarius.common.gson.GsonUtil;
 import org.sagittarius.common.http.HttpException;
-import org.sagittarius.common.http.HttpMethodEnum;
 import org.sagittarius.common.http.HttpRequestConfig;
 import org.sagittarius.common.http.HttpResponseConfig;
 import org.sagittarius.common.http.HttpUtil;
@@ -25,7 +24,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestContext;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 import com.google.gson.JsonObject;
 
@@ -125,27 +123,5 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 		recorder.compare(expect, httpResponseConfig1);
 		logger.info("recorder:{}" + recorder);
 	}
-
-	@Test
-	public void test5() throws Exception {
-		HttpRequestConfig request = new HttpRequestConfig();
-
-		request.setRequestMethod(HttpMethodEnum.POST);
-		request.setRequestUrl(
-				"https://192.168.130.101:8443/cas/login?service=http://192.168.130.101:5004/cas/validate&sn="
-						+ UUID.randomUUID());
-
-		Map<String, String> param = new HashMap<String, String>();
-		param.put("username", "k2data");
-		param.put("password", "K2Data@k001");
-		request.setHttpEntityJsonStr(MapUtil.mapToJsonStr(param));
-
-		HttpResponseConfig httpResponseConfig = HttpUtil.service(request);
-		logger.info("httpResponseConfig:\t{}", httpResponseConfig);
-
-		logger.info("JSESSIONID:\t{}", HttpUtil.getJSessionID(httpResponseConfig));
-	}
-	
-	 
 
 }

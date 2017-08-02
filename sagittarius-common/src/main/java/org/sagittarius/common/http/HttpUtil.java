@@ -20,15 +20,15 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
 
+// http://hc.apache.org/httpcomponents-client-ga/examples.html
 public class HttpUtil {
 
 	public static HttpResponseConfig service(HttpRequestConfig httpRequestConfig) throws HttpException {
-		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-		CloseableHttpClient closeableHttpClient = httpClientBuilder.build();
+		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 		HttpResponseConfig httpResponseConfig = new HttpResponseConfig();
 		try {
 
