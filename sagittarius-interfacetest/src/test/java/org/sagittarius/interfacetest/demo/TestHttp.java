@@ -24,6 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestContext;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 import com.google.gson.JsonObject;
 
@@ -52,7 +53,7 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 		return objects;
 	}
 
-	// @Test(dataProvider = "dataProvider2") // 测试获取JSessionId
+	@Test(dataProvider = "dataProvider2") // 测试获取JSessionId
 	public void test2(HttpRequestConfig res1, HttpRequestConfig res2) throws HttpException {
 		System.out.println(res1);
 		BasicClientCookie cookie1 = new BasicClientCookie("aaa", UUID.randomUUID().toString());
@@ -103,8 +104,8 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 
 	// @Test(dataProvider = "dataProvider3") // 测试Post Entity
 	public void test4(HttpRequestConfig res2) throws HttpException {
-		res2.getRequestHeaders().put("Cookie", "JSESSIONID=5B18673DDCF1A8F884A09613B7B9117C");
-
+		res2.addJsessionId("5B18673DDCF1A8F884A09613B7B9117C");
+		
 		logger.info("httpResponseConfig:\t{}", res2);
 
 		HttpResponseConfig httpResponseConfig1 = HttpUtil.service(res2);

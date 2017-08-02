@@ -32,6 +32,10 @@ public class HttpRequestConfig {
 		context.setCookieSpecRegistry(registry);
 	}
 
+	public void addJsessionId(String JsessionId) {
+		requestHeaders.put("Cookie", HttpUtil.JSESSIONID + "=" + JsessionId);
+	}
+
 	public HttpMethodEnum getRequestMethod() {
 		return requestMethod;
 	}
