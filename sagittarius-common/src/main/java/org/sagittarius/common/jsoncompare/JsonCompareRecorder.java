@@ -59,7 +59,7 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 
 	@Override
 	public String toString() {
-		return "JsonCompareRecorder [compareResult=" + compareResult + ", errorRecorder=" + errorRecorder + "\n]";
+		return "\nJsonCompareRecorder [compareResult=" + compareResult + ", errorRecorder=" + errorRecorder + "\n]";
 	}
 
 	/** 适用于 IGNORE_RESPONSE_CODE, IGNORE_OBJECT_SIZE, IGNORE_ARRAY_SIZE，全局忽略 */
@@ -173,9 +173,8 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 			checkArrayOne(expect, other);
 			return;
 		} else if (expect.getAsJsonArray().size() != other.getAsJsonArray().size()) {
-			builder.append(JSON_ARRAY_SIZE_MISS_MATCH).append(pathBuilder)
-					.append(setErrorMsg(expect.getAsJsonArray().size(), other.getAsJsonArray().size()))
-					.append(DEBUG_LINE);
+			setErrorDebug(JSON_ARRAY_SIZE_MISS_MATCH, pathBuilder, expect.getAsJsonArray().size(),
+					other.getAsJsonArray().size());
 			return;
 		}
 
@@ -251,8 +250,7 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 			JsonElement jsonElement = other.getAsJsonObject().get(entry.getKey());
 
 			if (jsonElement == null) {
-				setIndex(i);
-				pathBuilder.append("[").append(entry.getKey()).append("]");
+				setPrimitiveKey(i, entry);
 				if (checkIgnoreJsonPath(new JsonDiff(KEY_NOT_FOUND, pathBuilder.toString()))) {
 					continue;
 				}
@@ -265,9 +263,8 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 				if (checkIgnoreJsonPath(new JsonDiff(JSON_TYPE_MISS_MATCH, pathBuilder.toString()))) {
 					continue;
 				}
-				builder.append(JSON_TYPE_MISS_MATCH).append(pathBuilder).append(
-						setErrorMsg(GsonUtil.checkJsonType(entry.getValue()), GsonUtil.checkJsonType(jsonElement)))
-						.append(DEBUG_LINE);
+				setErrorDebug(JSON_TYPE_MISS_MATCH, pathBuilder, GsonUtil.checkJsonType(entry.getValue()),
+						GsonUtil.checkJsonType(jsonElement));
 				continue;
 			}
 
@@ -300,13 +297,11 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 					}
 
 					if (isError) {
-						setIndex(i);
-						pathBuilder.append("[").append(entry.getKey()).append("]");
+						setPrimitiveKey(i, entry);
 						if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_REGEX, pathBuilder.toString()))) {
 							continue;
 						}
-						builder.append(VALUE_MISS_REGEX).append(pathBuilder)
-								.append(setErrorMsg(entry.getValue().getAsString(), jsonElement)).append(DEBUG_LINE);
+						setErrorDebug(VALUE_MISS_REGEX, pathBuilder, entry.getValue().getAsString(), jsonElement);
 					}
 
 					continue;
@@ -318,43 +313,40 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 
 				if (entry.getValue().getAsString().equals(IS_NUMBER)) {
 					if (!StringUtils.isNumeric(entry.getValue().getAsString())) {
-						setIndex(i);
-						pathBuilder.append("[").append(entry.getKey()).append("]");
+						setPrimitiveKey(i, entry);
 						if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_REGEX, pathBuilder.toString()))) {
 							continue;
 						}
-						builder.append(VALUE_MISS_REGEX).append(pathBuilder)
-								.append(setErrorMsg(entry.getValue().getAsString(), jsonElement)).append(DEBUG_LINE);
+						setErrorDebug(VALUE_MISS_REGEX, pathBuilder, entry.getValue().getAsString(), jsonElement);
 					}
+					continue;
 				}
 
 				if (entry.getValue().getAsString().equals(IS_STRING)) {
 					if (StringUtils.isEmpty(entry.getValue().getAsString())) {
-						setIndex(i);
-						pathBuilder.append("[").append(entry.getKey()).append("]");
+						setPrimitiveKey(i, entry);
 						if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_REGEX, pathBuilder.toString()))) {
 							continue;
 						}
-						builder.append(VALUE_MISS_REGEX).append(pathBuilder)
-								.append(setErrorMsg(entry.getValue().getAsString(), jsonElement)).append(DEBUG_LINE);
+						setErrorDebug(VALUE_MISS_REGEX, pathBuilder, entry.getValue().getAsString(), jsonElement);
 					}
+					continue;
 				}
 
 				if (!entry.getValue().getAsString().equals(jsonElement.getAsString())) {
-					setIndex(i);
-					pathBuilder.append("[").append(entry.getKey()).append("]");
+					setPrimitiveKey(i, entry);
 					if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_MATCH, pathBuilder.toString()))) {
 						continue;
 					}
-					builder.append(VALUE_MISS_MATCH).append(pathBuilder)
-							.append(setErrorMsg(entry.getValue().getAsString(), jsonElement)).append(DEBUG_LINE);
+					setErrorDebug(VALUE_MISS_MATCH, pathBuilder, entry.getValue().getAsString(), jsonElement);
 					continue;
 				}
 			}
 
 			if (entry.getValue().isJsonObject()) {
 				setIndex(i);
-				pathBuilder.append(PATH_OBJECT).append("[").append(entry.getKey()).append("]");
+				pathBuilder.append(PATH_OBJECT);
+				setObjectKey(entry);
 				checkJsonObj(entry.getValue().getAsJsonObject(), jsonElement.getAsJsonObject());
 				continue;
 			}
@@ -364,7 +356,8 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 					continue;
 				}
 				setIndex(i);
-				pathBuilder.append(PATH_ARRAY).append("[").append(entry.getKey()).append("]");
+				pathBuilder.append(PATH_ARRAY);
+				setObjectKey(entry);
 				checkJsonArray(entry.getKey(), entry.getValue(), jsonElement);
 				continue;
 			}
@@ -376,14 +369,27 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 		}
 	}
 
+	private void setErrorDebug(String errorCode, StringBuilder path, Object expect, Object actual) {
+		builder.append(errorCode).append(path).append(setErrorMsg(expect, actual)).append(DEBUG_LINE);
+	}
+
+	private void setPrimitiveKey(int i, Entry<String, JsonElement> entry) {
+		setIndex(i);
+		setObjectKey(entry);
+	}
+
+	private void setObjectKey(Entry<String, JsonElement> entry) {
+		pathBuilder.append("[").append(entry.getKey()).append("]");
+	}
+
 	private void setIndex(int i) {
 		pathBuilder.append("[").append(i).append("]");
 	}
 
-	private String setErrorMsg(Object expect, Object result) {
+	private String setErrorMsg(Object expect, Object actual) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("\n").append("\tExpect: ").append(String.valueOf(expect)).append("\n\tActually: ")
-				.append(String.valueOf(result));
+				.append(String.valueOf(actual));
 		return builder.toString();
 	}
 

@@ -24,7 +24,7 @@ public class HttpRequestConfig {
 		super();
 		this.requestParam = new HashMap<>();
 		this.requestHeaders = new HashMap<>();
-		requestHeaders.put("Content-Type", "application/json");
+		requestHeaders.put("Content-Type", "application/json;charset=UTF-8");
 		this.context = HttpClientContext.create();
 		Registry<CookieSpecProvider> registry = RegistryBuilder.<CookieSpecProvider>create()
 				.register(CookieSpecs.DEFAULT, new DefaultCookieSpecProvider())

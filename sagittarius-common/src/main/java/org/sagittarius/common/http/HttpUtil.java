@@ -87,7 +87,7 @@ public class HttpUtil {
 	// http://blog.csdn.net/qq32933432/article/details/51813256
 	// http://www.cnblogs.com/yaowen/p/3757571.html
 
-	private static String JSESSIONID = "JSESSIONID";
+	public static String JSESSIONID = "JSESSIONID";
 
 	public static BasicClientCookie getJSessionID(HttpResponseConfig httpResponseConfig) {
 		Map<String, String> responseHeaders = httpResponseConfig.getResponseHeaders();

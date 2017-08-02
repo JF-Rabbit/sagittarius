@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.sagittarius.common.gson.GsonUtil;
 import org.sagittarius.common.http.HttpException;
+import org.sagittarius.common.http.HttpMethodEnum;
 import org.sagittarius.common.http.HttpRequestConfig;
 import org.sagittarius.common.http.HttpResponseConfig;
 import org.sagittarius.common.http.HttpUtil;
@@ -102,8 +103,10 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 		return objects;
 	}
 
-	@Test(dataProvider = "dataProvider3") // 测试Post Entity
+	// @Test(dataProvider = "dataProvider3") // 测试Post Entity
 	public void test4(HttpRequestConfig res2) throws HttpException {
+		res2.getRequestHeaders().put("Cookie", "JSESSIONID=5B18673DDCF1A8F884A09613B7B9117C");
+
 		logger.info("httpResponseConfig:\t{}", res2);
 
 		HttpResponseConfig httpResponseConfig1 = HttpUtil.service(res2);
@@ -122,5 +125,27 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 		recorder.compare(expect, httpResponseConfig1);
 		logger.info("recorder:{}" + recorder);
 	}
+
+	@Test
+	public void test5() throws Exception {
+		HttpRequestConfig request = new HttpRequestConfig();
+
+		request.setRequestMethod(HttpMethodEnum.POST);
+		request.setRequestUrl(
+				"https://192.168.130.101:8443/cas/login?service=http://192.168.130.101:5004/cas/validate&sn="
+						+ UUID.randomUUID());
+
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("username", "k2data");
+		param.put("password", "K2Data@k001");
+		request.setHttpEntityJsonStr(MapUtil.mapToJsonStr(param));
+
+		HttpResponseConfig httpResponseConfig = HttpUtil.service(request);
+		logger.info("httpResponseConfig:\t{}", httpResponseConfig);
+
+		logger.info("JSESSIONID:\t{}", HttpUtil.getJSessionID(httpResponseConfig));
+	}
 	
+	 
+
 }
