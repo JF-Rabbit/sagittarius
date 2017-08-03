@@ -1,4 +1,5 @@
 # Ignore
+.idea/
 .settings/
 logs/
 *.class
@@ -9,3 +10,4 @@ target/
 test-output/
 db.properties
 conf/
+*.iml
