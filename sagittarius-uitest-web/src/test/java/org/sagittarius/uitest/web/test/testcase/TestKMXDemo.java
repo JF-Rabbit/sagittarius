@@ -175,7 +175,11 @@ public class TestKMXDemo extends WebTest {
 		String dataSource3 = editProjectAction.createComponent(driver, ComponentEnum.KMX_OBJECT_DATASOURC,
 				RandomUtil.randomUUID(), -2, 0);
 		String script = editProjectAction.createComponent(driver, ComponentEnum.SCRIPT, RandomUtil.randomUUID(), 0, 2);
-
+		
+		editProjectAction.linkPoint(driver, 2, 3);
+		editProjectAction.linkPoint(driver, 0, 4);
+		editProjectAction.linkPoint(driver, 1, 5);
+		
 		editProjectAction.clickSaveBtn(driver);
 	}
 

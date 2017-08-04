@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.sagittarius.common.Delay;
 import org.sagittarius.common.annotation.DebugSuspend;
 import org.sagittarius.common.judge.JudgeUtil;
@@ -61,6 +62,15 @@ public class EditProjectAction {
 		RobotUtil.dragToLocation(startX, startY, endX, endY);
 		Delay.sleep(500);
 		PageElementUtil.clearAndSendKey(projectCanvasPage.nameInput, projectName);
+		
+		if (componentEnum.equals(ComponentEnum.SCRIPT)) {
+			Delay.sleep(500);
+			WebElement element = driver.findElement(By.xpath("//div[@class='ant-slider-handle' and @aria-valuemax='7']"));
+			WebElement slider = driver.findElement(By.className("ant-slider-step"));
+			int width = element.getLocation().x - slider.getLocation().x;
+			new Actions(driver).dragAndDropBy(element, 3 * width, 0).perform();
+		}
+		
 		projectCanvasPage.confirmBtn.click();
 		Delay.sleep(500);
 		return projectName;
