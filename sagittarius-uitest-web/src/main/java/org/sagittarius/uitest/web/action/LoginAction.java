@@ -8,15 +8,21 @@ import java.awt.event.KeyEvent;
 import java.util.Properties;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.sagittarius.common.properties.PropertiesUtil;
 import org.sagittarius.uitest.util.PageElementUtil;
 import org.sagittarius.uitest.web.ConfigConstant;
 import org.sagittarius.uitest.web.page.login.LoginPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LoginAction {
+	
+	private static final Logger logger = LoggerFactory.getLogger(LoginAction.class);
+
 
 	private String getCurrentEnv() {
 		return PropertiesUtil.getSingleValue(ConfigConstant.CONFIG_FILE_PATH, ConfigConstant.ENV);
@@ -37,12 +43,16 @@ public class LoginAction {
 
 	public void login(WebDriver driver) {
 		driver.get(getTargetURL());
-		LoginPage loginPage = new LoginPage();
-		PageElementUtil.initPages(driver, loginPage);
-		Properties properties = PropertiesUtil.load(ConfigConstant.CONFIG_FILE_PATH);
-		loginPage.usernameInput.sendKeys(properties.getProperty(getCurrentEnv() + ConfigConstant.USERNAME));
-		loginPage.passwordInput.sendKeys(properties.getProperty(getCurrentEnv() + ConfigConstant.PASSWORD));
-		loginPage.loginBtn.click();
+		try {
+			LoginPage loginPage = new LoginPage();
+			PageElementUtil.initPages(driver, loginPage);
+			Properties properties = PropertiesUtil.load(ConfigConstant.CONFIG_FILE_PATH);
+			loginPage.usernameInput.sendKeys(properties.getProperty(getCurrentEnv() + ConfigConstant.USERNAME));
+			loginPage.passwordInput.sendKeys(properties.getProperty(getCurrentEnv() + ConfigConstant.PASSWORD));
+			loginPage.loginBtn.click();
+		} catch (NoSuchElementException e) {
+			logger.warn("Not Login");
+		}
 	}
 
 	public void loadTask(WebDriver driver) {
@@ -51,7 +61,6 @@ public class LoginAction {
 
 	public void inputTaskName(WebDriver driver, String taskName) {
 		driver.findElement(By.xpath("//*[@id=\"name\"]")).sendKeys(taskName);
-		;
 	}
 
 	@Deprecated
