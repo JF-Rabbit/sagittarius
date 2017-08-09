@@ -47,6 +47,9 @@ public class GsonUtil {
 	}
 
 	public static JsonTypeEnum checkJsonType(JsonElement jsonElement) {
+		if (jsonElement == null) {
+			return null;
+		}
 		if (jsonElement.isJsonObject()) {
 			return JsonTypeEnum.OBJECT;
 		}
@@ -63,6 +66,9 @@ public class GsonUtil {
 	}
 
 	public static boolean isSameJsonType(JsonElement expect, JsonElement other) {
+		if (expect == null) {
+			return false;
+		}
 		return checkJsonType(expect).equals(checkJsonType(other));
 	}
 
