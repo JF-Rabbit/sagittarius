@@ -12,10 +12,14 @@ import org.sagittarius.common.http.HttpException;
 import org.sagittarius.common.http.HttpRequestConfig;
 import org.sagittarius.common.http.HttpResponseConfig;
 import org.sagittarius.common.http.HttpUtil;
+import org.sagittarius.common.jsoncompare.CheckEnum;
+import org.sagittarius.common.jsoncompare.FilterEnum;
 import org.sagittarius.common.jsoncompare.JsonCompareRecorder;
+import org.sagittarius.common.jsoncompare.JsonCompareRecorder2;
 import org.sagittarius.common.jsoncompare.JsonDiff;
 import org.sagittarius.common.jsoncompare.JsonDiffErrorCode;
 import org.sagittarius.common.jsoncompare.RuleEnum;
+import org.sagittarius.common.jsoncompare.RuleRegexConstant;
 import org.sagittarius.common.map.MapUtil;
 import org.sagittarius.interfacetest.caseEnum.TestCaseEnum;
 import org.slf4j.Logger;
@@ -53,7 +57,7 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 		return objects;
 	}
 
-	@Test(dataProvider = "dataProvider2") // 测试获取JSessionId
+	// @Test(dataProvider = "dataProvider2") // 测试获取JSessionId
 	public void test2(HttpRequestConfig res1, HttpRequestConfig res2) throws HttpException {
 		System.out.println(res1);
 		BasicClientCookie cookie1 = new BasicClientCookie("aaa", UUID.randomUUID().toString());
@@ -105,7 +109,7 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 	// @Test(dataProvider = "dataProvider3") // 测试Post Entity
 	public void test4(HttpRequestConfig res2) throws HttpException {
 		res2.addJsessionId("5B18673DDCF1A8F884A09613B7B9117C");
-		
+
 		logger.info("httpResponseConfig:\t{}", res2);
 
 		HttpResponseConfig httpResponseConfig1 = HttpUtil.service(res2);
@@ -122,6 +126,100 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 
 		JsonCompareRecorder recorder = new JsonCompareRecorder();
 		recorder.compare(expect, httpResponseConfig1);
+		logger.info("recorder:{}" + recorder);
+	}
+
+	private JsonCompareRecorder2 checkRecorder(JsonCompareRecorder2 recorder) throws HttpException {
+		HttpResponseConfig httpResponseConfig2 = new HttpResponseConfig();
+		httpResponseConfig2.setResponseStatusCode(100);
+		JsonObject jsonObject2 = GsonUtil.getJsonObjFromJsonFile("C:/Users/kzdatd/Desktop/b.json");
+		httpResponseConfig2.setResponseContent(GsonUtil.jsonObjToStr(jsonObject2));
+		// logger.info("{}", httpResponseConfig2);
+		HttpResponseConfig httpResponseConfig1 = HttpUtil.service(TestCaseEnum.GET_ANALYSIS_TYPES.getConfig());
+		recorder.setRule(JsonCompareRecorder2.KEY_RESPONSE_CODE, FilterEnum.IGNORE_RESPONSE_CODE);
+		recorder.compareAll(httpResponseConfig2, httpResponseConfig1);
+		return recorder;
+	}
+	
+	@Test(enabled = true)
+	public void testCheckOne () throws HttpException {
+		HttpResponseConfig httpResponseConfig2 = new HttpResponseConfig();
+		httpResponseConfig2.setResponseStatusCode(100);
+		JsonObject jsonObject2 = GsonUtil.getJsonObjFromJsonFile("C:/Users/kzdatd/Desktop/b.json");
+		httpResponseConfig2.setResponseContent(GsonUtil.jsonObjToStr(jsonObject2));
+		// logger.info("{}", httpResponseConfig2);
+		HttpResponseConfig httpResponseConfig1 = HttpUtil.service(TestCaseEnum.GET_ANALYSIS_TYPES.getConfig());
+		JsonCompareRecorder2 recorder = new JsonCompareRecorder2();
+		recorder.setRule(JsonCompareRecorder2.KEY_RESPONSE_CODE, FilterEnum.IGNORE_RESPONSE_CODE);
+		
+//		recorder.setRule("code", CheckEnum.MATCH_RULE_REGEX, RuleRegexConstant.IGNORE_VALUE);
+//		recorder.compareOne(httpResponseConfig2, httpResponseConfig1, "root-obj[0][code]");
+		
+//		recorder.compareOne(httpResponseConfig2, httpResponseConfig1, "root-obj[1][message]");
+		
+//		recorder.setRule("code", CheckEnum.IS_ANY_STRING, null);
+//		recorder.compareOne(httpResponseConfig2, httpResponseConfig1, "root-obj[2]-array[result][0]-obj[0][code]");
+		
+//		recorder.compareOne(httpResponseConfig2, httpResponseConfig1, "root-obj[2]-array[result][0]-obj[2][status]");
+		recorder.compareOne(httpResponseConfig2, httpResponseConfig1, "root-obj[3][id]");
+		
+		logger.info("recorder:{}" + recorder);
+	}
+	
+	@Test(enabled = false)
+	public void testDefault() throws HttpException {
+		JsonCompareRecorder2 recorder = new JsonCompareRecorder2();
+		recorder.setRule("result", FilterEnum.IGNORE_ARRAY_SIZE);
+		recorder.setRule(JsonCompareRecorder2.KEY_ROOT, FilterEnum.IGNORE_OBJECT_SIZE);
+		recorder = checkRecorder(recorder);
+		logger.info("recorder:{}" + recorder);
+	}
+
+	@Test(enabled = false)
+	public void testRuleRegex() throws HttpException {
+		JsonCompareRecorder2 recorder = new JsonCompareRecorder2();
+		recorder.setRule(JsonCompareRecorder2.KEY_ROOT, FilterEnum.IGNORE_OBJECT_SIZE);
+		recorder.setRule("result", FilterEnum.IGNORE_ARRAY_SIZE);
+		recorder.setRule("code", CheckEnum.MATCH_RULE_REGEX, RuleRegexConstant.IGNORE_VALUE);
+		//recorder.setRule("code", CheckEnum.MATCH_RULE_REGEX, RuleRegexConstant.IS_STRING);
+		recorder.setRule("status", CheckEnum.MATCH_RULE_REGEX, RuleRegexConstant.IS_NUMBER);
+		recorder = checkRecorder(recorder);
+		logger.info("recorder:{}" + recorder);
+	}
+
+	@Test(enabled = false)
+	public void testIsInteger() throws HttpException {
+		JsonCompareRecorder2 recorder = new JsonCompareRecorder2();
+		recorder.setRule("result", FilterEnum.IGNORE_ARRAY_SIZE);
+		recorder.setRule("status", CheckEnum.IS_ANY_INTEGER, null);
+		recorder = checkRecorder(recorder);
+		logger.info("recorder:{}" + recorder);
+	}
+
+	@Test(enabled = false)
+	public void testJsonDiff() throws HttpException {
+		JsonCompareRecorder2 recorder = new JsonCompareRecorder2();
+		recorder.setRule(JsonCompareRecorder2.KEY_ROOT, CheckEnum.MATCH_JSONDIFF, JsonDiffErrorCode.JSON_OBJECT_SIZE_MATCH + "root-obj");
+		recorder.setRule("id", CheckEnum.MATCH_JSONDIFF, JsonDiffErrorCode.KEY_NOT_FOUND + "root-obj[2][id]");
+		recorder.setRule("result", CheckEnum.MATCH_JSONDIFF, JsonDiffErrorCode.JSON_ARRAY_SIZE_MISS_MATCH + "root-obj[3]-array[result]");
+		recorder.setRule("code", CheckEnum.MATCH_JSONDIFF, JsonDiffErrorCode.VALUE_MISS_MATCH + "root-obj[0][code]");
+		recorder.setRule("code", CheckEnum.MATCH_JSONDIFF, JsonDiffErrorCode.VALUE_MISS_MATCH + "root-obj[3]-array[result][0]-obj[0][code]");
+		recorder.setRule("message", CheckEnum.MATCH_JSONDIFF, JsonDiffErrorCode.JSON_TYPE_MISS_MATCH + "root-obj[1][message]");
+		recorder = checkRecorder(recorder);
+		logger.info("recorder:{}" + recorder);
+	}
+
+	@Test(enabled = false)
+	public void testFilter() throws HttpException {
+		JsonCompareRecorder2 recorder = new JsonCompareRecorder2();
+		recorder.setRule(JsonCompareRecorder2.KEY_ROOT, FilterEnum.IGNORE_OBJECT_SIZE);
+		//recorder.setRule("root", FilterEnum.IGNORE_VALUE);
+		recorder.setRule("message", FilterEnum.IS_JSON_OBJECT);
+		recorder.setRule("code", FilterEnum.IGNORE_VALUE);
+		recorder.setRule("result", FilterEnum.IGNORE_ARRAY_SIZE);
+		recorder.setRule("result", FilterEnum.IS_JSON_ARRAY);
+		recorder.setRule("result", FilterEnum.IGNORE_VALUE);
+		recorder = checkRecorder(recorder);
 		logger.info("recorder:{}" + recorder);
 	}
 
