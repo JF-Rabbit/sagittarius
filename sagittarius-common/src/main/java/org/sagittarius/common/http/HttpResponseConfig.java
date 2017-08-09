@@ -47,7 +47,7 @@ public class HttpResponseConfig {
 		this.responseHeaders = responseHeaders;
 	}
 
-	public String Format() {
+	public String format() {
 		return "HttpResponseConfig [responseStatusCode=" + responseStatusCode + ", responseContent="
 				+ GsonUtil.jsonStrFormat(responseContent) + ", responseTime=" + responseTime + ", responseHeaders="
 				+ responseHeaders + "]";
