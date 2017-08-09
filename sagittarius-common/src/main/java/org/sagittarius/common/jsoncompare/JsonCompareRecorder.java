@@ -28,7 +28,7 @@ import com.google.gson.JsonObject;
  * @author jasonzhang 2017年7月29日 下午6:34:42
  *
  */
-public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleConstant {
+public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleRegexConstant {
 
 	private boolean compareResult;
 	private String errorRecorder;
@@ -163,7 +163,7 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 	}
 
 	private void checkJsonArray(String arrayEntryKey, JsonElement expect, JsonElement other) {
-		if (checkRuleMap(arrayEntryKey, RuleEnum.IGNORE_KEY_VALUE)) {
+		if (checkRuleMap(arrayEntryKey, RuleEnum.IGNORE_VALUE)) {
 			return;
 		}
 		if (checkIgnoreGlobalList(RuleEnum.IGNORE_ARRAY_SIZE)) {
@@ -268,12 +268,15 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 				continue;
 			}
 
-			if (checkRuleMap(entry.getKey(), RuleEnum.IGNORE_KEY_VALUE)
-					|| checkRuleConstant(entry.getValue().getAsString(), IGNORE_VALUE)) {
+			if (checkRuleMap(entry.getKey(), RuleEnum.IGNORE_VALUE)) {
 				continue;
 			}
 
 			if (entry.getValue().isJsonPrimitive()) {
+
+				if (checkRuleConstant(entry.getValue().getAsString(), IGNORE_VALUE)) {
+					continue;
+				}
 
 				if (checkRuleMap(entry.getKey())) {
 					boolean isError = false;
@@ -301,7 +304,7 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 						if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_REGEX, pathBuilder.toString()))) {
 							continue;
 						}
-						setErrorDebug(VALUE_MISS_REGEX, pathBuilder, entry.getValue().getAsString(), jsonElement);
+						setErrorDebug(VALUE_MISS_REGEX, pathBuilder, entry.getValue().getAsString(), jsonElement.getAsString());
 					}
 
 					continue;
@@ -317,7 +320,7 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 						if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_REGEX, pathBuilder.toString()))) {
 							continue;
 						}
-						setErrorDebug(VALUE_MISS_REGEX, pathBuilder, entry.getValue().getAsString(), jsonElement);
+						setErrorDebug(VALUE_MISS_REGEX, pathBuilder, entry.getValue().getAsString(), jsonElement.getAsString());
 					}
 					continue;
 				}
@@ -328,7 +331,7 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 						if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_REGEX, pathBuilder.toString()))) {
 							continue;
 						}
-						setErrorDebug(VALUE_MISS_REGEX, pathBuilder, entry.getValue().getAsString(), jsonElement);
+						setErrorDebug(VALUE_MISS_REGEX, pathBuilder, entry.getValue().getAsString(), jsonElement.getAsString());
 					}
 					continue;
 				}
@@ -338,7 +341,7 @@ public class JsonCompareRecorder implements JsonDiffErrorCode, JsonPath, RuleCon
 					if (checkIgnoreJsonPath(new JsonDiff(VALUE_MISS_MATCH, pathBuilder.toString()))) {
 						continue;
 					}
-					setErrorDebug(VALUE_MISS_MATCH, pathBuilder, entry.getValue().getAsString(), jsonElement);
+					setErrorDebug(VALUE_MISS_MATCH, pathBuilder, entry.getValue().getAsString(), jsonElement.getAsString());
 					continue;
 				}
 			}
