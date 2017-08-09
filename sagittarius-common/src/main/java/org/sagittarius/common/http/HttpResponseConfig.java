@@ -47,11 +47,16 @@ public class HttpResponseConfig {
 		this.responseHeaders = responseHeaders;
 	}
 
-	@Override
-	public String toString() {
+	public String Format() {
 		return "HttpResponseConfig [responseStatusCode=" + responseStatusCode + ", responseContent="
 				+ GsonUtil.jsonStrFormat(responseContent) + ", responseTime=" + responseTime + ", responseHeaders="
 				+ responseHeaders + "]";
+	}
+
+	@Override
+	public String toString() {
+		return "HttpResponseConfig [responseStatusCode=" + responseStatusCode + ", responseContent=" + responseContent
+				+ ", responseTime=" + responseTime + ", responseHeaders=" + responseHeaders + "]";
 	}
 
 }
