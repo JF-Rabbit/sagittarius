@@ -1,6 +1,6 @@
 package org.sagittarius.common.jsoncompare;
 
-public interface RuleConstant {
+public interface RuleRegexConstant {
 	
 	String IGNORE_VALUE = "%IGNORE_VALUE%";
 	String IS_NUMBER = "%IS_NUMBER%";
