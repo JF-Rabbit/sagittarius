@@ -1,9 +1,7 @@
 package org.sagittarius.uitest.web.aop;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Date;
-import java.util.Properties;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -12,21 +10,39 @@ import org.sagittarius.common.Delay;
 import org.sagittarius.common.annotation.DebugSuspend;
 import org.sagittarius.common.aop.AopUtil;
 import org.sagittarius.common.date.DateUtil;
-import org.sagittarius.common.judge.JudgeUtil;
-import org.sagittarius.common.properties.PropertiesUtil;
 import org.sagittarius.uitest.CommonConstant;
 import org.sagittarius.uitest.exception.ManualConfirmException;
 import org.sagittarius.uitest.util.web.WebElementUtil;
-import org.sagittarius.uitest.web.ConfigConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-public class ActionAop implements ConfigConstant, CommonConstant {
+@PropertySource({ AOPConstant.AOP_CONFIG_FILE_PATH })
+public class ActionAop implements AOPConstant, CommonConstant {
 
 	private static final Logger logger = LoggerFactory.getLogger(ActionAop.class);
+
+	@Value(RUN_TYPE)
+	private String runType;
+
+	@Value(DEBUG_TYPE_ERROR)
+	private String debugError;
+
+	@Value(DEBUG_TYPE_ANNOTATION)
+	private String debugAnnotation;
+
+	@Value(DEBUG_TYPE_EVERY_ACTION)
+	private String debugEveryAction;
+
+	@Value(DEBUG_SAVE_WEB_HTML)
+	private String debugSaveWebHtml;
+
+	@Value(LOG_PATH)
+	private String logPath;
 
 	private static final String ACTION_AOP_RULE = "execution(public * org.sagittarius.uitest.web.action..*.*(..))";
 
@@ -34,12 +50,6 @@ public class ActionAop implements ConfigConstant, CommonConstant {
 	private static final String ACTION_END = "<== ";
 
 	private static final String DEBUG_MSG = "=====DEBUG SUSPEND=====";
-
-	private Properties properties;
-
-	ActionAop() throws IOException {
-		this.properties = PropertiesUtil.load(CONFIG_FILE_PATH);
-	}
 
 	@Around(ACTION_AOP_RULE)
 	public Object actionAspect(ProceedingJoinPoint p) throws Throwable {
@@ -67,8 +77,8 @@ public class ActionAop implements ConfigConstant, CommonConstant {
 	}
 
 	private void saveWebPage() {
-		if (properties.get(DEBUG_SAVE_WEB_HTML).equals(TRUE)) {
-			String fileName = properties.getProperty(LOG_PATH) + DateUtil.dateFormat(new Date(), DateUtil.YYYY_MM_DD_HH_MM_SS_FILE_TYPE)
+		if (debugSaveWebHtml.equals(TRUE)) {
+			String fileName = logPath + DateUtil.dateFormat(new Date(), DateUtil.YYYY_MM_DD_HH_MM_SS_FILE_TYPE)
 					+ FILE_TYPE_HTML;
 			WebElementUtil.saveCurrentWebPage(fileName);
 			Delay.sleep(5000);
@@ -76,10 +86,9 @@ public class ActionAop implements ConfigConstant, CommonConstant {
 	}
 
 	private void errorDebug(Exception e) {
-		if (properties.get(RUN_TYPE).equals(RUN_TYPE_NORMAL)) {
+		if (runType.equals(RUN_TYPE_NORMAL)) {
 			return;
-		} else if (JudgeUtil.objEqualsStr(properties.get(RUN_TYPE), RUN_TYPE_DEBUG)
-				&& JudgeUtil.objEqualsStr(properties.get(DEBUG_TYPE_ERROR), TRUE)) {
+		} else if (runType.equals(RUN_TYPE_DEBUG) && debugError.equals(TRUE)) {
 			logger.error(DEBUG_MSG, e);
 			Delay.suspend();
 		}
@@ -87,20 +96,18 @@ public class ActionAop implements ConfigConstant, CommonConstant {
 	}
 
 	private void everyActionDebug() {
-		if (properties.get(RUN_TYPE).equals(RUN_TYPE_NORMAL)) {
+		if (runType.equals(RUN_TYPE_NORMAL)) {
 			return;
-		} else if (JudgeUtil.objEqualsStr(properties.get(RUN_TYPE), RUN_TYPE_DEBUG)
-				&& JudgeUtil.objEqualsStr(properties.get(DEBUG_TYPE_EVERY_ACTION), TRUE)) {
+		} else if (runType.equals(RUN_TYPE_DEBUG) && debugEveryAction.equals(TRUE)) {
 			logger.info(DEBUG_MSG);
 			Delay.suspend();
 		}
 	}
 
 	private void suspendAnnotation(Method method) {
-		if (properties.get(RUN_TYPE).equals(RUN_TYPE_NORMAL)) {
+		if (runType.equals(RUN_TYPE_NORMAL)) {
 			return;
-		} else if (JudgeUtil.objEqualsStr(properties.get(RUN_TYPE), RUN_TYPE_DEBUG)
-				&& JudgeUtil.objEqualsStr(properties.get(DEBUG_TYPE_ANNOTATION), TRUE)) {
+		} else if (runType.equals(RUN_TYPE_DEBUG) && debugAnnotation.equals(TRUE)) {
 
 			if (method.isAnnotationPresent(DebugSuspend.class)) {
 				logger.info(DEBUG_MSG);
@@ -108,4 +115,5 @@ public class ActionAop implements ConfigConstant, CommonConstant {
 			}
 		}
 	}
+
 }
