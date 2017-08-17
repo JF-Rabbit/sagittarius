@@ -5,14 +5,15 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
-import java.util.Properties;
+import java.util.Map;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.sagittarius.common.properties.PropertiesUtil;
+import org.sagittarius.common.yaml.YamlUtil;
 import org.sagittarius.uitest.util.PageElementUtil;
 import org.sagittarius.uitest.web.ConfigConstant;
+import org.sagittarius.uitest.web.enventity.Environment;
 import org.sagittarius.uitest.web.page.login.LoginPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,17 +24,23 @@ public class LoginAction {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LoginAction.class);
 
-
-	private String getCurrentEnv() {
-		return PropertiesUtil.getSingleValue(ConfigConstant.CONFIG_FILE_PATH, ConfigConstant.ENV);
+	private Environment environment;
+	
+	public LoginAction() {
+		this.environment = getEnv();
 	}
-
-	private String getTargetURL() {
-		return PropertiesUtil.getSingleValue(ConfigConstant.CONFIG_FILE_PATH, getCurrentEnv() + ConfigConstant.URL);
+	
+	@SuppressWarnings("unchecked")
+	public Environment getEnv() {
+		Map<String, Map<String, String>> map = (Map<String, Map<String, String>>) YamlUtil.load(ConfigConstant.ENV_CONFIG_PATH);
+		String url = map.get(map.get(ConfigConstant.ENV)).get(ConfigConstant.URL);
+		String username = map.get(map.get(ConfigConstant.ENV)).get(ConfigConstant.USERNAME);
+		String password = map.get(map.get(ConfigConstant.ENV)).get(ConfigConstant.PASSWORD);
+		return new Environment(url, username, password);
 	}
 
 	public void login(WebDriver driver, String username, String password) {
-		driver.get(getTargetURL());
+		driver.get(environment.getUrl());
 		LoginPage loginPage = new LoginPage();
 		PageElementUtil.initPages(driver, loginPage);
 		loginPage.usernameInput.sendKeys(username);
@@ -42,13 +49,12 @@ public class LoginAction {
 	}
 
 	public void login(WebDriver driver) {
-		driver.get(getTargetURL());
+		driver.get(environment.getUrl());
 		try {
 			LoginPage loginPage = new LoginPage();
 			PageElementUtil.initPages(driver, loginPage);
-			Properties properties = PropertiesUtil.load(ConfigConstant.CONFIG_FILE_PATH);
-			loginPage.usernameInput.sendKeys(properties.getProperty(getCurrentEnv() + ConfigConstant.USERNAME));
-			loginPage.passwordInput.sendKeys(properties.getProperty(getCurrentEnv() + ConfigConstant.PASSWORD));
+			loginPage.usernameInput.sendKeys(environment.getUsername());
+			loginPage.passwordInput.sendKeys(environment.getPassword());
 			loginPage.loginBtn.click();
 		} catch (NoSuchElementException e) {
 			logger.warn("Not Login");

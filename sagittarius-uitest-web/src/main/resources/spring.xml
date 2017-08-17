@@ -20,7 +20,7 @@
 	<!-- DriverManager -->
 	<bean id="driverManager" class="org.sagittarius.uitest.driver.DriverManager"></bean>
 
-	<util:properties id="jdbc" location="classpath:db.properties"></util:properties>
+	<util:properties id="jdbc" location="classpath:config/db.properties"></util:properties>
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="#{jdbc.driver}"></property>
 		<property name="url" value="#{jdbc.url}"></property>

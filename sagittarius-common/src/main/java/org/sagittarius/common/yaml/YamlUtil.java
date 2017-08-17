@@ -8,6 +8,14 @@ import org.yaml.snakeyaml.Yaml;
 
 public class YamlUtil {
 
+	public static Object load(String path) {
+		try {
+			return new Yaml().load(new FileInputStream(new File(path)));
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static Iterable<Object> loadAll(String path) {
 		try {
 			return new Yaml().loadAll(new FileInputStream(new File(path)));

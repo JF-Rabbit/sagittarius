@@ -253,4 +253,9 @@ public class TestKMXDemo extends WebTest {
 	 * project, we are not getting the valid data across the wire and are
 	 * erroring appropriately
 	 */
+	
+	@Test
+	public void testProp() {
+		loginAction.login(driver);
+	}
 }
