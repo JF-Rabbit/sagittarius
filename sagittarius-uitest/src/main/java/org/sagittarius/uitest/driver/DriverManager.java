@@ -2,11 +2,9 @@ package org.sagittarius.uitest.driver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
@@ -16,34 +14,44 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.sagittarius.common.properties.PropertiesUtil;
 import org.sagittarius.uitest.exception.DriverInitException;
 import org.sagittarius.uitest.util.web.Browser;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-public class DriverManager {
+@PropertySource({ DriverConstant.SELENIUM_CONFIG_PATH })
+public class DriverManager implements DriverConstant {
 
-	private static final String SELENIUM_PROPERTIES = "selenium.properties";
-	private static final String SELENIUM_PROPERTIES_PATH = "conf/selenium.properties";
+	@Value(DRIVER_TYPE)
+	private String driverType;
 
-	private static final String LOAD_FILE_FAIL = "LOAD_FILE_FAIL";
-	private static final String DRIVER_TYPE_NOT_FOUND_IN_PROPERTIES = "DRIVER_TYPE_NOT_FOUND_IN_PROPERTIES";
-	private static final String DRIVER_TYPE_WRONG_ENUM = "DRIVER_TYPE_WRONG_ENUM";
-	private static final String WEBDRIVER_CHROME_DRIVER_NOT_FOUND = "WEBDRIVER_CHROME_DRIVER_NOT_FOUND";
-	private static final String WEBDRIVER_GECKO_DRIVER_NOT_FOUND = "WEBDRIVER_GECKO_DRIVER_NOT_FOUND";
-	private static final String WEBDRIVER_FIREFOX_BIN_NOT_FOUND = "WEBDRIVER_FIREFOX_BIN_NOT_FOUND";
-	private static final String DRIVER_IS_NULL = "DRIVER_IS_NULL";
-	private static final String REMOVTE_HUB_NOT_FOUND_IN_PROPERTIES = "REMOVTE_HUB_NOT_FOUND_IN_PROPERTIES";
-	private static final String REMOVTE_HUB_CONNECT_ERROR = "REMOVTE_HUB_CONNECT_ERROR";
+	@Value("${" + WEBDRIVER_CHROME_DRIVER + "}")
+	private String chromeDriverPath;
 
-	private static final String DRIVER_TYPE = "driver.type";
-	private static final String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
-	private static final String WEBDRIVER_GECKO_DRIVER = "webdriver.gecko.driver";
-	private static final String WEBDRIVER_FIREFOX_BIN = "webdriver.firefox.bin";
-	private static final String REMOTE_HUB = "remote.hub";
+	@Value("${" + WEBDRIVER_GECKO_DRIVER + "}")
+	private String geckoDriverPath;
+
+	@Value("${" + WEBDRIVER_FIREFOX_BIN + "}")
+	private String firefoxDriverPath;
+
+	@Value(REMOTE_HUB)
+	private String remoteHub;
+
+	@Value(WEBDRIVER_POINT_X)
+	private String browserX;
+
+	@Value(WEBDRIVER_POINT_Y)
+	private String browserY;
+
+	@Value(WEBDRIVER_Dimension_WIDTH)
+	private String browserWidth;
+
+	@Value(WEBDRIVER_Dimension_HEIGHT)
+	private String browserHeigh;
 
 	public static final int DEFAULT_FIND_ELEMENT_TIMEOUT = 3;
 
@@ -53,81 +61,58 @@ public class DriverManager {
 		return browser;
 	}
 
-	public void setBrowser(Browser browser) {
-		this.browser = browser;
-	}
-
 	public enum DriverType {
 		LOCAL_CHROME, REMOTE_CHROME, LOCAL_FIREFOX,
 	}
 
-	private Map<String, Object> loadDriverTypeFromSource() throws DriverInitException {
-		Properties properties = new Properties();
-		try {
-			properties = PropertiesUtil.load(SELENIUM_PROPERTIES_PATH);
-		} catch (Exception e) {
-			throw new DriverInitException(LOAD_FILE_FAIL, e);
-		}
+	private DriverType loadDriverTypeFromSource() throws DriverInitException {
 
-		String driverTypeStr = properties.getProperty(DRIVER_TYPE);
-		if (driverTypeStr == null) {
+		if (StringUtils.isEmpty(driverType)) {
 			throw new DriverInitException(DRIVER_TYPE_NOT_FOUND_IN_PROPERTIES);
 		}
 
-		DriverType driverType = null;
+		DriverType type = null;
 		try {
-			driverType = DriverType.valueOf(driverTypeStr);
+			type = DriverType.valueOf(driverType);
 		} catch (IllegalArgumentException e) {
 			throw new DriverInitException(DRIVER_TYPE_WRONG_ENUM, e);
 		}
 
-		Map<String, Object> map = new HashMap<>();
-		map.put(SELENIUM_PROPERTIES, properties);
-		map.put(DRIVER_TYPE, driverType);
-
-		return map;
+		return type;
 	}
 
-	private void setChromeConfig(Properties properties) throws DriverInitException {
-		String webdriver_chrome_driver = properties.getProperty(WEBDRIVER_CHROME_DRIVER);
-
-		if (webdriver_chrome_driver == null) {
-			String errorMsg = WEBDRIVER_CHROME_DRIVER + " | " + webdriver_chrome_driver;
-			throw new DriverInitException(WEBDRIVER_CHROME_DRIVER_NOT_FOUND + ":" + errorMsg);
+	private void setChromeConfig() throws DriverInitException {
+		if (StringUtils.isEmpty(chromeDriverPath)) {
+			throw new DriverInitException(WEBDRIVER_CHROME_DRIVER_NOT_FOUND);
 		}
-		System.setProperty(WEBDRIVER_CHROME_DRIVER, webdriver_chrome_driver);
+		System.setProperty(WEBDRIVER_CHROME_DRIVER, chromeDriverPath);
 	}
 
-	private void setFirefoxConfig(Properties properties) throws DriverInitException {
-		String webdriver_gecko_driver = properties.getProperty(WEBDRIVER_GECKO_DRIVER);
-		String webdriver_firefox_bin = properties.getProperty(WEBDRIVER_FIREFOX_BIN);
+	private void setFirefoxConfig() throws DriverInitException {
 
-		if (webdriver_gecko_driver == null) {
-			String errorMsg = WEBDRIVER_GECKO_DRIVER + " | " + webdriver_gecko_driver;
-			throw new DriverInitException(WEBDRIVER_GECKO_DRIVER_NOT_FOUND + ":" + errorMsg);
+		if (StringUtils.isEmpty(geckoDriverPath)) {
+			throw new DriverInitException(WEBDRIVER_GECKO_DRIVER_NOT_FOUND);
 		}
-		if (webdriver_firefox_bin == null) {
-			String errorMsg = WEBDRIVER_FIREFOX_BIN + " | " + webdriver_firefox_bin;
-			throw new DriverInitException(WEBDRIVER_FIREFOX_BIN_NOT_FOUND + ":" + errorMsg);
+		if (StringUtils.isEmpty(firefoxDriverPath)) {
+			throw new DriverInitException(WEBDRIVER_FIREFOX_BIN_NOT_FOUND);
 		}
-		System.setProperty(WEBDRIVER_GECKO_DRIVER, webdriver_gecko_driver);
-		System.setProperty(WEBDRIVER_FIREFOX_BIN, webdriver_firefox_bin);
+		System.setProperty(WEBDRIVER_GECKO_DRIVER, geckoDriverPath);
+		System.setProperty(WEBDRIVER_FIREFOX_BIN, firefoxDriverPath);
 	}
 
-	private String getRemoteHubAddressFromSource(Properties properties) throws DriverInitException {
-		String remoteHub = properties.getProperty(REMOTE_HUB);
-		if (remoteHub == null) {
+	private String getRemoteHubAddressFromSource() throws DriverInitException {
+		if (StringUtils.isEmpty(remoteHub)) {
 			throw new DriverInitException(REMOVTE_HUB_NOT_FOUND_IN_PROPERTIES);
 		}
 		return remoteHub;
 	}
 
-	private RemoteWebDriver setRemoteWebDriver(DesiredCapabilities capabilities, Properties properties) throws DriverInitException {
+	private RemoteWebDriver setRemoteWebDriver(DesiredCapabilities capabilities) throws DriverInitException {
 		capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 		capabilities.setCapability("name", "Remote File Upload using Selenium 2's FileDetectors");
 		RemoteWebDriver remoteWebDriver = null;
 		try {
-			remoteWebDriver = new RemoteWebDriver(new URL(getRemoteHubAddressFromSource(properties)), capabilities);
+			remoteWebDriver = new RemoteWebDriver(new URL(getRemoteHubAddressFromSource()), capabilities);
 		} catch (MalformedURLException e) {
 			throw new DriverInitException(REMOVTE_HUB_CONNECT_ERROR, e);
 		}
@@ -136,25 +121,23 @@ public class DriverManager {
 	}
 
 	public WebDriver getDriver() throws DriverInitException {
-		Map<String, Object> droverConfigMap = this.loadDriverTypeFromSource();
-		DriverType driverType = (DriverType) droverConfigMap.get(DRIVER_TYPE);
-		Properties properties = (Properties) droverConfigMap.get(SELENIUM_PROPERTIES);
+		DriverType driverType = this.loadDriverTypeFromSource();
 
 		WebDriver driver = null;
 		DesiredCapabilities capabilities = null;
 		switch (driverType) {
 		case LOCAL_CHROME:
-			this.setChromeConfig(properties);
+			this.setChromeConfig();
 			driver = new ChromeDriver();
-			setBrowser(Browser.CHROME);
-			driver = setBrowserLayout(driver, properties);
+			this.browser = Browser.CHROME;
+			driver = setBrowserLayout(driver);
 			break;
 		case REMOTE_CHROME:
 			capabilities = DesiredCapabilities.chrome();
-			driver = setRemoteWebDriver(capabilities, properties);
+			driver = setRemoteWebDriver(capabilities);
 			break;
 		case LOCAL_FIREFOX:
-			this.setFirefoxConfig(properties);
+			this.setFirefoxConfig();
 			// skip SSL
 			// ProfilesIni profilesIni = new ProfilesIni();
 			// FirefoxProfile profile = profilesIni.getProfile("default");
@@ -175,8 +158,8 @@ public class DriverManager {
 			 * github bug: https://github.com/mozilla/geckodriver/issues/820
 			 * 
 			 */
-			driver = setBrowserLayout(driver, properties);
-			setBrowser(Browser.FIREFOX);
+			driver = setBrowserLayout(driver);
+			this.browser = Browser.FIREFOX;
 			break;
 		}
 
@@ -189,22 +172,15 @@ public class DriverManager {
 		return driver;
 	}
 
-	private static final String WEBDRIVER_POINT_X = "webdriver.point.x";
-	private static final String WEBDRIVER_POINT_Y = "webdriver.point.y";
-	private static final String WEBDRIVER_Dimension_WIDTH = "webdriver.dimension.width";
-	private static final String WEBDRIVER_Dimension_HEIGHT = "webdriver.dimension.height";
-
-	private WebDriver setBrowserLayout(WebDriver driver, Properties properties) throws DriverInitException {
+	private WebDriver setBrowserLayout(WebDriver driver) throws DriverInitException {
 
 		WebDriver.Window window = driver.manage().window();
-		if (properties.get(WEBDRIVER_POINT_X) != null && properties.get(WEBDRIVER_POINT_Y) != null) {
-			window.setPosition(
-					new Point(PropertiesUtil.getInt(properties, WEBDRIVER_POINT_X), PropertiesUtil.getInt(properties, WEBDRIVER_POINT_Y)));
+		if (StringUtils.isNotEmpty(browserX) && StringUtils.isNotEmpty(browserY)) {
+			window.setPosition(new Point(Integer.valueOf(browserX), Integer.valueOf(browserY)));
 		}
 
-		if (properties.get(WEBDRIVER_Dimension_WIDTH) != null && properties.get(WEBDRIVER_Dimension_HEIGHT) != null) {
-			window.setSize(new Dimension(PropertiesUtil.getInt(properties, WEBDRIVER_Dimension_WIDTH),
-					PropertiesUtil.getInt(properties, WEBDRIVER_Dimension_HEIGHT)));
+		if (StringUtils.isNotEmpty(browserWidth) && StringUtils.isNotEmpty(browserHeigh)) {
+			window.setSize(new Dimension(Integer.valueOf(browserWidth), Integer.valueOf(browserHeigh)));
 		} else {
 			if (browser != Browser.CHROME) {
 				throw new DriverInitException(
