@@ -1,5 +1,6 @@
 package org.sagittarius.common.reflect;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -66,12 +67,11 @@ public class ReflectUnit {
 	 * @throws SecurityException
 	 * @throws NoSuchMethodException
 	 */
-	public static Object reflectCall(Object instanceClass, String methodName, Object... args)
-			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public static Object reflectCall(Object instanceClass, String methodName, Object... args) {
 		Class<?> clazz = instanceClass.getClass();
 		if (args == null) {
-			Method method = clazz.getMethod(methodName);
-			return method.invoke(instanceClass);
+			Method method = getMethod(clazz, methodName);
+			return invoke(method, instanceClass);
 		}
 		Method[] methods = clazz.getMethods();
 		for (Method method : methods) {
@@ -90,14 +90,66 @@ public class ReflectUnit {
 				if (!flag) {
 					continue;
 				} else {
-					return method.invoke(instanceClass, args);
+					return invoke(method, instanceClass, args);
 				}
 			}
 		}
 		return null;
 	}
 
-	public static Object getInstanceClassByClassName(String className) throws Exception {
-		return Class.forName(className).newInstance();
+	public static Object newInstance(String className) {
+		try {
+			return Class.forName(className).newInstance();
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> T newInstance(Class<T> clazz) {
+		try {
+			return clazz.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static Object getField(Field field, Object obj) {
+		try {
+			return field.get(obj);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static void setField(Field field, Object obj, Object value) {
+		try {
+			field.set(obj, value);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static Method getMethod(Class<?> clazz, String methodName) {
+		try {
+			return clazz.getMethod(methodName);
+		} catch (NoSuchMethodException | SecurityException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static Object invoke(Method method, Object obj) {
+		try {
+			return method.invoke(obj);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static Object invoke(Method method, Object obj, Object... args) {
+		try {
+			return method.invoke(obj, args);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
