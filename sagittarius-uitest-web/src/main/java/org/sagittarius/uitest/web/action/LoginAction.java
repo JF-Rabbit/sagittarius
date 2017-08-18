@@ -10,6 +10,8 @@ import java.util.Map;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.sagittarius.common.judge.JudgeUtil;
+import org.sagittarius.common.map.MapUtil;
 import org.sagittarius.common.yaml.YamlUtil;
 import org.sagittarius.uitest.util.PageElementUtil;
 import org.sagittarius.uitest.web.ConfigConstant;
@@ -21,22 +23,23 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LoginAction {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(LoginAction.class);
 
 	private Environment environment;
-	
+
 	public LoginAction() {
 		this.environment = getEnv();
+		if (JudgeUtil.isObjHaveNullField(environment)) {
+			throw new RuntimeException("Environment args config error!");
+		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public Environment getEnv() {
-		Map<String, Map<String, String>> map = (Map<String, Map<String, String>>) YamlUtil.load(ConfigConstant.ENV_CONFIG_PATH);
-		String url = map.get(map.get(ConfigConstant.ENV)).get(ConfigConstant.URL);
-		String username = map.get(map.get(ConfigConstant.ENV)).get(ConfigConstant.USERNAME);
-		String password = map.get(map.get(ConfigConstant.ENV)).get(ConfigConstant.PASSWORD);
-		return new Environment(url, username, password);
+	private Environment getEnv() {
+		Map<String, Object> yamlFile = (Map<String, Object>) YamlUtil.load(ConfigConstant.ENV_CONFIG_PATH);
+		Map<String, Object> map = (Map<String, Object>) yamlFile.get(yamlFile.get(ConfigConstant.ENV));
+		return MapUtil.map2Obj(Environment.class, map);
 	}
 
 	public void login(WebDriver driver, String username, String password) {
@@ -71,12 +74,14 @@ public class LoginAction {
 
 	@Deprecated
 	public void clickUpload(WebDriver driver) {
-		driver.findElement(By.xpath("//*[@id=\"content-layout\"]/div/div/form/section[1]/div/div[3]/div[2]/div/span/div[1]/span/button"))
+		driver.findElement(By
+				.xpath("//*[@id=\"content-layout\"]/div/div/form/section[1]/div/div[3]/div[2]/div/span/div[1]/span/button"))
 				.click();
 	}
 
 	public void sendFile(WebDriver driver, String filePath) {
-		driver.findElement(By.xpath("//*[@id=\"content-layout\"]/div/div/form/section[1]/div/div[3]/div[2]/div/span/div[1]/span/input"))
+		driver.findElement(By
+				.xpath("//*[@id=\"content-layout\"]/div/div/form/section[1]/div/div[3]/div[2]/div/span/div[1]/span/input"))
 				.sendKeys(filePath);
 	}
 
