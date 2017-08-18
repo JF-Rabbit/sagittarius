@@ -1,18 +1,21 @@
 package org.sagittarius.common.judge;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
+
+import org.sagittarius.common.reflect.ReflectUnit;
 
 public class JudgeUtil {
 
 	public static boolean isNotNullStr(String obj) {
 		return (obj != null && !obj.equals(""));
 	}
-	
-	public static boolean objEqualsStr(Object actual, String expect){
-		if(actual == null) {
+
+	public static boolean objEqualsStr(Object actual, String expect) {
+		if (actual == null) {
 			return false;
 		}
-		if(String.valueOf(actual).equals(expect)) {
+		if (String.valueOf(actual).equals(expect)) {
 			return true;
 		}
 		return false;
@@ -31,4 +34,15 @@ public class JudgeUtil {
 			return 1;
 		}
 	}
+
+	public static boolean isObjHaveNotNullField(Object obj) {
+		for (Field field : obj.getClass().getDeclaredFields()) {
+			field.setAccessible(true);
+			if (ReflectUnit.getField(field, obj) == null) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }
