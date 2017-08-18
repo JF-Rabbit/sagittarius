@@ -6,6 +6,17 @@ public class Environment {
 	private String username;
 	private String password;
 
+	public Environment() {
+		super();
+	}
+
+	public Environment(String url, String username, String password) {
+		super();
+		this.url = url;
+		this.username = username;
+		this.password = password;
+	}
+
 	public String getUrl() {
 		return url;
 	}
@@ -27,13 +38,6 @@ public class Environment {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Environment(String url, String username, String password) {
-		super();
-		this.url = url;
-		this.username = username;
 		this.password = password;
 	}
 
