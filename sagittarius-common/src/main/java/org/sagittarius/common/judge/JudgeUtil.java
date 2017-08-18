@@ -35,14 +35,14 @@ public class JudgeUtil {
 		}
 	}
 
-	public static boolean isObjHaveNotNullField(Object obj) {
+	public static boolean isObjHaveNullField(Object obj) {
 		for (Field field : obj.getClass().getDeclaredFields()) {
 			field.setAccessible(true);
 			if (ReflectUnit.getField(field, obj) == null) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 }
