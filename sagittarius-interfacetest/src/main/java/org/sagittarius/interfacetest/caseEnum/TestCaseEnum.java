@@ -7,7 +7,7 @@ import java.util.Random;
 import org.sagittarius.common.http.HttpMethodEnum;
 import org.sagittarius.common.http.HttpRequestConfig;
 import org.sagittarius.common.map.MapUtil;
-import org.sagittarius.common.properties.PropertiesUtil;
+import org.sagittarius.common.yaml.YamlUtil;
 import org.sagittarius.interfacetest.ConfigConstant;
 
 public enum TestCaseEnum {
@@ -66,8 +66,14 @@ public enum TestCaseEnum {
 		}
 	};
 
-	private static final String pasUrl = PropertiesUtil.getSingleValue(ConfigConstant.CONFIG_FILE_PATH,
-			ConfigConstant.MODUAL_PAS);
+	private static final String pasUrl = getUrl();
+	
+	@SuppressWarnings("unchecked")
+	public static String getUrl(){
+		Map<String, Object> yamlFile = (Map<String, Object>) YamlUtil.load(ConfigConstant.CONFIG_FILE_PATH);
+		Map<String, String> map = (Map<String, String>) yamlFile.get(yamlFile.get(ConfigConstant.URL));
+		return map.get(ConfigConstant.PAS);
+	}
 
 	public abstract HttpRequestConfig getConfig();
 
