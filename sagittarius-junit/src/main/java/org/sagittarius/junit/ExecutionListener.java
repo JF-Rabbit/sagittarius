@@ -16,6 +16,7 @@ public class ExecutionListener extends RunListener {
 	public ExecutionListener() {
 		this.list = new ArrayList<>();
 	}
+	
 
 	public void testRunStarted(Description description) throws Exception {
 		System.out.println("--------- START ----------");
