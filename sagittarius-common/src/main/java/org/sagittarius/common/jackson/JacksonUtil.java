@@ -18,10 +18,8 @@ public class JacksonUtil {
 		JsonNode rootNode = null;
 		try {
 			rootNode = mapper.readTree(new File(jsonFilePath));
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return rootNode;
 	}
