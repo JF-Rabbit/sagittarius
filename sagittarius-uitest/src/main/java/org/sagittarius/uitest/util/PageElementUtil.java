@@ -44,7 +44,13 @@ public class PageElementUtil {
 		return unFindElementMap;
 	}
 	
-	public static void clearAndSendKey(WebElement element, String key){
+	public static void clear_sendKey(WebElement element, String key){
+		element.clear();
+		element.sendKeys(key);
+	}
+	
+	public static void click_clear_SendKey(WebElement element, String key){
+		element.click();
 		element.clear();
 		element.sendKeys(key);
 	}

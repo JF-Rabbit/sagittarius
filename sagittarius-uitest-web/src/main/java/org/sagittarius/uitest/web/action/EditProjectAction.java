@@ -61,7 +61,7 @@ public class EditProjectAction {
 		logger.info("startX:{}, startY:{}, endX:{}, endY:{}", startX, startY, endX, endY);
 		RobotUtil.dragToLocation(startX, startY, endX, endY);
 		Delay.sleep(500);
-		PageElementUtil.clearAndSendKey(projectCanvasPage.nameInput, projectName);
+		PageElementUtil.clear_sendKey(projectCanvasPage.nameInput, projectName);
 		
 		if (componentEnum.equals(ComponentEnum.SCRIPT)) {
 			Delay.sleep(500);
@@ -198,7 +198,7 @@ public class EditProjectAction {
 			if (JudgeUtil.isNotNullStr(String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_TIME_START)))) {
 				kmxTimeSeriesQueryConditionEditPage.startTimeReadOnly.click();
 				Delay.sleep(500);
-				PageElementUtil.clearAndSendKey(kmxTimeSeriesQueryConditionEditPage.timeInput,
+				PageElementUtil.clear_sendKey(kmxTimeSeriesQueryConditionEditPage.timeInput,
 						String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_TIME_START)));
 				Delay.sleep(500);
 			}
@@ -206,7 +206,7 @@ public class EditProjectAction {
 			if (JudgeUtil.isNotNullStr(String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_TIME_END)))) {
 				kmxTimeSeriesQueryConditionEditPage.endTimeReadOnly.click();
 				Delay.sleep(500);
-				PageElementUtil.clearAndSendKey(kmxTimeSeriesQueryConditionEditPage.timeInput,
+				PageElementUtil.clear_sendKey(kmxTimeSeriesQueryConditionEditPage.timeInput,
 						String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_TIME_END)));
 				Delay.sleep(500);
 			}
@@ -255,7 +255,7 @@ public class EditProjectAction {
 	}
 
 	private void editHDFSPath(Map<String, Object> componmentInfo, HDFSConfigPage hdfsConfigPage) {
-		PageElementUtil.clearAndSendKey(hdfsConfigPage.hdfsPath, String.valueOf(componmentInfo.get(ComponentInfoConstant.HDFS_PATH)));
+		PageElementUtil.clear_sendKey(hdfsConfigPage.hdfsPath, String.valueOf(componmentInfo.get(ComponentInfoConstant.HDFS_PATH)));
 	}
 	
 	private void editObjectType(WebDriver driver, Map<String, Object> componmentInfo, KmxObjectConfigPage kmxObjectConfigPage) {
@@ -295,14 +295,14 @@ public class EditProjectAction {
 					kmxObjectConfigPage.startTimeReadOnly.click();
 					Delay.sleep(500);
 					// XXX 未做兼容多组测试
-					PageElementUtil.clearAndSendKey(kmxObjectConfigPage.timeInput,dateTime[0]);
+					PageElementUtil.clear_sendKey(kmxObjectConfigPage.timeInput,dateTime[0]);
 					Delay.sleep(500);
 					WebElementUtil.clickOneDisplayedElementofList(kmxObjectConfigPage.ultiConfirBtnByTagA);
 					Delay.sleep(500);
 					
 					kmxObjectConfigPage.endTimeReadOnly.click();
 					Delay.sleep(500);
-					PageElementUtil.clearAndSendKey(kmxObjectConfigPage.timeInput,dateTime[1]);
+					PageElementUtil.clear_sendKey(kmxObjectConfigPage.timeInput,dateTime[1]);
 					Delay.sleep(500);
 					WebElementUtil.clickOneDisplayedElementofList(kmxObjectConfigPage.ultiConfirBtnByTagA);
 					Delay.sleep(500);
