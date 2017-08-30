@@ -54,6 +54,7 @@ public class DriverManager implements DriverConstant {
 	private String browserHeigh;
 
 	public static final int DEFAULT_FIND_ELEMENT_TIMEOUT = 3;
+	public static final int DEFAULT_PAGE_LOAD_TIMEOUT = 10;
 
 	private Browser browser;
 
@@ -168,7 +169,8 @@ public class DriverManager implements DriverConstant {
 		}
 
 		driver.manage().timeouts().implicitlyWait(DEFAULT_FIND_ELEMENT_TIMEOUT, TimeUnit.SECONDS);
-
+		driver.manage().timeouts().pageLoadTimeout(DEFAULT_PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
+		
 		return driver;
 	}
 
