@@ -10,6 +10,7 @@ import org.sagittarius.common.Delay;
 import org.sagittarius.common.annotation.DebugSuspend;
 import org.sagittarius.common.aop.AopUtil;
 import org.sagittarius.common.date.DateUtil;
+import org.sagittarius.common.judge.JudgeUtil;
 import org.sagittarius.uitest.CommonConstant;
 import org.sagittarius.uitest.exception.ManualConfirmException;
 import org.sagittarius.uitest.util.web.WebElementUtil;
@@ -77,7 +78,7 @@ public class ActionAop implements AOPConstant, CommonConstant {
 	}
 
 	private void saveWebPage() {
-		if (debugSaveWebHtml.equals(TRUE)) {
+		if (JudgeUtil.isTrue(debugSaveWebHtml)) {
 			String fileName = logPath + DateUtil.dateFormat(new Date(), DateUtil.YYYY_MM_DD_HH_MM_SS_FILE_TYPE)
 					+ FILE_TYPE_HTML;
 			WebElementUtil.saveCurrentWebPage(fileName);
@@ -88,7 +89,7 @@ public class ActionAop implements AOPConstant, CommonConstant {
 	private void errorDebug(Exception e) {
 		if (runType.equals(RUN_TYPE_NORMAL)) {
 			return;
-		} else if (runType.equals(RUN_TYPE_DEBUG) && debugError.equals(TRUE)) {
+		} else if (runType.equals(RUN_TYPE_DEBUG) && JudgeUtil.isTrue(debugError)) {
 			logger.error(DEBUG_MSG, e);
 			Delay.suspend();
 		}
@@ -98,7 +99,7 @@ public class ActionAop implements AOPConstant, CommonConstant {
 	private void everyActionDebug() {
 		if (runType.equals(RUN_TYPE_NORMAL)) {
 			return;
-		} else if (runType.equals(RUN_TYPE_DEBUG) && debugEveryAction.equals(TRUE)) {
+		} else if (runType.equals(RUN_TYPE_DEBUG) && JudgeUtil.isTrue(debugEveryAction)) {
 			logger.info(DEBUG_MSG);
 			Delay.suspend();
 		}
@@ -107,7 +108,7 @@ public class ActionAop implements AOPConstant, CommonConstant {
 	private void suspendAnnotation(Method method) {
 		if (runType.equals(RUN_TYPE_NORMAL)) {
 			return;
-		} else if (runType.equals(RUN_TYPE_DEBUG) && debugAnnotation.equals(TRUE)) {
+		} else if (runType.equals(RUN_TYPE_DEBUG) && JudgeUtil.isTrue(debugAnnotation)) {
 
 			if (method.isAnnotationPresent(DebugSuspend.class)) {
 				logger.info(DEBUG_MSG);

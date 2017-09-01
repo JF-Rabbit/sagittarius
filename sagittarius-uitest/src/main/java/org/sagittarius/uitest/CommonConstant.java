@@ -9,6 +9,4 @@ public interface CommonConstant {
 	String FILE_TYPE_JPEG = ".jpeg";
 	
 	String TEMP = "temp";
-	String TRUE = "true";
-	String FALSE = "false";
 }
