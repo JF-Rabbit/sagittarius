@@ -15,7 +15,7 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.iOSXCUITBy;
 
 public class PageElementUtil {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(PageElementUtil.class);
 
 	public static void initPages(WebDriver driver, PageUI... pageUIs) {
@@ -24,7 +24,8 @@ public class PageElementUtil {
 		}
 	}
 
-	public static Map<String, Object> getUnFindElement(WebDriver driver, PageUI... pageUIs) throws IllegalArgumentException, IllegalAccessException {
+	public static Map<String, Object> getUnFindElement(WebDriver driver, PageUI... pageUIs)
+			throws IllegalArgumentException, IllegalAccessException {
 		Map<String, Object> unFindElementMap = new HashMap<String, Object>();
 		initPages(driver, pageUIs);
 		for (PageUI pageUI : pageUIs) {
@@ -43,20 +44,19 @@ public class PageElementUtil {
 		}
 		return unFindElementMap;
 	}
-	
-	public static void clear_sendKey(WebElement element, String key){
-		element.clear();
+
+	public static void sendKey(WebElement element, String key, boolean isClick, boolean isClear) {
+		if (isClick)
+			element.click();
+
+		if (isClear)
+			element.clear();
+
 		element.sendKeys(key);
 	}
-	
-	public static void click_clear_SendKey(WebElement element, String key){
-		element.click();
-		element.clear();
-		element.sendKeys(key);
-	}
-	
+
 	public static void showPageSource(WebDriver driver) {
 		logger.info(driver.getPageSource());
 	}
-	
+
 }
