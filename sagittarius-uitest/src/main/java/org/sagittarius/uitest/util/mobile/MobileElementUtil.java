@@ -7,7 +7,6 @@ import org.sagittarius.common.Delay;
 import org.sagittarius.uitest.exception.FindElementTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -45,13 +44,12 @@ import io.appium.java_client.ios.IOSDriver;
  * @author jasonzhang 2016年11月2日 下午4:59:52
  *
  */
-@Component
-public class ElementLocator {
+public class MobileElementUtil {
 
-	private static Logger logger = LoggerFactory.getLogger(ElementLocator.class);
+	private static Logger logger = LoggerFactory.getLogger(MobileElementUtil.class);
 
 	private int findTimeout = 15;
-	
+
 	public int getFindTimeout() {
 		return findTimeout;
 	}
@@ -63,28 +61,28 @@ public class ElementLocator {
 	/**
 	 * 定位一个元素
 	 * 
-	 * @param findType
-	 *            ATPFindMobileElementType 枚举
-	 * @param findMsg
+	 * @param by
+	 *            MobileByEnum 枚举
+	 * @param msg
 	 *            定位参数
 	 * @return
 	 */
-	public MobileElement locateElement(AppiumDriver<MobileElement> driver, FindMobileElementEnum findType, String findMsg) {
-		switch (findType) {
-			case ID:
-				return driver.findElementById(findMsg);
-			case CLASS:
-				return driver.findElementByClassName(findMsg);
-			case UIAUTOMATOR:
-				return ((AndroidDriver<MobileElement>) driver).findElementByAndroidUIAutomator(findMsg);
-			case XPATH:
-				return driver.findElementByXPath(findMsg);
-			case ACCESSIBILITYID:
-				return driver.findElementByAccessibilityId(findMsg);
-			case IOSNSPREDICATE:
-				return ((IOSDriver<MobileElement>) driver).findElementByIosNsPredicate(findMsg);
-			default:
-				return null;
+	public MobileElement findElement(AppiumDriver<MobileElement> driver, MobileByEnum by, String msg) {
+		switch (by) {
+		case ID:
+			return driver.findElementById(msg);
+		case CLASS:
+			return driver.findElementByClassName(msg);
+		case UIAUTOMATOR:
+			return ((AndroidDriver<MobileElement>) driver).findElementByAndroidUIAutomator(msg);
+		case XPATH:
+			return driver.findElementByXPath(msg);
+		case ACCESSIBILITYID:
+			return driver.findElementByAccessibilityId(msg);
+		case IOSNSPREDICATE:
+			return ((IOSDriver<MobileElement>) driver).findElementByIosNsPredicate(msg);
+		default:
+			return null;
 		}
 
 	}
@@ -92,46 +90,49 @@ public class ElementLocator {
 	/**
 	 * 定位元素列表
 	 * 
-	 * @param findType
-	 *            ATPFindMobileElementType 枚举
-	 * @param findMsg
+	 * @param by
+	 *            MobileByEnum 枚举
+	 * @param msg
 	 *            定位参数
 	 * @return
 	 */
-	public List<MobileElement> locateElements(AppiumDriver<MobileElement> driver, FindMobileElementEnum findType, String findMsg) {
-		switch (findType) {
-			case ID:
-				return driver.findElementsById(findMsg);
-			case CLASS:
-				return driver.findElementsByClassName(findMsg);
-			case UIAUTOMATOR:
-				return ((AndroidDriver<MobileElement>) driver).findElementsByAndroidUIAutomator(findMsg);
-			case XPATH:
-				return driver.findElementsByXPath(findMsg);
-			case ACCESSIBILITYID:
-				return driver.findElementsByAccessibilityId(findMsg);
-			case IOSNSPREDICATE:
-				return ((IOSDriver<MobileElement>) driver).findElementsByIosNsPredicate(findMsg);
-			default:
-				return null;
+	public List<MobileElement> findElements(AppiumDriver<MobileElement> driver, MobileByEnum by, String msg) {
+		switch (by) {
+		case ID:
+			return driver.findElementsById(msg);
+		case CLASS:
+			return driver.findElementsByClassName(msg);
+		case UIAUTOMATOR:
+			return ((AndroidDriver<MobileElement>) driver).findElementsByAndroidUIAutomator(msg);
+		case XPATH:
+			return driver.findElementsByXPath(msg);
+		case ACCESSIBILITYID:
+			return driver.findElementsByAccessibilityId(msg);
+		case IOSNSPREDICATE:
+			return ((IOSDriver<MobileElement>) driver).findElementsByIosNsPredicate(msg);
+		default:
+			return null;
 		}
 	}
 
-	private String toStringTimeoutParam(FindMobileElementEnum findType, String findMsg, LoadElementConfirmEnum loadingType, String expect) {
-		return "findType:" + findType + " findMsg:" + findMsg + " loadingType:" + loadingType + " expect:" + expect;
+	private String toStringTimeoutParam(MobileByEnum by, String msg, MobileConfirmEnum loadingType, String expect) {
+		return "by:" + by + " msg:" + msg + " loadingType:" + loadingType + " expect:" + expect;
 	}
 
 	/**
 	 * 加载元素(判断timeout)
 	 * 
-	 * @param findType
-	 *            ATPFindMobileElementType 枚举
-	 * @param findMsg
+	 * @param by
+	 *            MobileByEnum 枚举
+	 * @param msg
 	 *            定位参数
-	 * @param confirmType
-	 *            ATPLoadElementConfirmType 枚举 
+	 * @param type
+	 *            MobileConfirmEnum 枚举
+	 *            <p>
 	 *            1:isDisplayed
+	 *            <p>
 	 *            2:getText().equals(expect)
+	 *            <p>
 	 *            3:content-desc: getAttribute("name").equals(String expect)
 	 * @param expect
 	 *            预期结果 isDisplayed时传null
@@ -139,8 +140,8 @@ public class ElementLocator {
 	 * @throws FindElementTimeoutException
 	 *             超时异常
 	 */
-	public MobileElement loadingElement(AppiumDriver<MobileElement> driver, FindMobileElementEnum findType, String findMsg,
-			LoadElementConfirmEnum confirmType, String expect) throws FindElementTimeoutException {
+	public MobileElement loadingElement(AppiumDriver<MobileElement> driver, MobileByEnum by, String msg, MobileConfirmEnum type,
+			String expect) throws FindElementTimeoutException {
 
 		logger.info("Loading Element START");
 		Boolean result = false;
@@ -150,25 +151,25 @@ public class ElementLocator {
 		while (true) {
 
 			if (time == 0) {
-				logger.error(toStringTimeoutParam(findType, findMsg, confirmType, expect));
+				logger.error(toStringTimeoutParam(by, msg, type, expect));
 				throw new FindElementTimeoutException("-----Find Element Timeout-----");
 			}
 
 			try {
-				target = locateElement(driver, findType, findMsg);
+				target = findElement(driver, by, msg);
 
-				switch (confirmType) {
-					case IS_DISPLAYED:
-						result = target.isDisplayed();
-						break;
-					case GET_TEXT_EQUALS:
-						result = target.getText().equals(expect);
-						break;
-					case GET_CONTENT_DESC_EQUALS:
-						result = target.getAttribute("name").equals(expect);
-						break;
-					default:
-						break;
+				switch (type) {
+				case IS_DISPLAYED:
+					result = target.isDisplayed();
+					break;
+				case GET_TEXT_EQUALS:
+					result = target.getText().equals(expect);
+					break;
+				case GET_CONTENT_DESC_EQUALS:
+					result = target.getAttribute("name").equals(expect);
+					break;
+				default:
+					break;
 				}
 
 			} catch (NoSuchElementException e) {

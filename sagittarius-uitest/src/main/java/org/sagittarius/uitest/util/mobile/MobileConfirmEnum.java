@@ -1,6 +1,6 @@
 package org.sagittarius.uitest.util.mobile;
 
-public enum LoadElementConfirmEnum {
+public enum MobileConfirmEnum {
 	/** isDisplay */
 	IS_DISPLAYED,
 	/** Text: getText().equals(String expect) */

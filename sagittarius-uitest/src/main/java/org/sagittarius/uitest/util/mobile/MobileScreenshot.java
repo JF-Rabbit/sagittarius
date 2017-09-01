@@ -11,7 +11,6 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -23,7 +22,6 @@ import io.appium.java_client.android.AndroidDriver;
  * @author jasonzhang 2016年11月3日 下午4:51:47
  *
  */
-@Component
 public class MobileScreenshot {
 
 	private static Logger logger = LoggerFactory.getLogger(MobileScreenshot.class);
@@ -32,7 +30,7 @@ public class MobileScreenshot {
 	public static final String SYSTEMTIME = "SystemTime";
 	public static final String FILETYPE_PNG = ".png";
 
-	public int screenShoot(AppiumDriver<MobileElement> driver, String saveName, String screenshotPath) throws IOException {
+	public static int screenShoot(AppiumDriver<MobileElement> driver, String saveName, String screenshotPath) throws IOException {
 
 		File screen = null;
 		File screenFile = null;
@@ -71,7 +69,7 @@ public class MobileScreenshot {
 	 *            存放在本地的名称
 	 * @return 目标元素BufferedImage
 	 */
-	public BufferedImage getTargetElementScreenShoot(AndroidDriver<MobileElement> driver, MobileElement targetElement, String saveName,
+	public static BufferedImage getTargetElementScreenShoot(AndroidDriver<MobileElement> driver, MobileElement targetElement, String saveName,
 			String screenshotPath) {
 		logger.info("截取屏幕中当前元素的图像 START");
 
@@ -110,7 +108,7 @@ public class MobileScreenshot {
 	 *            比较时存储的图片名称
 	 * @return
 	 */
-	public ImageCompareResult isImageSameAs(AndroidDriver<MobileElement> driver, MobileElement targetElement, String TargetImgName,
+	public static ImageCompareResult isImageSameAs(AndroidDriver<MobileElement> driver, MobileElement targetElement, String TargetImgName,
 			String ComparedName, String screenshotPath) {
 		logger.info("移植MonkeyRunner的sameAs方法，判断两张图片是否相同 START");
 		ImageCompareResult gicr = null;
@@ -154,7 +152,7 @@ public class MobileScreenshot {
 	 * @author jasonzhang 2016年11月3日 下午4:59:44
 	 *
 	 */
-	public class ImageCompareResult {
+	public static class ImageCompareResult {
 		public double percent;
 		public boolean result;
 
@@ -182,7 +180,7 @@ public class MobileScreenshot {
 	 *            相似度百分比，1为完全一致，0为完全不一致
 	 * @return
 	 */
-	private double sameAs(BufferedImage myImage, BufferedImage otherImage, double percent) {
+	private static double sameAs(BufferedImage myImage, BufferedImage otherImage, double percent) {
 
 		if (otherImage.getWidth() != myImage.getWidth()) {
 			return 0;
@@ -224,7 +222,7 @@ public class MobileScreenshot {
 	 *            高度
 	 * @return
 	 */
-	private BufferedImage getSubImage(BufferedImage image, int x, int y, int w, int h) {
+	private static BufferedImage getSubImage(BufferedImage image, int x, int y, int w, int h) {
 		logger.info(x + "|" + y + "|" + w + "|" + h);
 		return image.getSubimage(x, y, w, h);
 	}
