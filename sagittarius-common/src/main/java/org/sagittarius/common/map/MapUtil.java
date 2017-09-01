@@ -13,7 +13,7 @@ public class MapUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
 
-	public static <T> String mapToJsonStr(Map<String, T> map) {
+	public static <T> String map2JsonStr(Map<String, T> map) {
 		return new Gson().toJson(map);
 	}
 

@@ -60,7 +60,7 @@ public enum TestCaseEnum {
 			param.put("creator", "k2data");
 			param.put("description", "lijo");
 			param.put("iconUrl", "/pas/imgs/projectIcons/sales_forecast.png");
-			httpRequestConfig.setHttpEntityJsonStr(MapUtil.mapToJsonStr(param));
+			httpRequestConfig.setHttpEntityJsonStr(MapUtil.map2JsonStr(param));
 
 			return httpRequestConfig;
 		}

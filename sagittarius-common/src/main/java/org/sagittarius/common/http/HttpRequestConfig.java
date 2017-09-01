@@ -87,7 +87,7 @@ public class HttpRequestConfig {
 	@Override
 	public String toString() {
 		return "HttpRequestConfig [requestMethod=" + requestMethod + ", requestUrl=" + requestUrl + ", requestParam="
-				+ MapUtil.mapToJsonStr(requestParam) + ", requestHeaders=" + MapUtil.mapToJsonStr(requestHeaders)
+				+ MapUtil.map2JsonStr(requestParam) + ", requestHeaders=" + MapUtil.map2JsonStr(requestHeaders)
 				+ ", httpEntityJsonStr=" + httpEntityJsonStr + ", context=" + context + "]";
 	}
 

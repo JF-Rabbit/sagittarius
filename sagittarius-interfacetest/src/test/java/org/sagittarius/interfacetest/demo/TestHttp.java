@@ -122,7 +122,7 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 		map.put("code", 0);
 		map.put("message", "");
 		map.put("result", "%IGNORE_VALUE%");
-		expect.setResponseContent(MapUtil.mapToJsonStr(map));
+		expect.setResponseContent(MapUtil.map2JsonStr(map));
 
 		JsonCompareRecorder recorder = new JsonCompareRecorder();
 		recorder.compare(expect, httpResponseConfig1);

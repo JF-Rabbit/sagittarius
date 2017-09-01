@@ -61,11 +61,6 @@ public class ReflectUnit {
 	 * @param args
 	 *            变长参数数组，无参时传null
 	 * @return 原方法返回值(void方法返回null)
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
-	 * @throws SecurityException
-	 * @throws NoSuchMethodException
 	 */
 	public static Object reflectCall(Object instanceClass, String methodName, Object... args) {
 		Class<?> clazz = instanceClass.getClass();
