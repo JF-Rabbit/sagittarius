@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="MySuite" verbose="1">
+	<listeners>
+		<listener class-name="org.sagittarius.common.testng.TestNGListener"/>
+	</listeners>
+	<test name="Regression1">
+		<classes>
+			<class name="org.sagittarius.common.test.testng.TestCase01" />
+		</classes>
+	</test>
+</suite>

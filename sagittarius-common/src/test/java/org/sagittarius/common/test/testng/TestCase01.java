@@ -1,4 +1,4 @@
-package org.sagittarius.uitest.testng;
+package org.sagittarius.common.test.testng;
 
 import org.testng.annotations.Test;
 

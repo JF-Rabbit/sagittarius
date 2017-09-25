@@ -1,0 +1,37 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="SuiteTemplate" verbose="1">
+	<test name="Nopackage">
+		<classes>
+			<class name="NoPackageTest" />
+		</classes>
+	</test>
+
+	<test name="Package">
+		<packages>
+			<package name="test.sample" />
+		</packages>
+	</test>
+
+	<test name="Regression1">
+		<!-- The list of groups you want to be excluded from this run. -->
+		<groups>
+			<run>
+				<exclude name="brokenTests" />
+				<include name="checkinTests" />
+			</run>
+		</groups>
+		<classes>
+			<class name="test.sample.ParameterSample" />
+			<class name="test.sample.ParameterTest" />
+			<class name="test.IndividualMethodsTest">
+				<methods>
+					<include name="testMethod" />
+					<exclude name="testMethod" />
+				</methods>
+			</class>
+			<class name="test.Test2" />
+
+		</classes>
+	</test>
+</suite>
