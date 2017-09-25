@@ -7,7 +7,7 @@ public class ExceptionUtil {
 			return "";
 		}
 		StringBuilder builder = new StringBuilder();
-		builder.append("Exception: ").append(throwable.getClass().getName() + "\n");
+		builder.append("Exception: \n").append(throwable.getClass().getName() + "\n");
 		if (throwable.getCause() != null) {
 			builder.append("Cause By: \n").append(throwable.getCause()).append("\n");
 		}
