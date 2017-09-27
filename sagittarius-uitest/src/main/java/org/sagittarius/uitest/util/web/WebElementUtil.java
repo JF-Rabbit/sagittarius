@@ -186,4 +186,17 @@ public class WebElementUtil {
 		RobotUtil.action_CONTROL_S_CONTROL_V_ENTER();
 	}
 
+	public static boolean isExsit(WebDriver driver, WebByEnum by, String msg) {
+		try {
+			WebElement element = findElement(driver, by, msg);
+			if (element.isDisplayed()) {
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+
+		return true;
+	}
+
 }

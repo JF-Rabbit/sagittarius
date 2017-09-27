@@ -48,14 +48,14 @@ public class MobileElementUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(MobileElementUtil.class);
 
-	private int findTimeout = 15;
+	private static int findTimeout = 15;
 
 	public int getFindTimeout() {
 		return findTimeout;
 	}
 
 	public void setFindTimeout(int findTimeout) {
-		this.findTimeout = findTimeout;
+		MobileElementUtil.findTimeout = findTimeout;
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class MobileElementUtil {
 	 *            定位参数
 	 * @return
 	 */
-	public MobileElement findElement(AppiumDriver<MobileElement> driver, MobileByEnum by, String msg) {
+	public static MobileElement findElement(AppiumDriver<MobileElement> driver, MobileByEnum by, String msg) {
 		switch (by) {
 		case ID:
 			return driver.findElementById(msg);
@@ -96,7 +96,7 @@ public class MobileElementUtil {
 	 *            定位参数
 	 * @return
 	 */
-	public List<MobileElement> findElements(AppiumDriver<MobileElement> driver, MobileByEnum by, String msg) {
+	public static List<MobileElement> findElements(AppiumDriver<MobileElement> driver, MobileByEnum by, String msg) {
 		switch (by) {
 		case ID:
 			return driver.findElementsById(msg);
@@ -115,7 +115,7 @@ public class MobileElementUtil {
 		}
 	}
 
-	private String toStringTimeoutParam(MobileByEnum by, String msg, MobileConfirmEnum loadingType, String expect) {
+	private static String toStringTimeoutParam(MobileByEnum by, String msg, MobileConfirmEnum loadingType, String expect) {
 		return "by:" + by + " msg:" + msg + " loadingType:" + loadingType + " expect:" + expect;
 	}
 
@@ -140,7 +140,7 @@ public class MobileElementUtil {
 	 * @throws FindElementTimeoutException
 	 *             超时异常
 	 */
-	public MobileElement loadingElement(AppiumDriver<MobileElement> driver, MobileByEnum by, String msg, MobileConfirmEnum type,
+	public static MobileElement loadingElement(AppiumDriver<MobileElement> driver, MobileByEnum by, String msg, MobileConfirmEnum type,
 			String expect) throws FindElementTimeoutException {
 
 		logger.info("Loading Element START");
@@ -192,5 +192,18 @@ public class MobileElementUtil {
 				time--;
 			}
 		}
+	}
+
+	public static boolean isExsit(AppiumDriver<MobileElement> driver, MobileByEnum by, String msg) {
+		try {
+			MobileElement element = findElement(driver, by, msg);
+			if (element.isDisplayed()) {
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+
+		return true;
 	}
 }
