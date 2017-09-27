@@ -9,6 +9,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -129,7 +130,9 @@ public class DriverManager implements DriverConstant {
 		switch (driverType) {
 		case LOCAL_CHROME:
 			this.setChromeConfig();
-			driver = new ChromeDriver();
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("disable-infobars");
+			driver = new ChromeDriver(options);
 			this.browser = Browser.CHROME;
 			driver = setBrowserLayout(driver);
 			break;
