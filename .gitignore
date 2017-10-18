@@ -8,7 +8,6 @@ target/
 .classpath
 .project
 test-output/
-db.properties
 conf/
 config/
 *.iml
