@@ -66,7 +66,7 @@ public class WebElementUtil {
 	}
 
 	private static void checkTimeout(int secound) {
-		if (secound <= DriverManager.DEFAULT_FIND_ELEMENT_TIMEOUT) {
+		if (secound <= Integer.valueOf(String.valueOf(DriverManager.find_element_timeout))) {
 			throw new IllegalArgumentException(MULTIPLE_CLICKABLE_ELEMENT);
 		}
 	}

@@ -10,6 +10,11 @@ public interface DriverConstant {
 	String WEBDRIVER_GECKO_DRIVER = "webdriver.gecko.driver";
 	String WEBDRIVER_FIREFOX_BIN = "webdriver.firefox.bin";
 	String REMOTE_HUB = "${remote.hub}";
+	
+	String SELENIUM_FIND_ELEMENT_TIMEOUT = "${selenium.find.element.timeout}";
+	String SELENIUM_PAGE_LOAD_TIMEOUT = "${selenium.page.load.timeout}";
+	int DEFAULT_SELENIUM_FIND_ELEMENT_TIMEOUT = 3;
+	int DEFAULT_SELENIUM_PAGE_LOAD_TIMEOUT = 30;
 
 	String WEBDRIVER_POINT_X = "${webdriver.point.x}";
 	String WEBDRIVER_POINT_Y = "${webdriver.point.y}";

@@ -54,8 +54,11 @@ public class DriverManager implements DriverConstant {
 	@Value(WEBDRIVER_Dimension_HEIGHT)
 	private String browserHeigh;
 
-	public static final int DEFAULT_FIND_ELEMENT_TIMEOUT = 3;
-	public static final int DEFAULT_PAGE_LOAD_TIMEOUT = 10;
+	@Value(SELENIUM_FIND_ELEMENT_TIMEOUT)
+	public Object findElementTimeout;
+	
+	@Value(SELENIUM_PAGE_LOAD_TIMEOUT)
+	public Object loadPageTimeout;
 
 	private Browser browser;
 
@@ -121,6 +124,23 @@ public class DriverManager implements DriverConstant {
 		remoteWebDriver.setFileDetector(new LocalFileDetector());
 		return remoteWebDriver;
 	}
+	
+	public static int find_element_timeout = DEFAULT_SELENIUM_FIND_ELEMENT_TIMEOUT;
+	
+	private int initFindElementTimeout() throws DriverInitException {
+		if(findElementTimeout != null) {
+			find_element_timeout = Integer.valueOf(String.valueOf(findElementTimeout));
+			return find_element_timeout;
+		}
+		return DEFAULT_SELENIUM_FIND_ELEMENT_TIMEOUT;
+	}
+	
+	private int initSeleniumPageLoadTimeout() throws DriverInitException {
+		if(loadPageTimeout != null) {
+			return Integer.valueOf(String.valueOf(loadPageTimeout));
+		} 
+		return DEFAULT_SELENIUM_PAGE_LOAD_TIMEOUT;
+	}
 
 	public WebDriver getDriver() throws DriverInitException {
 		DriverType driverType = this.loadDriverTypeFromSource();
@@ -171,8 +191,8 @@ public class DriverManager implements DriverConstant {
 			throw new DriverInitException(DRIVER_IS_NULL);
 		}
 
-		driver.manage().timeouts().implicitlyWait(DEFAULT_FIND_ELEMENT_TIMEOUT, TimeUnit.SECONDS);
-		driver.manage().timeouts().pageLoadTimeout(DEFAULT_PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(initFindElementTimeout(), TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(initSeleniumPageLoadTimeout(), TimeUnit.SECONDS);
 		
 		return driver;
 	}
