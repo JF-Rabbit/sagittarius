@@ -28,7 +28,7 @@ public class WebTest extends AbstractTestNGSpringContextTests {
 	public Browser currentBrowser;
 
 	@Resource
-	DriverManager manager;
+	private DriverManager manager;
 	public WebDriver driver;
 
 	@BeforeClass
@@ -48,9 +48,9 @@ public class WebTest extends AbstractTestNGSpringContextTests {
 	@AfterMethod
 	public void teardown(Method method) {
 		logger.info("Case: " + method.getName() + " End...");
-		logger.info("Destory Driver...");
+		logger.info("Destroy Driver...");
 		manager.quitDriver(driver);
-		logger.info("Destory Done");
+		logger.info("Destroy Done");
 	}
 
 	@AfterClass(alwaysRun = true)
