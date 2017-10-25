@@ -33,7 +33,7 @@
 				<configuration>
 					<source>${java_source_version}</source>
 					<target>${java_target_version}</target>
-					<encoding>${file_encoding}</encoding>
+					<!--<encoding>${file_encoding}</encoding>-->
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
 				</configuration>
@@ -87,7 +87,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
-			<scope>test</scope>
+			<!--<scope>test</scope>-->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
