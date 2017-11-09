@@ -1,9 +1,5 @@
 package org.sagittarius.uitest;
 
-import java.lang.reflect.Method;
-
-import javax.annotation.Resource;
-
 import org.openqa.selenium.WebDriver;
 import org.sagittarius.uitest.driver.DriverManager;
 import org.sagittarius.uitest.exception.DriverInitException;
@@ -17,6 +13,9 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+
+import javax.annotation.Resource;
+import java.lang.reflect.Method;
 
 @ContextConfiguration(locations = CommonConstant.SPRING_PATH)
 public class WebTest extends AbstractTestNGSpringContextTests {
@@ -39,6 +38,7 @@ public class WebTest extends AbstractTestNGSpringContextTests {
 	@BeforeMethod
 	public void setup(Method method) throws DriverInitException {
 		logger.info("Init Driver...");
+		manager.initDriver();
 		driver = manager.getDriver();
 		currentBrowser = manager.getBrowser();
 		logger.info("Init Done");
@@ -49,8 +49,12 @@ public class WebTest extends AbstractTestNGSpringContextTests {
 	public void teardown(Method method) {
 		logger.info("Case: " + method.getName() + " End...");
 		logger.info("Destroy Driver...");
-		manager.quitDriver(driver);
-		logger.info("Destroy Done");
+		if (driver == null) {
+			logger.info("Destroy Failed! Driver is null!");
+		} else {
+			manager.quitDriver(driver);
+			logger.info("Destroy Done");
+		}
 	}
 
 	@AfterClass(alwaysRun = true)
