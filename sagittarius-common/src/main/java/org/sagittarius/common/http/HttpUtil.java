@@ -28,6 +28,7 @@ import org.apache.http.message.BasicHeader;
 public class HttpUtil {
 
     public static HttpResponseConfig service(HttpRequestConfig httpRequestConfig) throws HttpException {
+        // TODO Authorization 预留
         CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
         HttpResponseConfig httpResponseConfig = new HttpResponseConfig();
         try {
