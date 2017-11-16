@@ -7,8 +7,8 @@ import java.util.Scanner;
  *
  * @author JasonZhang 2017-11-09
  * <p>
- * IDIntelliJ TestNG console can't enter any key when use Scanner class
- * https://github.com/cbeust/testng/issues/1601
+ * IDEA-64081 TestNG tests does not allow user input (regression from IDEA 9)
+ * https://youtrack.jetbrains.com/issue/IDEA-64081#tab=Comments
  */
 public abstract class ScannerDebug {
     /**
