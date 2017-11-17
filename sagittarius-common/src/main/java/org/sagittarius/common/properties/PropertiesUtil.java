@@ -10,18 +10,15 @@ public class PropertiesUtil {
 	public static Properties load(String path) {
 
 		InputStream inStream = null;
-		Properties properties = null;
 		try {
 			inStream = new FileInputStream(path);
-			properties = new Properties();
+			Properties properties = new Properties();
+			properties.load(inStream);
 			return properties;
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} finally {
 			try {
-				if (properties != null) {
-					properties.load(inStream);
-				}
 				if (inStream != null) {
 					inStream.close();
 				}
