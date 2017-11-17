@@ -12,11 +12,20 @@ public class ListUtil {
         return list;
     }
 
+    public static <T> List<T> multiAppend(T... params) {
+        List<T> list = new ArrayList<>();
+        for (T p : params) {
+            list.add(p);
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         List<Object> list = new ArrayList<>();
 
         list = ListUtil.multiAppend(list, 1, "11", 3.14);
         System.out.println(list);
+        System.out.println(multiAppend(2, "aeda", 0.94));
     }
 
 }
