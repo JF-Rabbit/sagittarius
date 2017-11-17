@@ -64,7 +64,7 @@ public class ReflectUnit {
 	 */
 	public static Object reflectCall(Object instanceClass, String methodName, Object... args) {
 		Class<?> clazz = instanceClass.getClass();
-		if (args == null) {
+		if (args == null || args.length == 0) {
 			Method method = getMethod(clazz, methodName);
 			return invoke(method, instanceClass);
 		}
