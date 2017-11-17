@@ -15,7 +15,7 @@ public class Telphone {
 	/**
 	 * 随机生成以PhoneNum为前缀的手机号
 	 * 
-	 * @param PhoneNum
+	 * @param phoneNum
 	 *            例如199
 	 * @return
 	 */
