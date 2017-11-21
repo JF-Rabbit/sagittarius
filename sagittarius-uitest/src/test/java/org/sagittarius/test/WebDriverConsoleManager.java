@@ -65,7 +65,8 @@ public class WebDriverConsoleManager {
                         click_element.click();
                         break;
                     case Q:
-                        manager.driver.close();
+                        manager.driver.quit();
+                        scanner.close();
                         return;
                     default:
                         break;
