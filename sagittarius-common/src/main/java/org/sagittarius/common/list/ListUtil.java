@@ -20,12 +20,18 @@ public class ListUtil {
         return list;
     }
 
-    public static void main(String[] args) {
-        List<Object> list = new ArrayList<>();
+    public static <T> boolean isEmpty(List<T> list) {
+        return list == null || list.size() == 0;
+    }
 
-        list = ListUtil.multiAppend(list, 1, "11", 3.14);
-        System.out.println(list);
-        System.out.println(multiAppend(2, "aeda", 0.94));
+    public static <T> List<T> removeAll(List<T> collection, List<T> remove) {
+        List<T> list = new ArrayList<>();
+        for (T obj : collection) {
+            if (!remove.contains(obj)) {
+                list.add(obj);
+            }
+        }
+        return list;
     }
 
 }
