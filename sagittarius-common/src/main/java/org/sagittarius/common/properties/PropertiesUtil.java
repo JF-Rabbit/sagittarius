@@ -7,33 +7,65 @@ import java.util.Properties;
 
 public class PropertiesUtil {
 
-	public static Properties load(String path) {
+    public static Properties load(String path) {
 
-		InputStream inStream = null;
-		try {
-			inStream = new FileInputStream(path);
-			Properties properties = new Properties();
-			properties.load(inStream);
-			return properties;
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-			try {
-				if (inStream != null) {
-					inStream.close();
-				}
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		}
-	}
+        InputStream inStream = null;
+        try {
+            inStream = new FileInputStream(path);
+            Properties properties = new Properties();
+            properties.load(inStream);
+            return properties;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (inStream != null) {
+                    inStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	public static String getSingleValue(String path, String key) {
-		return load(path).getProperty(key);
-	}
-	
-	public static int getInt(Properties properties, String key){
-		return Integer.valueOf(properties.getProperty(key));
-	}
+    public static String getString(Properties properties, String key) {
+        String value = properties.getProperty(key);
+        if (value == null || value.trim().length() == 0) {
+            throw new RuntimeException("Can't load properties key: " + key + ", null or trim length is 0!");
+        }
+        return value;
+    }
+
+    public static double getInt(Properties properties, String key) {
+        return Double.valueOf(getString(properties, key));
+    }
+
+    public static int getDouble(Properties properties, String key) {
+        return Integer.valueOf(getString(properties, key));
+    }
+
+    public static boolean getBoolean(Properties properties, String key) {
+        return Boolean.valueOf(getString(properties, key));
+    }
+
+    public enum ResultTypeEnum {
+        STRING, INT, BOOLEAN, DOUBLE
+    }
+
+    public static Object getValue(Properties properties, String key, ResultTypeEnum type) {
+        switch (type) {
+            case STRING:
+                return getString(properties, key);
+            case INT:
+                return getInt(properties, key);
+            case BOOLEAN:
+                return getBoolean(properties, key);
+            case DOUBLE:
+                return getDouble(properties, key);
+            default:
+                return getString(properties, key);
+        }
+
+    }
 
 }
