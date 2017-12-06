@@ -36,11 +36,11 @@ public class PropertiesUtil {
         return value;
     }
 
-    public static double getInt(Properties properties, String key) {
+    public static double getDouble(Properties properties, String key) {
         return Double.valueOf(getString(properties, key));
     }
 
-    public static int getDouble(Properties properties, String key) {
+    public static int getInt(Properties properties, String key) {
         return Integer.valueOf(getString(properties, key));
     }
 
