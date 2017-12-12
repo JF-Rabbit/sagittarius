@@ -176,7 +176,7 @@ public class EditProjectAction {
 			field.click();
 		}
 		Delay.sleep(500);
-		WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesConfigPage.ultiConfirBtnByTagSpan);
+		WebElementUtil.clickOneDisplayedElementOfList(kmxTimeSeriesConfigPage.ultiConfirBtnByTagSpan);
 		Delay.sleep(500);
 	}
 
@@ -222,7 +222,7 @@ public class EditProjectAction {
 					kmxTimeSeriesQueryConditionEditPage.multiSelectDiv.get(index).click();
 					Delay.sleep(500);
 
-					WebElementUtil.clickOneDisplayedElementofList(driver.findElements(By.xpath("//li[contains(text(), '" + key + "')]")));
+					WebElementUtil.clickOneDisplayedElementOfList(driver.findElements(By.xpath("//li[contains(text(), '" + key + "')]")));
 					Delay.sleep(500);
 
 					kmxTimeSeriesQueryConditionEditPage.idInput.get(index).sendKeys(map.get(key));
@@ -236,7 +236,7 @@ public class EditProjectAction {
 						.sendKeys(String.valueOf(componmentInfo.get(ComponentInfoConstant.QUERY_CONDION_OTHER)));
 			}
 
-			WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesQueryConditionEditPage.ultiConfirBtnByTagSpan);
+			WebElementUtil.clickOneDisplayedElementOfList(kmxTimeSeriesQueryConditionEditPage.ultiConfirBtnByTagSpan);
 			Delay.sleep(500);
 		}
 	}
@@ -245,11 +245,11 @@ public class EditProjectAction {
 		if (JudgeUtil.isNotNullStr(ComponentInfoConstant.GROUP_VALUE)) {
 			kmxTimeSeriesConfigPage.groupEditBtn.click();
 			Delay.sleep(500);
-			WebElementUtil.clickOneDisplayedElementofList(driver.findElements(By.className("ant-select-selection__rendered")));
+			WebElementUtil.clickOneDisplayedElementOfList(driver.findElements(By.className("ant-select-selection__rendered")));
 			Delay.sleep(500);
 			driver.findElement(By.xpath("//li[text()='" + String.valueOf(componmentInfo.get(ComponentInfoConstant.GROUP_VALUE)) + "']"))
 					.click();
-			WebElementUtil.clickOneDisplayedElementofList(kmxTimeSeriesConfigPage.ultiConfirBtnByTagSpan);
+			WebElementUtil.clickOneDisplayedElementOfList(kmxTimeSeriesConfigPage.ultiConfirBtnByTagSpan);
 			Delay.sleep(500);
 		}
 	}
@@ -269,7 +269,7 @@ public class EditProjectAction {
 					"//div[text()='" + objectConfig.getObjectName() + "']/../../../preceding-sibling::span[@class='ant-tree-checkbox']"));
 			checkbox.click();
 			
-			WebElementUtil.clickOneDisplayedElementofList(kmxObjectConfigPage.ultiConfirBtnByTagSpan);
+			WebElementUtil.clickOneDisplayedElementOfList(kmxObjectConfigPage.ultiConfirBtnByTagSpan);
 			Delay.sleep(500);
 			
 			List<ObjectProperty> objectPropertyList = objectConfig.getObjectProperty();
@@ -297,14 +297,14 @@ public class EditProjectAction {
 					// XXX 未做兼容多组测试
 					PageElementUtil.sendKey(kmxObjectConfigPage.timeInput, dateTime[0], false, true);
 					Delay.sleep(500);
-					WebElementUtil.clickOneDisplayedElementofList(kmxObjectConfigPage.ultiConfirBtnByTagA);
+					WebElementUtil.clickOneDisplayedElementOfList(kmxObjectConfigPage.ultiConfirBtnByTagA);
 					Delay.sleep(500);
 					
 					kmxObjectConfigPage.endTimeReadOnly.click();
 					Delay.sleep(500);
 					PageElementUtil.sendKey(kmxObjectConfigPage.timeInput, dateTime[1], false, true);
 					Delay.sleep(500);
-					WebElementUtil.clickOneDisplayedElementofList(kmxObjectConfigPage.ultiConfirBtnByTagA);
+					WebElementUtil.clickOneDisplayedElementOfList(kmxObjectConfigPage.ultiConfirBtnByTagA);
 					Delay.sleep(500);
 					break;
 				}
@@ -317,11 +317,11 @@ public class EditProjectAction {
 		if (JudgeUtil.isNotNullStr(ComponentInfoConstant.GROUP_VALUE)) {
 			kmxObjectConfigPage.groupEditBtn.click();
 			Delay.sleep(500);
-			WebElementUtil.clickOneDisplayedElementofList(driver.findElements(By.xpath("//div[@class='ag-body-container']//div[@class='ant-select-selection__rendered']")));
+			WebElementUtil.clickOneDisplayedElementOfList(driver.findElements(By.xpath("//div[@class='ag-body-container']//div[@class='ant-select-selection__rendered']")));
 			Delay.sleep(500);
 			driver.findElement(By.xpath("//li[text()='" + String.valueOf(componmentInfo.get(ComponentInfoConstant.GROUP_VALUE)) + "']"))
 					.click();
-			WebElementUtil.clickOneDisplayedElementofList(kmxObjectConfigPage.ultiConfirBtnByTagSpan);
+			WebElementUtil.clickOneDisplayedElementOfList(kmxObjectConfigPage.ultiConfirBtnByTagSpan);
 			Delay.sleep(500);
 		}
 	}

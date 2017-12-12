@@ -45,9 +45,17 @@ public class WebElementUtil {
 
     private static final String MULTIPLE_CLICKABLE_ELEMENT = "MULTIPLE_CLICKABLE_ELEMENT";
     private static final String NO_DISPLAYED_ELEMENT = "NO_DISPLAYED_ELEMENT";
+    private static final String INPUT_LIST_SIZE_IS_0 = "INPUT_LIST_SIZE_IS_0";
     private static final String FIND_BY_WAIT_WARN = "findByWait timeout should > DriverManager.find_element_timeout";
 
-    public static void clickOneDisplayedElementofList(List<WebElement> elementList) {
+    public static void clickOneDisplayedElementOfList(List<WebElement> elementList) {
+        getOneDisplayedElementOfList(elementList).click();
+    }
+
+    public static WebElement getOneDisplayedElementOfList(List<WebElement> elementList) {
+        if (elementList.size() == 0) {
+            throw new IllegalArgumentException(INPUT_LIST_SIZE_IS_0);
+        }
         List<WebElement> list = new ArrayList<>();
         for (int i = 0; i < elementList.size(); i++) {
             logger.info("index:{}, isDisplayed:{}, element:{}", i, elementList.get(i).isDisplayed(), elementList.get(i));
@@ -59,11 +67,10 @@ public class WebElementUtil {
         if (list.size() == 0) {
             throw new IllegalArgumentException(NO_DISPLAYED_ELEMENT);
         } else if (list.size() == 1) {
-            list.get(0).click();
+            return list.get(0);
         } else {
             throw new IllegalArgumentException(MULTIPLE_CLICKABLE_ELEMENT);
         }
-
     }
 
     private static void checkTimeout(int secound) {
