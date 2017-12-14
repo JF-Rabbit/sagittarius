@@ -2,7 +2,7 @@ package org.sagittarius.common.test;
 
 import org.sagittarius.common.annotation.ParamFilterException;
 import org.sagittarius.common.annotation.ParamFilterResolver;
-import org.sagittarius.common.test.entity.ParamFitlerTestEntity;
+import org.sagittarius.common.test.entity.ParamFilterTestEntity;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -29,42 +29,42 @@ public class TestParamFilter {
     public Object[][] provider() {
         return new Object[][]{
                 {
-                        ParamFitlerTestEntity.builder()
+                        ParamFilterTestEntity.builder()
                                 .name(null).obj(new Object()).list(oneList()).map(oneMap())
                                 .build()
                 },
                 {
-                        ParamFitlerTestEntity.builder()
+                        ParamFilterTestEntity.builder()
                                 .name("").obj(new Object()).list(oneList()).map(oneMap())
                                 .build()
                 },
                 {
-                        ParamFitlerTestEntity.builder()
+                        ParamFilterTestEntity.builder()
                                 .name("a").obj(null).list(oneList()).map(oneMap())
                                 .build()
                 },
                 {
-                        ParamFitlerTestEntity.builder()
+                        ParamFilterTestEntity.builder()
                                 .name("a").obj(new Object()).list(null).map(oneMap())
                                 .build()
                 },
                 {
-                        ParamFitlerTestEntity.builder()
+                        ParamFilterTestEntity.builder()
                                 .name("a").obj(new Object()).list(new ArrayList()).map(oneMap())
                                 .build()
                 },
                 {
-                        ParamFitlerTestEntity.builder()
+                        ParamFilterTestEntity.builder()
                                 .name("a").obj(new Object()).list(oneList()).map(null)
                                 .build()
                 },
                 {
-                        ParamFitlerTestEntity.builder()
+                        ParamFilterTestEntity.builder()
                                 .name("a").obj(new Object()).list(oneList()).map(new HashMap())
                                 .build()
                 },
                 {
-                        ParamFitlerTestEntity.builder()
+                        ParamFilterTestEntity.builder()
                                 .name("a").obj(new Object()).list(oneList()).map(oneMap())
                                 .build()
                 },
@@ -72,7 +72,7 @@ public class TestParamFilter {
     }
 
     @Test(dataProvider = "provider")
-    public void test(ParamFitlerTestEntity entity) throws ParamFilterException {
+    public void test(ParamFilterTestEntity entity) throws ParamFilterException {
         ParamFilterResolver.checkParam(entity);
     }
 

@@ -6,7 +6,7 @@ import org.sagittarius.common.annotation.ParamFilterEnum;
 import java.util.List;
 import java.util.Map;
 
-public class ParamFitlerTestEntity {
+public class ParamFilterTestEntity {
 
     @ParamFilter(ParamFilterEnum.NOT_EMPTY_STRING)
     private String name;
@@ -64,7 +64,7 @@ public class ParamFitlerTestEntity {
     }
 
     public static class Builder {
-        ParamFitlerTestEntity entity = new ParamFitlerTestEntity();
+        ParamFilterTestEntity entity = new ParamFilterTestEntity();
 
         public Builder name(String name) {
             this.entity.setName(name);
@@ -86,7 +86,7 @@ public class ParamFitlerTestEntity {
             return this;
         }
 
-        public ParamFitlerTestEntity build() {
+        public ParamFilterTestEntity build() {
             return this.entity;
         }
     }
