@@ -211,10 +211,11 @@ public class DriverManager implements DriverConstant {
         if (StringUtils.isNotEmpty(browserWidth) && StringUtils.isNotEmpty(browserHeigh)) {
             window.setSize(new Dimension(Integer.valueOf(browserWidth), Integer.valueOf(browserHeigh)));
         } else {
-            if (browser != Browser.CHROME) {
-                throw new DriverInitException(
-                        "can't set maximize for firefox, github bug: https://github.com/mozilla/geckodriver/issues/820");
-            }
+            // test pass on Firefox 57.0.2
+//            if (browser != Browser.CHROME) {
+//                throw new DriverInitException(
+//                        "can't set maximize for firefox, github bug: https://github.com/mozilla/geckodriver/issues/820");
+//            }
             window.maximize();
         }
 
