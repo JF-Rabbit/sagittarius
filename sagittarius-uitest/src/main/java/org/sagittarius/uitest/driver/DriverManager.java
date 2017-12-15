@@ -2,6 +2,8 @@ package org.sagittarius.uitest.driver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
@@ -156,7 +158,15 @@ public class DriverManager implements DriverConstant {
             case LOCAL_CHROME:
                 this.setChromeConfig();
                 ChromeOptions options = new ChromeOptions();
+
+                // 允许下载多个文件
+                Map<String, Object> chromePrefs = new HashMap<>();
+                chromePrefs.put("profile.content_settings.exceptions.automatic_downloads.*.setting", 1 );
+                options.setExperimentalOption("prefs", chromePrefs);
+
+                // 取消脚本警告提醒
                 options.addArguments("disable-infobars");
+
                 driver = new ChromeDriver(options);
                 this.browser = Browser.CHROME;
                 driver = setBrowserLayout(driver);
