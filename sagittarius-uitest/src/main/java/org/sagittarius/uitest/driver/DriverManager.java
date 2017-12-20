@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Dimension;
@@ -13,6 +14,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -157,17 +160,13 @@ public class DriverManager implements DriverConstant {
         switch (driverType) {
             case LOCAL_CHROME:
                 this.setChromeConfig();
-                ChromeOptions options = new ChromeOptions();
 
-                // 允许下载多个文件
-                Map<String, Object> chromePrefs = new HashMap<>();
-                chromePrefs.put("profile.content_settings.exceptions.automatic_downloads.*.setting", 1 );
-                options.setExperimentalOption("prefs", chromePrefs);
+                capabilities = DesiredCapabilities.chrome();
 
-                // 取消脚本警告提醒
-                options.addArguments("disable-infobars");
+                setLocalChromeCapabilities(capabilities);
 
-                driver = new ChromeDriver(options);
+                driver = new ChromeDriver(capabilities);
+
                 this.browser = Browser.CHROME;
                 driver = setBrowserLayout(driver);
                 break;
@@ -209,6 +208,29 @@ public class DriverManager implements DriverConstant {
         driver.manage().timeouts().implicitlyWait(initFindElementTimeout(), TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(initSeleniumPageLoadTimeout(), TimeUnit.SECONDS);
 
+    }
+
+    private void setLocalChromeCapabilities(DesiredCapabilities capabilities) {
+        setChromeOptions(capabilities);
+
+        // 允许获取浏览器日志
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.BROWSER, Level.ALL);
+        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+    }
+
+    private void setChromeOptions(DesiredCapabilities capabilities) {
+        ChromeOptions options = new ChromeOptions();
+
+        // 允许下载多个文件
+        Map<String, Object> chromePrefs = new HashMap<String, Object>();
+        chromePrefs.put("profile.content_settings.exceptions.automatic_downloads.*.setting", 1 );
+        options.setExperimentalOption("prefs", chromePrefs);
+
+        // 取消脚本警告提醒
+        options.addArguments("disable-infobars");
+
+        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
     }
 
     private WebDriver setBrowserLayout(WebDriver driver) throws DriverInitException {
