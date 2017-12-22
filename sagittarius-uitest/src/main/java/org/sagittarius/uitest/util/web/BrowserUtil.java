@@ -50,7 +50,7 @@ public class BrowserUtil {
     /**
      * 浏览器控制台是否报错
      */
-    public void checkBrowserHaveErrorLog(WebDriver driver) {
+    public static void checkBrowserHaveErrorLog(WebDriver driver) {
         LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
             logger.info(entry.getLevel().toString());
