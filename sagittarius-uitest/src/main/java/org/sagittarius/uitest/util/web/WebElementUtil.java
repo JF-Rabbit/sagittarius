@@ -135,6 +135,7 @@ public class WebElementUtil {
         return wait.until(d -> findElement(d, by, msg));
     }
 
+    @Deprecated
     public static List<WebElement> findElementsByWait(WebDriver driver, int secound, WebByEnum by, String msg) {
         checkTimeout(secound);
         WebDriverWait wait = new WebDriverWait(driver, secound);
