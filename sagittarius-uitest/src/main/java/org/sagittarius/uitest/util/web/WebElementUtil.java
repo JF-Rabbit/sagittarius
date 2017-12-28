@@ -5,11 +5,15 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.sagittarius.common.Delay;
 import org.sagittarius.common.robot.RobotUtil;
 import org.sagittarius.uitest.driver.DriverManager;
+import org.sagittarius.uitest.exception.FindElementTimeoutException;
 import org.sagittarius.uitest.util.web.js.JsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,6 +139,22 @@ public class WebElementUtil {
         return wait.until(d -> findElement(d, by, msg));
     }
 
+    public static void clickElementByWait(WebDriver driver, int secound, WebByEnum by, String msg) {
+        checkTimeout(secound);
+        while (true) {
+            if (secound == 0) {
+                throw new FindElementTimeoutException();
+            }
+            try {
+                findElement(driver, by, msg).click();
+                return;
+            } catch (WebDriverException e) {
+                logger.warn("Exception: {} happened when try to click element, details: {}", e.getClass().getName(), e.getMessage());
+                secound -= DriverManager.find_element_timeout;
+            }
+        }
+    }
+
     @Deprecated
     public static List<WebElement> findElementsByWait(WebDriver driver, int secound, WebByEnum by, String msg) {
         checkTimeout(secound);
@@ -150,7 +170,7 @@ public class WebElementUtil {
     public static boolean isExsit(WebDriver driver, WebByEnum by, String msg) {
         try {
             WebElement element = findElement(driver, by, msg);
-            if (element.isDisplayed()) {
+            if (!element.isDisplayed()) {
                 return false;
             }
         } catch (Exception e) {

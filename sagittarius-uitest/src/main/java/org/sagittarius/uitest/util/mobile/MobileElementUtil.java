@@ -141,7 +141,7 @@ public class MobileElementUtil {
 	 *             超时异常
 	 */
 	public static MobileElement loadingElement(AppiumDriver<MobileElement> driver, MobileByEnum by, String msg, MobileConfirmEnum type,
-			String expect) throws FindElementTimeoutException {
+			String expect) {
 
 		logger.info("Loading Element START");
 		Boolean result = false;
