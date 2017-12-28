@@ -23,9 +23,23 @@ public class TestJdbcUtil {
     }
 
     @Test
+    public void delete() throws SQLException {
+        String sql = "delete from foo where foo_name=?";
+        int result = JdbcUtil.change(conn, sql, "Amy");
+        System.out.println(result);
+    }
+
+    @Test
+    public void insert() throws SQLException {
+        String sql = "insert into foo(foo_name) value(?) ";
+        int result = JdbcUtil.change(conn, sql, "Amy");
+        System.out.println(result);
+    }
+
+    @Test
     public void update() throws SQLException {
         String sql = "update foo set foo_name='Marry1' where foo_name='Marry0'";
-        int result = JdbcUtil.update(conn, sql);
+        int result = JdbcUtil.change(conn, sql);
         System.out.println(result);
     }
 

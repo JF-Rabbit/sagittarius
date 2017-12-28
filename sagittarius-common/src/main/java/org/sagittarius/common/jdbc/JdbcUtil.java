@@ -44,8 +44,37 @@ public class JdbcUtil {
         return ps;
     }
 
+    public enum JdbcActionEnum {
+        EXECUTE, QUERY, CHANGE
+    }
+
     /**
-     * 更新
+     * 根据JdbcActionEnum执行
+     *
+     * @param conn
+     * @param sql
+     * @param actionEnum
+     * @param params
+     * @throws SQLException
+     */
+    public static void execute(Connection conn, String sql, JdbcActionEnum actionEnum, Object... params) throws SQLException {
+        switch (actionEnum) {
+            case EXECUTE:
+                execute(conn, sql, params);
+                break;
+            case QUERY:
+                query(conn, sql, params);
+                break;
+            case CHANGE:
+                change(conn, sql, params);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 执行
      *
      * @param conn
      * @param sql
@@ -53,17 +82,30 @@ public class JdbcUtil {
      * @return
      * @throws SQLException
      */
-    public static int update(Connection conn, String sql, Object... params) throws SQLException {
-        return prepare(conn, sql, params).executeUpdate();
+    public static boolean execute(Connection conn, String sql, Object... params) throws SQLException {
+        return prepare(conn, sql, params).execute();
     }
 
     /**
-     * 查询获取ResultSet
+     * 增、删、改
      *
      * @param conn
      * @param sql
      * @param params
-     * @return
+     * @return 更新的条数
+     * @throws SQLException
+     */
+    public static int change(Connection conn, String sql, Object... params) throws SQLException {
+        return prepare(conn, sql, params).executeUpdate();
+    }
+
+    /**
+     * 查询
+     *
+     * @param conn
+     * @param sql
+     * @param params
+     * @return ResultSet集
      * @throws SQLException
      */
     public static ResultSet query(Connection conn, String sql, Object... params) throws SQLException {
