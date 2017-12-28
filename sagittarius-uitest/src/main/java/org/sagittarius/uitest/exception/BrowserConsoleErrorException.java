@@ -1,6 +1,6 @@
 package org.sagittarius.uitest.exception;
 
-public class BrowserConsoleErrorException extends RuntimeException{
+public class BrowserConsoleErrorException extends UIRuntimeException{
 
     public BrowserConsoleErrorException() {
         super();

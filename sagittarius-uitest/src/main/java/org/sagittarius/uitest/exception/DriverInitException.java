@@ -1,6 +1,6 @@
 package org.sagittarius.uitest.exception;
 
-public class DriverInitException extends Exception {
+public class DriverInitException extends UIException {
 
 	private static final long serialVersionUID = 1L;
 

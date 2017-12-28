@@ -1,6 +1,6 @@
 package org.sagittarius.uitest.exception;
 
-public class SwipeLocationException extends Exception {
+public class SwipeLocationException extends UIException {
 
 	/**
 	 * 

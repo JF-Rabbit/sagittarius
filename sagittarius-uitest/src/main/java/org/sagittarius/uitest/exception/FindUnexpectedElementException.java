@@ -1,6 +1,6 @@
 package org.sagittarius.uitest.exception;
 
-public class FindUnexpectedElementException extends RuntimeException {
+public class FindUnexpectedElementException extends UIRuntimeException {
 
 	private static final long serialVersionUID = -8581105414200720051L;
 

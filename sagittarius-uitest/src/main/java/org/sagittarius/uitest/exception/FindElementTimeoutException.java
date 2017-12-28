@@ -6,7 +6,7 @@ package org.sagittarius.uitest.exception;
  * @author jasonzhang 2016年11月3日 下午5:43:29
  *
  */
-public class FindElementTimeoutException extends Exception {
+public class FindElementTimeoutException extends UIRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

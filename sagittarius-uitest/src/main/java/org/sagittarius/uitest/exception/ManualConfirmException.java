@@ -1,6 +1,6 @@
 package org.sagittarius.uitest.exception;
 
-public class ManualConfirmException extends Exception {
+public class ManualConfirmException extends UIException {
 
 	private static final long serialVersionUID = 1L;
 
