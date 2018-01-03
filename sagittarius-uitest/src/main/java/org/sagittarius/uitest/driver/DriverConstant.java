@@ -3,6 +3,7 @@ package org.sagittarius.uitest.driver;
 public interface DriverConstant {
 
 	String SELENIUM_CONFIG_PATH = "classpath:config/selenium.properties";
+	String DOWNLOAD_PATH = "config/download";
 
 	/* selenium properties */
 	String DRIVER_TYPE = "${driver.type}";

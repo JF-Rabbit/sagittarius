@@ -1,5 +1,6 @@
 package org.sagittarius.uitest.driver;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -81,7 +82,7 @@ public class DriverManager implements DriverConstant {
             throw new DriverInitException(DRIVER_TYPE_NOT_FOUND_IN_PROPERTIES);
         }
 
-        DriverType type = null;
+        DriverType type;
         try {
             type = DriverType.valueOf(driverType);
         } catch (IllegalArgumentException e) {
@@ -120,7 +121,7 @@ public class DriverManager implements DriverConstant {
     private RemoteWebDriver setRemoteWebDriver(DesiredCapabilities capabilities) throws DriverInitException {
         capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
         capabilities.setCapability("name", "Remote File Upload using Selenium 2's FileDetectors");
-        RemoteWebDriver remoteWebDriver = null;
+        RemoteWebDriver remoteWebDriver;
         try {
             remoteWebDriver = new RemoteWebDriver(new URL(getRemoteHubAddressFromSource()), capabilities);
         } catch (MalformedURLException e) {
@@ -156,7 +157,7 @@ public class DriverManager implements DriverConstant {
     public void initDriver() throws DriverInitException {
         DriverType driverType = this.loadDriverTypeFromSource();
 
-        DesiredCapabilities capabilities = null;
+        DesiredCapabilities capabilities;
         switch (driverType) {
             case LOCAL_CHROME:
                 this.setChromeConfig();
@@ -222,9 +223,16 @@ public class DriverManager implements DriverConstant {
     private void setChromeOptions(DesiredCapabilities capabilities) {
         ChromeOptions options = new ChromeOptions();
 
+
+        Map<String, Object> chromePrefs = new HashMap<>();
         // 允许下载多个文件
-        Map<String, Object> chromePrefs = new HashMap<String, Object>();
         chromePrefs.put("profile.content_settings.exceptions.automatic_downloads.*.setting", 1 );
+
+        // 下载不弹框，指定下载路径
+        chromePrefs.put("profile.default_content_settings.popups", 0);
+        chromePrefs.put("download.default_directory", new File(DOWNLOAD_PATH).getAbsolutePath());
+        chromePrefs.put("download.directory_upgrade", true);
+
         options.setExperimentalOption("prefs", chromePrefs);
 
         // 取消脚本警告提醒
