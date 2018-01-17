@@ -53,10 +53,13 @@ public class BrowserUtil {
     public static void checkBrowserHaveErrorLog(WebDriver driver) {
         LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
-            logger.info(entry.getLevel().toString());
-            if (entry.getLevel().toString().equals("ERROR")) {
-                logger.error("CONSOLE MSG:{} {}", entry.getLevel(), entry.getMessage());
+            if (entry.getLevel().toString().equals("SEVERE")) {
+                logger.error("CONSOLE-LOG: {}", entry);
                 throw new BrowserConsoleErrorException(entry.getMessage());
+            } else if (entry.getLevel().toString().equals("WARNING")) {
+                logger.warn("CONSOLE-LOG: {}", entry);
+            } else {
+                logger.debug("CONSOLE-LOG: {}", entry);
             }
         }
     }
