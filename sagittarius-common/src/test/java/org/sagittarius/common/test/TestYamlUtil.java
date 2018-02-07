@@ -8,7 +8,7 @@ public class TestYamlUtil {
         Object object = YamlUtil.load("C:/Users/kzdatd/Desktop/env.yaml");
         System.out.println(object);
 
-        Object foo = YamlUtil.chain(object).link("qa_dev").link("foo").flush("foo_name");
+        Object foo = YamlUtil.chain(object).asMap("qa_dev").asMap("foo").value("foo_name");
         System.out.println(foo);
     }
 }

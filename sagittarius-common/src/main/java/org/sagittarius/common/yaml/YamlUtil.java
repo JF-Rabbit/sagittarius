@@ -20,30 +20,21 @@ public class YamlUtil {
         @SuppressWarnings("unchecked")
         public MapChain(Object object) {
             if (object == null) {
-                throw new RuntimeException("Can't instance MapChain by param: null");
+                throw new NullPointerException("Can't instance MapChain by param: null");
             }
-            try {
+            if (object instanceof Map) {
                 this.chain = (Map<String, Object>) object;
-            } catch (ClassCastException e) {
-                throw new RuntimeException("Object: [" + object + "] cannot be cast to java.util.Map", e);
+            } else {
+                throw new ClassCastException("Object: [" + object.getClass() + "] cannot be cast to java.util.Map");
             }
         }
 
-        public Object flush(String key) {
+        public Object value(String key) {
             return this.chain.get(key);
         }
 
-        @SuppressWarnings("unchecked")
-        public MapChain link(String key) {
-            if (this.chain.get(key) == null) {
-                throw new RuntimeException("Can't find key: " + key);
-            }
-            try {
-                this.chain = (Map<String, Object>) this.chain.get(key);
-            } catch (ClassCastException e) {
-                throw new RuntimeException("Object: [" + this.chain.get(key) + "] cannot be cast to java.util.Map", e);
-            }
-            return this;
+        public MapChain asMap(String key) {
+            return new MapChain(this.chain.get(key));
         }
     }
 
