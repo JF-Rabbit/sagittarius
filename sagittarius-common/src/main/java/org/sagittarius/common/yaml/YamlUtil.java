@@ -18,7 +18,7 @@ public class YamlUtil {
         private Map<String, Object> chain;
 
         @SuppressWarnings("unchecked")
-        public MapChain(Object object) {
+        private MapChain(Object object) {
             if (object == null) {
                 throw new NullPointerException("Can't instance MapChain by param: null");
             }
@@ -56,8 +56,7 @@ public class YamlUtil {
 
     public static <T> T loadAs(String path, Class<T> clazz) {
         try {
-            T result = new Yaml().loadAs(new FileInputStream(new File(path)), clazz);
-            return result;
+            return new Yaml().loadAs(new FileInputStream(new File(path)), clazz);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
