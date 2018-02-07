@@ -26,13 +26,13 @@ public class ParamFilterResolver {
 
     }
 
-    private static void checkEmptyList(String name, List param) throws ParamFilterException {
+    private static void checkEmptyList(String name, List<?> param) throws ParamFilterException {
         checkNull(name, param);
         if (param.size() == 0)
             throw new ParamFilterException(PARAM + name + IS_EMPTY);
     }
 
-    private static void checkEmptyMap(String name, Map param) throws ParamFilterException {
+    private static void checkEmptyMap(String name, Map<?, ?> param) throws ParamFilterException {
         checkNull(name, param);
         if (param.size() == 0)
             throw new ParamFilterException(PARAM + name + IS_EMPTY);
@@ -55,10 +55,10 @@ public class ParamFilterResolver {
                             checkEmptyString(field.getName(), paramValue);
                             break;
                         case NOT_EMPTY_LIST:
-                            checkEmptyList(field.getName(), (List) paramValue);
+                            checkEmptyList(field.getName(), (List<?>) paramValue);
                             break;
                         case NOT_EMPTY_MAP:
-                            checkEmptyMap(field.getName(), (Map) paramValue);
+                            checkEmptyMap(field.getName(), (Map<?, ?>) paramValue);
                             break;
                     }
                 }

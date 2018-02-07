@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>sagittarius</groupId>
+    <groupId>sagittarius-demo</groupId>
     <artifactId>sagittarius-demo</artifactId>
     <packaging>jar</packaging>
 

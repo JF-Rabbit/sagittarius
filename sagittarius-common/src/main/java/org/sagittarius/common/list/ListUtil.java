@@ -5,14 +5,16 @@ import java.util.List;
 
 public class ListUtil {
 
-    public static <T> List<T> multiAppend(List<T> list, T... params) {
+    @SafeVarargs
+	public static <T> List<T> multiAppend(List<T> list, T... params) {
         for (T p : params) {
             list.add(p);
         }
         return list;
     }
 
-    public static <T> List<T> multiAppend(T... params) {
+    @SafeVarargs
+	public static <T> List<T> multiAppend(T... params) {
         List<T> list = new ArrayList<>();
         for (T p : params) {
             list.add(p);

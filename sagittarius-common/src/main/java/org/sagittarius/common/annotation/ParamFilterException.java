@@ -2,7 +2,9 @@ package org.sagittarius.common.annotation;
 
 public class ParamFilterException extends Exception {
 
-    public ParamFilterException() {
+	private static final long serialVersionUID = -826573994586794324L;
+
+	public ParamFilterException() {
         super();
     }
 
