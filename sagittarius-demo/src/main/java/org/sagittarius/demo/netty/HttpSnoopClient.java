@@ -30,7 +30,7 @@ public final class HttpSnoopClient {
 		int port = uri.getPort();
 		if (port == -1) {
 			if ("http".equalsIgnoreCase(scheme)) {
-				port = 80;
+				port = 20058;
 			} else if ("https".equalsIgnoreCase(scheme)) {
 				port = 443;
 			}
