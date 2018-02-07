@@ -76,12 +76,12 @@ public class ParamFilterTestEntity {
             return this;
         }
 
-        public Builder list(List list) {
+        public Builder list(List<Object> list) {
             this.entity.setList(list);
             return this;
         }
 
-        public Builder map(Map map) {
+        public Builder map(Map<String, Object> map) {
             this.entity.setMap(map);
             return this;
         }

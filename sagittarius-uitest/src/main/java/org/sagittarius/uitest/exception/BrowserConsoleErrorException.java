@@ -2,7 +2,9 @@ package org.sagittarius.uitest.exception;
 
 public class BrowserConsoleErrorException extends UIRuntimeException{
 
-    public BrowserConsoleErrorException() {
+	private static final long serialVersionUID = 144854905082479372L;
+
+	public BrowserConsoleErrorException() {
         super();
     }
 

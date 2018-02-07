@@ -2,7 +2,9 @@ package org.sagittarius.uitest.exception;
 
 public class UIException extends Exception {
 
-    public UIException() {
+	private static final long serialVersionUID = 6822952807310450861L;
+
+	public UIException() {
         super();
     }
 

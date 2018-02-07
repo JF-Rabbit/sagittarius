@@ -50,7 +50,7 @@ public class TestParamFilter {
                 },
                 {
                         ParamFilterTestEntity.builder()
-                                .name("a").obj(new Object()).list(new ArrayList()).map(oneMap())
+                                .name("a").obj(new Object()).list(new ArrayList<Object>()).map(oneMap())
                                 .build()
                 },
                 {
@@ -60,7 +60,7 @@ public class TestParamFilter {
                 },
                 {
                         ParamFilterTestEntity.builder()
-                                .name("a").obj(new Object()).list(oneList()).map(new HashMap())
+                                .name("a").obj(new Object()).list(oneList()).map(new HashMap<String, Object>())
                                 .build()
                 },
                 {

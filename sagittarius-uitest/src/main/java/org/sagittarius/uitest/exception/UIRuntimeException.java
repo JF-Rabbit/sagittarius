@@ -2,7 +2,9 @@ package org.sagittarius.uitest.exception;
 
 public class UIRuntimeException extends RuntimeException {
 
-    public UIRuntimeException() {
+	private static final long serialVersionUID = 7861753130663137727L;
+
+	public UIRuntimeException() {
         super();
     }
 
