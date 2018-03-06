@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util" xmlns:jee="http://www.springframework.org/schema/jee"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
@@ -14,42 +15,43 @@
 		http://www.springframework.org/schema/aop
 		http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
-	<context:component-scan base-package="org.sagittarius.uitest.web"></context:component-scan>
-	<aop:aspectj-autoproxy proxy-target-class="false" />
+    <context:component-scan base-package="org.sagittarius.uitest.web"></context:component-scan>
+    <aop:aspectj-autoproxy proxy-target-class="false"/>
 
-	<!-- DriverManager -->
-	<bean id="driverManager" class="org.sagittarius.uitest.driver.DriverManager"></bean>
+    <!-- DriverManager -->
+    <bean id="driverManager" class="org.sagittarius.uitest.driver.DriverManager"></bean>
+    <bean id="baseAction" class="org.sagittarius.uitest.util.BaseAction"></bean>
 
-	<util:properties id="jdbc" location="classpath:config/db.properties"></util:properties>
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="driverClassName" value="#{jdbc.driver}"></property>
-		<property name="url" value="#{jdbc.url}"></property>
-		<property name="username" value="#{jdbc.user}"></property>
-		<property name="password" value="#{jdbc.pwd}"></property>
-		<property name="maxActive" value="#{jdbc.maxPoolSize}"></property>
-		<property name="minIdle" value="#{jdbc.minPoolSize}"></property>
-	</bean>
-	
-	<!-- MapperScanner -> Java Bean -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="org.sagittarius.mybatis.generator" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
-	</bean>
-	<!-- sqlSessionFactory -->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<!-- mapper.xml location -->
-		<property name="mapperLocations">
-			<array>
-				<value>classpath*:org/sagittarius/mybatis/generator/sqlmap/**/*.xml
-				</value>
-			</array>
-		</property>
-		<property name="configuration">
-			<bean class="org.apache.ibatis.session.Configuration">
-				<property name="mapUnderscoreToCamelCase" value="true" />
-			</bean>
-		</property>
-	</bean>
+    <util:properties id="jdbc" location="classpath:config/db.properties"></util:properties>
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="#{jdbc.driver}"></property>
+        <property name="url" value="#{jdbc.url}"></property>
+        <property name="username" value="#{jdbc.user}"></property>
+        <property name="password" value="#{jdbc.pwd}"></property>
+        <property name="maxActive" value="#{jdbc.maxPoolSize}"></property>
+        <property name="minIdle" value="#{jdbc.minPoolSize}"></property>
+    </bean>
+
+    <!-- MapperScanner -> Java Bean -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="org.sagittarius.mybatis.generator"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+    <!-- sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- mapper.xml location -->
+        <property name="mapperLocations">
+            <array>
+                <value>classpath*:org/sagittarius/mybatis/generator/sqlmap/**/*.xml
+                </value>
+            </array>
+        </property>
+        <property name="configuration">
+            <bean class="org.apache.ibatis.session.Configuration">
+                <property name="mapUnderscoreToCamelCase" value="true"/>
+            </bean>
+        </property>
+    </bean>
 
 </beans>

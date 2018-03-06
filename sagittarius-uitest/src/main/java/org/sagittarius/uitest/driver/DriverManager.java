@@ -28,6 +28,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 @Scope("prototype")
 @PropertySource({DriverConstant.SELENIUM_CONFIG_PATH})
@@ -154,6 +156,7 @@ public class DriverManager implements DriverConstant {
         return this.driver;
     }
 
+    @PostConstruct
     public void initDriver() throws DriverInitException {
         DriverType driverType = this.loadDriverTypeFromSource();
 

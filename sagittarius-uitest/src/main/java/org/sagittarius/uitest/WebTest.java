@@ -38,7 +38,7 @@ public class WebTest extends AbstractTestNGSpringContextTests {
 	@BeforeMethod
 	public void setup(Method method) throws DriverInitException {
 		logger.info("Init Driver...");
-		manager.initDriver();
+//		manager.initDriver();
 		driver = manager.getDriver();
 		currentBrowser = manager.getBrowser();
 		logger.info("Init Done");
