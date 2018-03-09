@@ -34,7 +34,8 @@ public class JsonPath {
     }
 
     private static final String ROOT = "$";
-    private static final String SQUARE = "[";
+    private static final String SQUARE_L = "[";
+    private static final String SQUARE_R = "]";
     private static final String SQUARE_SEPARATOR = "\\[";
 
     public JsonPath() {
@@ -51,9 +52,9 @@ public class JsonPath {
             if (item.equals(ROOT)) {
                 continue;
             }
-            if (item.contains(SQUARE)) {
+            if (item.contains(SQUARE_L)) {
                 jsonElement = getElement(jsonElement, item.split(SQUARE_SEPARATOR)[0]).getAsJsonArray().get(
-                        Integer.valueOf(item.substring(item.indexOf("[") + 1, item.indexOf("]")))
+                        Integer.valueOf(item.substring(item.indexOf(SQUARE_L) + 1, item.indexOf(SQUARE_R)))
                 );
                 continue;
             }
@@ -75,9 +76,9 @@ public class JsonPath {
             if (item.equals(ROOT)) {
                 continue;
             }
-            if (item.contains(SQUARE)) {
+            if (item.contains(SQUARE_L)) {
                 jsonNode = getNode(jsonNode, item.split(SQUARE_SEPARATOR)[0]).get(
-                        Integer.valueOf(item.substring(item.indexOf("[") + 1, item.indexOf("]"))));
+                        Integer.valueOf(item.substring(item.indexOf(SQUARE_L) + 1, item.indexOf(SQUARE_R))));
                 continue;
             }
             jsonNode = getNode(jsonNode, item);
