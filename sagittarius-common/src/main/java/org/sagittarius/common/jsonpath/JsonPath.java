@@ -46,51 +46,86 @@ public class JsonPath {
         this.separator = separator.getSeparator();
     }
 
+    private void verifyPath(String path) {
+        if (!path.startsWith(ROOT)) {
+            throw new RuntimeException("path: " + path + " must start with '$'");
+        }
+        if (path.indexOf(ROOT) != path.lastIndexOf(ROOT)) {
+            throw new RuntimeException("path: " + path + " must contains one '$'");
+        }
+    }
+
     public JsonElement elementValue(String path, JsonElement jsonElement) {
+        verifyPath(path);
         String[] elementItems = path.split(this.separator);
         for (String item : elementItems) {
             if (item.equals(ROOT)) {
                 continue;
             }
             if (item.contains(SQUARE_L)) {
-                jsonElement = getElement(jsonElement, item.split(SQUARE_SEPARATOR)[0]).getAsJsonArray().get(
+                jsonElement = getElement(jsonElement, item.split(SQUARE_SEPARATOR)[0], true).getAsJsonArray().get(
                         Integer.valueOf(item.substring(item.indexOf(SQUARE_L) + 1, item.indexOf(SQUARE_R)))
                 );
                 continue;
             }
-            jsonElement = getElement(jsonElement, item);
+            jsonElement = getElement(jsonElement, item, false);
         }
         return jsonElement;
     }
 
-    private JsonElement getElement(JsonElement jsonElement, String key) {
+    private JsonElement getElement(JsonElement jsonElement, String key, Boolean isList) {
         if (jsonElement.isJsonObject()) {
-            return jsonElement.getAsJsonObject().get(key);
+            if (jsonElement.getAsJsonObject().keySet().contains(key)) {
+                return jsonElement.getAsJsonObject().get(key);
+            }
+            throw new RuntimeException("JsonElement: " + jsonElement + " not have key: " + key);
         }
-        return jsonElement;
+        if (jsonElement.isJsonArray()) {
+            if (isList) {
+                return jsonElement;
+            }
+            throw new RuntimeException("list should use '[]'");
+        }
+
+        throw new RuntimeException("Can't find key: " + key + " in primary value: " + jsonElement);
     }
 
     public JsonNode nodeValue(String path, JsonNode jsonNode) {
+        verifyPath(path);
         String[] nodeItems = path.split(this.separator);
         for (String item : nodeItems) {
             if (item.equals(ROOT)) {
                 continue;
             }
             if (item.contains(SQUARE_L)) {
-                jsonNode = getNode(jsonNode, item.split(SQUARE_SEPARATOR)[0]).get(
-                        Integer.valueOf(item.substring(item.indexOf(SQUARE_L) + 1, item.indexOf(SQUARE_R))));
+                JsonNode tmp = getNode(jsonNode, item.split(SQUARE_SEPARATOR)[0], true);
+                jsonNode = tmp.path(Integer.valueOf(item.substring(item.indexOf(SQUARE_L) + 1, item.indexOf(SQUARE_R))));
+                if (jsonNode.isMissingNode()) {
+                    throw new RuntimeException("JsonNode: " + tmp + " index out of range: length: "
+                            + "index: " + item.substring(item.indexOf(SQUARE_L) + 1, item.indexOf(SQUARE_R)));
+                }
                 continue;
             }
-            jsonNode = getNode(jsonNode, item);
+            jsonNode = getNode(jsonNode, item, false);
         }
         return jsonNode;
     }
 
-    private JsonNode getNode(JsonNode jsonNode, String key) {
+    private JsonNode getNode(JsonNode jsonNode, String key, boolean isList) {
         if (jsonNode.isObject()) {
-            return jsonNode.get(key);
+            if (jsonNode.path(key).isMissingNode()) {
+                throw new RuntimeException("JsonNode: " + jsonNode + " not have key: " + key);
+            }
+            return jsonNode.path(key);
         }
-        return jsonNode;
+
+        if (jsonNode.isArray()) {
+            if (isList) {
+                return jsonNode;
+            }
+            throw new RuntimeException("list should use '[]'");
+        }
+        throw new RuntimeException("Can't find key: " + key + " in primary value: " + jsonNode);
     }
 
 
