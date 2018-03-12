@@ -14,10 +14,6 @@ public class JdbcUtil {
 
     /**
      * 获取Connection
-     *
-     * @param url
-     * @return
-     * @throws SQLException
      */
     public static Connection getConnection(String url) throws SQLException {
         return DriverManager.getConnection(url);
@@ -25,12 +21,10 @@ public class JdbcUtil {
 
     /**
      * 关闭Connection
-     *
-     * @param conn
-     * @throws SQLException
      */
     public static void close(Connection conn) throws SQLException {
         if (conn != null) {
+            logger.info("Close Connection");
             conn.close();
         }
     }
@@ -50,12 +44,6 @@ public class JdbcUtil {
 
     /**
      * 根据JdbcActionEnum执行
-     *
-     * @param conn
-     * @param sql
-     * @param actionEnum
-     * @param params
-     * @throws SQLException
      */
     public static void execute(Connection conn, String sql, JdbcActionEnum actionEnum, Object... params) throws SQLException {
         switch (actionEnum) {
@@ -75,12 +63,6 @@ public class JdbcUtil {
 
     /**
      * 执行
-     *
-     * @param conn
-     * @param sql
-     * @param params
-     * @return
-     * @throws SQLException
      */
     public static boolean execute(Connection conn, String sql, Object... params) throws SQLException {
         return prepare(conn, sql, params).execute();
@@ -88,12 +70,6 @@ public class JdbcUtil {
 
     /**
      * 增、删、改
-     *
-     * @param conn
-     * @param sql
-     * @param params
-     * @return 更新的条数
-     * @throws SQLException
      */
     public static int change(Connection conn, String sql, Object... params) throws SQLException {
         return prepare(conn, sql, params).executeUpdate();
@@ -101,12 +77,6 @@ public class JdbcUtil {
 
     /**
      * 查询
-     *
-     * @param conn
-     * @param sql
-     * @param params
-     * @return ResultSet集
-     * @throws SQLException
      */
     public static ResultSet query(Connection conn, String sql, Object... params) throws SQLException {
         return prepare(conn, sql, params).executeQuery();
@@ -114,10 +84,6 @@ public class JdbcUtil {
 
     /**
      * ResultSet转Map
-     *
-     * @param rs
-     * @param map
-     * @return
      */
     public static Map<String, Object> resultSet2Map(ResultSet rs, Map<String, Object> map, Set<String> notFindSet) {
         map.forEach((k, v) -> {
@@ -132,11 +98,6 @@ public class JdbcUtil {
 
     /**
      * ResultSet转Object
-     *
-     * @param rs
-     * @param object
-     * @param <T>
-     * @return
      */
     public static <T> T resultSet2Object(ResultSet rs, T object, Set<String> notFindSet) {
         for (Field field : object.getClass().getDeclaredFields()) {
@@ -152,31 +113,24 @@ public class JdbcUtil {
 
     /**
      * 获取ResultSet并转成Map列表
-     *
-     * @param item
-     * @param map
-     * @return
-     * @throws SQLException
      */
     public static List<Map<String, Object>> getMap(JdbcItem item, Map<String, Object> map) throws SQLException {
         List<Map<String, Object>> mapList = new ArrayList<>();
         ResultSet rs = query(item.getConnection(), item.getSql(), item.getParams());
         Set<String> notFindSet = new HashSet<>();
         while (rs.next()) {
-            mapList.add(resultSet2Map(rs, map, notFindSet));
+            Map<String, Object> tmp = new HashMap<>();
+            tmp.putAll(resultSet2Map(rs, map, notFindSet));
+            mapList.add(tmp);
         }
-        logger.warn("Not find keys: {} in ResultSet", notFindSet);
+        if (notFindSet.size() > 0) {
+            logger.warn("Not find keys: {} in ResultSet", notFindSet);
+        }
         return mapList;
     }
 
     /**
      * 获取ResultSet并转成对象列表
-     *
-     * @param item
-     * @param object
-     * @param <T>
-     * @return
-     * @throws SQLException
      */
     public static <T> List<T> getObject(JdbcItem item, T object) throws SQLException {
         List<T> objectList = new ArrayList<>();
