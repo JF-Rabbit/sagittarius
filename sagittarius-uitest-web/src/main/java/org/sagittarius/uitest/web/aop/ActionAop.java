@@ -125,7 +125,6 @@ public class ActionAop extends ScannerDebug implements AOPConstant, CommonConsta
 
     @Override
     public void beforeExit() {
-        manager.quitDriver(manager.getDriver());
         logger.info("\nStop test");
     }
 

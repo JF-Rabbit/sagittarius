@@ -18,22 +18,26 @@ public class BaseAction {
 
     private static Logger logger = LoggerFactory.getLogger(BaseAction.class);
 
-    protected static WebDriver driver;
+    private DriverManager manager;
 
-    public WebDriver getDriver() {
-        return driver;
+    public DriverManager getManager() {
+        return manager;
     }
 
-    public static void setDriver(WebDriver driver) {
-        BaseAction.driver = driver;
+    public void setManager(DriverManager manager) {
+        this.manager = manager;
     }
 
-    protected static void open(String url) {
+    public WebDriver driver() {
+        return this.manager.getDriver();
+    }
+
+    public void open(String url) {
         logger.info("Open URL: {}", url);
-        driver.get(url);
+        manager.getDriver().get(url);
     }
 
-    protected static void sleep(int millisecond) {
+    public void sleep(int millisecond) {
         logger.info("Sleep: {} ms", millisecond);
         try {
             Thread.sleep(millisecond);
@@ -42,60 +46,60 @@ public class BaseAction {
         }
     }
 
-    protected static void sleep() {
+    public void sleep() {
         sleep(500);
     }
 
-    protected static WebElement find(By by) {
+    public WebElement find(By by) {
         logger.info("Find Element By: {}", by);
-        return driver.findElement(by);
+        return manager.getDriver().findElement(by);
     }
 
-    protected static List<WebElement> finds(By by) {
+    public List<WebElement> finds(By by) {
         logger.info("Find Elements By: {}", by);
-        return driver.findElements(by);
+        return manager.getDriver().findElements(by);
     }
 
-    protected static void script(String script, Object... args) {
+    public void script(String script, Object... args) {
         logger.info("Execute Script: {}, args: {}", script, args);
-        JavascriptExecutor js = (JavascriptExecutor) driver;
+        JavascriptExecutor js = (JavascriptExecutor) manager.getDriver();
         js.executeScript(script, args);
     }
 
-    protected static void click(WebElement element) {
+    public void click(WebElement element) {
         logger.info("Click Element: {}", element);
         element.click();
         sleep();
     }
 
-    protected static void click(WebElement element, int millisecond) {
+    public void click(WebElement element, int millisecond) {
         element.click();
         sleep(millisecond);
     }
 
-    protected static void sendKeys(WebElement element, String keys) {
-        logger.info("Send Keys: {} to Elements: {}", keys, element);
+    public void sendKeys(WebElement element, String keys) {
+        logger.info("Send Keys: {} to Element: {}", keys, element);
         element.sendKeys(keys);
     }
 
-    protected static void c_sendKeys(WebElement element, String keys) {
+    public void c_sendKeys(WebElement element, String keys) {
         click(element);
         element.clear();
         element.sendKeys(keys);
     }
 
-    protected static void source() {
-        logger.info(driver.getPageSource());
+    public void source() {
+        logger.info(manager.getDriver().getPageSource());
     }
 
-    public static void initPages(PageUI... pageUIs) {
+    public void initPages(PageUI... pageUIs) {
         for (PageUI pageUI : pageUIs) {
             logger.info("Init Page;{} ", pageUI);
-            PageFactory.initElements(driver, pageUI);
+            PageFactory.initElements(manager.getDriver(), pageUI);
         }
     }
 
-    public static List<WebElement> loadList(By by, int timeout) {
+    public List<WebElement> loadList(By by, int timeout) {
         while (true) {
             if (timeout < 0) {
                 break;
@@ -118,9 +122,9 @@ public class BaseAction {
         }
     }
 
-    public static WebElement wait(By by, int secound) {
+    public WebElement wait(By by, int secound) {
         checkTimeout(secound);
-        WebDriverWait wait = new WebDriverWait(driver, secound);
+        WebDriverWait wait = new WebDriverWait(manager.getDriver(), secound);
         return wait.until(d -> find(by));
     }
 

@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import org.sagittarius.uitest.driver.DriverManager;
 import org.sagittarius.uitest.exception.BrowserConsoleErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,12 +51,23 @@ public class BrowserUtil {
     /**
      * 浏览器控制台是否报错
      */
-    public static void checkBrowserHaveErrorLog(WebDriver driver) {
-        LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
+    public static void checkBrowserHaveErrorLog(DriverManager manager) {
+        LogEntries logEntries = manager.getDriver().manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
             if (entry.getLevel().toString().equals("SEVERE")) {
-                logger.error("CONSOLE-LOG: {}", entry);
-                throw new BrowserConsoleErrorException(entry.getMessage());
+                boolean flag = true;
+                for (String ignore : manager.getConsoleIgnores()) {
+                    if (entry.getMessage().contains(ignore)) {
+                        flag = false;
+                        logger.warn("CONSOLE-LOG: {}", entry);
+                        break;
+                    }
+                }
+
+                if (flag) {
+                    logger.error("CONSOLE-LOG: {}", entry);
+                    throw new BrowserConsoleErrorException(entry.getMessage());
+                }
             } else if (entry.getLevel().toString().equals("WARNING")) {
                 logger.warn("CONSOLE-LOG: {}", entry);
             } else {

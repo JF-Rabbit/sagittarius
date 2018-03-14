@@ -1,13 +1,5 @@
 package org.sagittarius.uitest.driver;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
@@ -23,17 +15,29 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.sagittarius.uitest.exception.DriverInitException;
 import org.sagittarius.uitest.util.web.Browser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 @Component
-@Scope("prototype")
 @PropertySource({DriverConstant.SELENIUM_CONFIG_PATH})
 public class DriverManager implements DriverConstant {
+
+    private static final Logger logger = LoggerFactory.getLogger(DriverManager.class);
 
     @Value(DRIVER_TYPE)
     private String driverType;
@@ -72,6 +76,12 @@ public class DriverManager implements DriverConstant {
 
     public Browser getBrowser() {
         return browser;
+    }
+
+    private List<String> consoleIgnores;
+
+    public List<String> getConsoleIgnores() {
+        return consoleIgnores;
     }
 
     public enum DriverType {
@@ -193,7 +203,7 @@ public class DriverManager implements DriverConstant {
 
                 driver = new FirefoxDriver(capabilities);
             /*
-			 * XXX can't set maximize for firefox
+             * XXX can't set maximize for firefox
 			 * 
 			 * use maximize history manually to skip
 			 *
@@ -208,6 +218,8 @@ public class DriverManager implements DriverConstant {
         if (driver == null) {
             throw new DriverInitException(DRIVER_IS_NULL);
         }
+
+        consoleIgnores = new ArrayList<>();
 
         driver.manage().timeouts().implicitlyWait(initFindElementTimeout(), TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(initSeleniumPageLoadTimeout(), TimeUnit.SECONDS);
@@ -229,7 +241,7 @@ public class DriverManager implements DriverConstant {
 
         Map<String, Object> chromePrefs = new HashMap<>();
         // 允许下载多个文件
-        chromePrefs.put("profile.content_settings.exceptions.automatic_downloads.*.setting", 1 );
+        chromePrefs.put("profile.content_settings.exceptions.automatic_downloads.*.setting", 1);
 
         // 下载不弹框，指定下载路径
         chromePrefs.put("profile.default_content_settings.popups", 0);
@@ -265,9 +277,14 @@ public class DriverManager implements DriverConstant {
         return driver;
     }
 
-    public void quitDriver(WebDriver driver) {
-        if (driver != null) {
-            driver.quit();
+    @PreDestroy
+    public void quitDriver() {
+        logger.info("Destroy Driver...");
+        if (this.driver == null) {
+            logger.info("Destroy Failed! Driver is null!");
+        } else {
+            this.driver.quit();
+            logger.info("Destroy Done");
         }
     }
 }

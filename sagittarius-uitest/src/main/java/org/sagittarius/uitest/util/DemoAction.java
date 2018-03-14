@@ -1,35 +1,29 @@
 package org.sagittarius.uitest.util;
 
 import org.openqa.selenium.By;
-import org.sagittarius.uitest.driver.DriverManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 @Component
-@Scope("prototype")
-public class DemoAction extends BaseAction {
+public class DemoAction{
 
-    @Autowired
-    private DriverManager manager;
+    @Resource
+    BaseAction baseAction;
 
-    @PostConstruct
-    public void init() {
-        setDriver(manager.getDriver());
-    }
 
     public void do_test(String url, String keys) {
-        open(url);
+        System.out.println(baseAction.driver());
 
-        sendKeys(find(By.id("kw")), keys);
+        baseAction.open(url);
 
-        sleep();
+        baseAction.sendKeys(baseAction.find(By.id("kw")), keys);
 
-        click(find(By.id("su")));
+        baseAction.sleep();
 
-        sleep(2000);
+        baseAction.click(baseAction.find(By.id("su")));
+
+        baseAction.sleep(2000);
 
     }
 }

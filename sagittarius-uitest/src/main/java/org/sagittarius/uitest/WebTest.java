@@ -27,8 +27,8 @@ public class WebTest extends AbstractTestNGSpringContextTests {
 	public Browser currentBrowser;
 
 	@Resource
-	private DriverManager manager;
-	public WebDriver driver;
+	protected DriverManager manager;
+	protected WebDriver driver;
 
 	@BeforeClass
 	public void Start() {
@@ -38,7 +38,6 @@ public class WebTest extends AbstractTestNGSpringContextTests {
 	@BeforeMethod
 	public void setup(Method method) throws DriverInitException {
 		logger.info("Init Driver...");
-//		manager.initDriver();
 		driver = manager.getDriver();
 		currentBrowser = manager.getBrowser();
 		logger.info("Init Done");
@@ -48,13 +47,6 @@ public class WebTest extends AbstractTestNGSpringContextTests {
 	@AfterMethod
 	public void teardown(Method method) {
 		logger.info("Case: " + method.getName() + " End...");
-		logger.info("Destroy Driver...");
-		if (driver == null) {
-			logger.info("Destroy Failed! Driver is null!");
-		} else {
-			manager.quitDriver(driver);
-			logger.info("Destroy Done");
-		}
 	}
 
 	@AfterClass(alwaysRun = true)
