@@ -13,45 +13,45 @@ import org.slf4j.LoggerFactory;
 
 public class IOUtil {
 
-	private static Logger logger = LoggerFactory.getLogger(IOUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(IOUtil.class);
 
-	private static final String READ_FILE_ERROR = "READ_FILE_ERROR";
-	private static final String CLOSE_BUFFEREDREADER_ERROR = "CLOSE_BUFFEREDREADER_ERROR";
+    private static final String READ_FILE_ERROR = "READ_FILE_ERROR";
+    private static final String CLOSE_BUFFEREDREADER_ERROR = "CLOSE_BUFFEREDREADER_ERROR";
 
-	public static String readFirstLine(String filePath) {
-		BufferedReader br = null;
-		String readline = null;
-		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filePath))));
+    public static String readFirstLine(String filePath) {
+        BufferedReader br = null;
+        String readLine = "";
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filePath))));
 
-			while ((readline = br.readLine()) != null) {
-				return readline;
-			}
-		} catch (IOException e) {
-			logger.error(READ_FILE_ERROR, e);
-		} finally {
-			try {
-				if (br != null) {
-					br.close();
-				}
-			} catch (IOException e) {
-				logger.error(CLOSE_BUFFEREDREADER_ERROR, e);
-			}
-		}
-		return readline;
-	}
+            if ((readLine = br.readLine()) != null) {
+                return readLine;
+            }
+        } catch (IOException e) {
+            logger.error(READ_FILE_ERROR, e);
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException e) {
+                logger.error(CLOSE_BUFFEREDREADER_ERROR, e);
+            }
+        }
+        return readLine;
+    }
 
-	public static boolean isFileExist(String filePath) {
-		File file = new File(filePath);
-		return file.isFile();
-	}
+    public static boolean isFileExist(String filePath) {
+        File file = new File(filePath);
+        return file.isFile();
+    }
 
-	public static String getFilePathFromClassLoader(String fileName) throws FileNotFoundException {
-		URL url = ClassLoader.getSystemClassLoader().getResource(fileName);
-		if (url == null) {
-			throw new FileNotFoundException(fileName);
-		}
-		return url.getPath();
-	}
+    public static String getFilePathFromClassLoader(String fileName) throws FileNotFoundException {
+        URL url = ClassLoader.getSystemClassLoader().getResource(fileName);
+        if (url == null) {
+            throw new FileNotFoundException(fileName);
+        }
+        return url.getPath();
+    }
 
 }

@@ -23,8 +23,8 @@ public class GsonUtil {
     /**
      * Json格式字符串格式化
      *
-     * @param jsonObject
-     * @return
+     * @param jsonObject Json对象
+     * @return Json对象格式化输出
      */
     public static String jsonObjFormat(JsonObject jsonObject) {
         return new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject);
@@ -66,17 +66,14 @@ public class GsonUtil {
     }
 
     public static boolean isSameJsonType(JsonElement expect, JsonElement other) {
-        if (expect == null) {
-            return false;
-        }
-        return checkJsonType(expect).equals(checkJsonType(other));
+        return expect != null && checkJsonType(expect).equals(checkJsonType(other));
     }
 
     /**
      * 从文件当中读取并专成JsonElement对象
      *
-     * @param jsonFilePath
-     * @return
+     * @param jsonFilePath Json文件路径
+     * @return JsonElement
      */
     public static JsonElement getJsonObjFromJsonFile(String jsonFilePath) {
         BufferedReader reader = null;

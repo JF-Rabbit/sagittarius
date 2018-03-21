@@ -100,27 +100,19 @@ public class ClassSortDemo {
         list.add(demo2);
         list.add(demo3);
 
-        list.forEach(arg -> {
-            System.out.println(arg);
-        });
+        list.forEach(System.out::println);
         System.out.println("\n=============================\n");
 
         ClassSortDemo.sort(list, ClassSortDemo.SortEnum.ID, true);
-        list.forEach(arg -> {
-            System.out.println(arg);
-        });
+        list.forEach(System.out::println);
         System.out.println("\n=============================\n");
 
         ClassSortDemo.sort(list, SortEnum.NAME, false);
-        list.forEach(arg -> {
-            System.out.println(arg);
-        });
+        list.forEach(System.out::println);
         System.out.println("\n=============================\n");
 
         ClassSortDemo.sort(list, SortEnum.START, true);
-        list.forEach(arg -> {
-            System.out.println(arg);
-        });
+        list.forEach(System.out::println);
     }
 }
 

@@ -9,18 +9,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JacksonUtil {
 
-	public String jsonFommat(JsonNode jsonNode) throws JsonProcessingException {
-		return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
-	}
+    public String jsonFommat(JsonNode jsonNode) throws JsonProcessingException {
+        return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
+    }
 
-	public static JsonNode getJsonFile(String jsonFilePath) {
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode rootNode = null;
-		try {
-			rootNode = mapper.readTree(new File(jsonFilePath));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		return rootNode;
-	}
+    public static JsonNode getJsonFile(String jsonFilePath) {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode;
+        try {
+            rootNode = mapper.readTree(new File(jsonFilePath));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return rootNode;
+    }
 }
