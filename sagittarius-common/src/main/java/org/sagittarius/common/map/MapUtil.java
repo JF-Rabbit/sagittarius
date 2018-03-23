@@ -1,7 +1,10 @@
 package org.sagittarius.common.map;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.sagittarius.common.reflect.ReflectUnit;
 import org.slf4j.Logger;
@@ -39,4 +42,47 @@ public class MapUtil {
         return t;
     }
 
+    public static <T, K> MapBuilder<T, K> builder() {
+        return new MapBuilder<>();
+    }
+
+    public static <T, K> MapBuilder<T, K> builder(MapEnum mapEnum) {
+        return new MapBuilder<>(mapEnum);
+    }
+
+    public enum MapEnum {
+        HASH_MAP, TREE_MAP, LINKED_HASH_MAP
+    }
+
+    public static class MapBuilder<T, K> {
+
+        private Map<T, K> map;
+
+        private MapBuilder() {
+            map = new HashMap<>();
+        }
+
+        private MapBuilder(MapEnum mapEnum) {
+            switch (mapEnum) {
+                case HASH_MAP:
+                    map = new HashMap<>();
+                    break;
+                case TREE_MAP:
+                    map = new TreeMap<>();
+                    break;
+                case LINKED_HASH_MAP:
+                    map = new LinkedHashMap<>();
+                    break;
+            }
+        }
+
+        public MapBuilder<T, K> put(T t, K k) {
+            this.map.put(t, k);
+            return this;
+        }
+
+        public Map<T, K> build() {
+            return map;
+        }
+    }
 }
