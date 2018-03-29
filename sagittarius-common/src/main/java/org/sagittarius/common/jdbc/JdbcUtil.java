@@ -1,6 +1,6 @@
 package org.sagittarius.common.jdbc;
 
-import org.sagittarius.common.reflect.ReflectUnit;
+import org.sagittarius.common.ReflectUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

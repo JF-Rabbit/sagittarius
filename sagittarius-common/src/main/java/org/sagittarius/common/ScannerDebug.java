@@ -1,4 +1,4 @@
-package org.sagittarius.common.debug;
+package org.sagittarius.common;
 
 import java.util.Scanner;
 

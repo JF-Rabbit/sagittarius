@@ -1,4 +1,4 @@
-package org.sagittarius.common.io;
+package org.sagittarius.common;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +54,14 @@ public class IOUtil {
             throw new FileNotFoundException(fileName);
         }
         return url.getPath();
+    }
+
+    public static String getClassLoaderResource(String path) {
+        URL url = ClassLoader.getSystemClassLoader().getResource(path);
+        Optional<URL> optional = Optional.ofNullable(url);
+
+        Supplier<RuntimeException> supplier = () -> new RuntimeException("Can't get Resource by: " + path);
+        return optional.map(URL::getPath).orElseThrow(supplier);
     }
 
 }

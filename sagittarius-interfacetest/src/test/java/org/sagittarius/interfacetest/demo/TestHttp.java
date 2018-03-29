@@ -20,7 +20,7 @@ import org.sagittarius.common.jsoncompare.JsonDiff;
 import org.sagittarius.common.jsoncompare.JsonDiffErrorCode;
 import org.sagittarius.common.jsoncompare.RuleEnum;
 import org.sagittarius.common.jsoncompare.RuleRegexConstant;
-import org.sagittarius.common.map.MapUtil;
+import org.sagittarius.common.MapUtil;
 import org.sagittarius.interfacetest.caseEnum.TestCaseEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

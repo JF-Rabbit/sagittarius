@@ -1,4 +1,4 @@
-package org.sagittarius.common.map;
+package org.sagittarius.common;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.sagittarius.common.reflect.ReflectUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

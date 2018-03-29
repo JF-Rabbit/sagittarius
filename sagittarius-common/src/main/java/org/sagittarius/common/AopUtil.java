@@ -1,4 +1,4 @@
-package org.sagittarius.common.aop;
+package org.sagittarius.common;
 
 import java.lang.reflect.Method;
 

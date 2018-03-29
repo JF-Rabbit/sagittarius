@@ -1,6 +1,6 @@
 package org.sagittarius.common.test;
 
-import org.sagittarius.common.yaml.YamlUtil;
+import org.sagittarius.common.YamlUtil;
 
 public class TestYamlUtil {
 

@@ -1,4 +1,4 @@
-package org.sagittarius.common.zip;
+package org.sagittarius.common;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

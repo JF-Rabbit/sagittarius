@@ -1,4 +1,4 @@
-package org.sagittarius.common.clipboard;
+package org.sagittarius.common;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;

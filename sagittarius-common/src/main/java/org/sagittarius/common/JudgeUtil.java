@@ -1,8 +1,6 @@
-package org.sagittarius.common.judge;
+package org.sagittarius.common;
 
 import java.lang.reflect.Field;
-
-import org.sagittarius.common.reflect.ReflectUnit;
 
 public class JudgeUtil {
 

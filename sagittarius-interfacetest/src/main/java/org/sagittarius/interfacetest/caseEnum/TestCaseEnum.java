@@ -6,8 +6,8 @@ import java.util.Random;
 
 import org.sagittarius.common.http.HttpMethodEnum;
 import org.sagittarius.common.http.HttpRequestConfig;
-import org.sagittarius.common.map.MapUtil;
-import org.sagittarius.common.yaml.YamlUtil;
+import org.sagittarius.common.MapUtil;
+import org.sagittarius.common.YamlUtil;
 import org.sagittarius.interfacetest.ConfigConstant;
 
 public enum TestCaseEnum {

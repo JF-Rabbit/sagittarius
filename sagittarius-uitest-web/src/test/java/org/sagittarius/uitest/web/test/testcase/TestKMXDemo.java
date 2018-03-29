@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.interactions.Actions;
 import org.sagittarius.common.Delay;
-import org.sagittarius.common.random.RandomUtil;
+import org.sagittarius.common.RandomUtil;
 import org.sagittarius.uitest.WebTest;
 import org.sagittarius.uitest.web.action.CreateProjectInfoAction;
 import org.sagittarius.uitest.web.action.EditProjectAction;

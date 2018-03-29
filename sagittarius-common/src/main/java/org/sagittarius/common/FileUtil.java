@@ -1,4 +1,4 @@
-package org.sagittarius.common.File;
+package org.sagittarius.common;
 
 import java.io.File;
 

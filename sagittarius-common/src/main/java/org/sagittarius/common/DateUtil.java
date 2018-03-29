@@ -1,4 +1,4 @@
-package org.sagittarius.common.date;
+package org.sagittarius.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

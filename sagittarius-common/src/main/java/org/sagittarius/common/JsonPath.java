@@ -1,4 +1,4 @@
-package org.sagittarius.common.jsonpath;
+package org.sagittarius.common;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonElement;

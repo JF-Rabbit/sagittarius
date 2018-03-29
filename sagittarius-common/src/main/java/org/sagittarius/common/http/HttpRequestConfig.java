@@ -9,7 +9,7 @@ import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.cookie.CookieSpecProvider;
 import org.apache.http.impl.cookie.DefaultCookieSpecProvider;
-import org.sagittarius.common.map.MapUtil;
+import org.sagittarius.common.MapUtil;
 
 public class HttpRequestConfig {
 

@@ -1,9 +1,7 @@
-package org.sagittarius.common.random;
+package org.sagittarius.common;
 
 import java.util.Random;
 import java.util.UUID;
-
-import org.sagittarius.common.io.IOUtil;
 
 public class RandomUtil {
 

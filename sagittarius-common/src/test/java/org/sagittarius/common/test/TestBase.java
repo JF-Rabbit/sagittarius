@@ -1,6 +1,6 @@
 package org.sagittarius.common.test;
 
-import org.sagittarius.common.judge.JudgeUtil;
+import org.sagittarius.common.JudgeUtil;
 import org.sagittarius.common.test.entity.Person;
 import org.testng.Assert;
 import org.testng.annotations.Test;

@@ -1,4 +1,4 @@
-package org.sagittarius.common.unicode;
+package org.sagittarius.common;
 
 import org.apache.commons.lang3.StringUtils;
 

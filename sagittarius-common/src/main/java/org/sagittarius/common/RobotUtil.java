@@ -1,4 +1,4 @@
-package org.sagittarius.common.robot;
+package org.sagittarius.common;
 
 import java.awt.AWTException;
 import java.awt.Robot;
@@ -6,7 +6,6 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 
-import org.sagittarius.common.Delay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

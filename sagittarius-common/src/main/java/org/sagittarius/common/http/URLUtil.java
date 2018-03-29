@@ -6,7 +6,7 @@ import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.apache.http.client.utils.URIBuilder;
-import org.sagittarius.common.reflect.ReflectUnit;
+import org.sagittarius.common.ReflectUnit;
 
 /**
  * 将对象或Map设置到Get请求的URL当中

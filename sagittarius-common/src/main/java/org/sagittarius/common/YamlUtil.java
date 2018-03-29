@@ -1,4 +1,4 @@
-package org.sagittarius.common.yaml;
+package org.sagittarius.common;
 
 import org.yaml.snakeyaml.Yaml;
 

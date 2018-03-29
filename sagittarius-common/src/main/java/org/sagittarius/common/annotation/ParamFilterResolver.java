@@ -1,6 +1,6 @@
 package org.sagittarius.common.annotation;
 
-import org.sagittarius.common.reflect.ReflectUnit;
+import org.sagittarius.common.ReflectUnit;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

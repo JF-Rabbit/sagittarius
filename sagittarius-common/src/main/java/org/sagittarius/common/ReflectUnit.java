@@ -1,4 +1,4 @@
-package org.sagittarius.common.reflect;
+package org.sagittarius.common;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.sagittarius.common.robot.RobotUtil;
+import org.sagittarius.common.RobotUtil;
 import org.sagittarius.uitest.driver.DriverManager;
 import org.sagittarius.uitest.exception.FindElementTimeoutException;
 import org.sagittarius.uitest.util.web.js.JsUtil;
