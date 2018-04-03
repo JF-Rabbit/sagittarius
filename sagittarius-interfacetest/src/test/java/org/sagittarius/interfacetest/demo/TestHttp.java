@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.google.gson.JsonElement;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.sagittarius.common.gson.GsonUtil;
 import org.sagittarius.common.http.HttpException;
@@ -30,8 +31,6 @@ import org.testng.ITestContext;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.google.gson.JsonObject;
-
 @ContextConfiguration(locations = "classpath:spring.xml")
 public class TestHttp extends AbstractTestNGSpringContextTests {
 
@@ -51,10 +50,8 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 
 	@DataProvider
 	public Object[][] dataProvider2(ITestContext context) {
-		Object[][] objects = new Object[][] { new Object[] { TestCaseEnum.GET_ANALYSIS_TYPES.getConfig(),
+		return new Object[][] { new Object[] { TestCaseEnum.GET_ANALYSIS_TYPES.getConfig(),
 				TestCaseEnum.GET_PROJECTS_SIZE_2_PAGE_1.getConfig() }, };
-
-		return objects;
 	}
 
 	// @Test(dataProvider = "dataProvider2") // 测试获取JSessionId
@@ -75,14 +72,14 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 	// @Test // 测试过滤条件
 	public void test3() throws HttpException {
 		HttpResponseConfig httpResponseConfig1 = new HttpResponseConfig();
-		JsonObject jsonObject1 = GsonUtil.getJsonObjFromJsonFile("/Users/jasonzhang/Desktop/a.json");
+		JsonElement jsonObject1 = GsonUtil.getJsonObjFromJsonFile("/Users/jasonzhang/Desktop/a.json");
 		httpResponseConfig1.setResponseStatusCode(100);
-		httpResponseConfig1.setResponseContent(GsonUtil.jsonObjToStr(jsonObject1));
+		httpResponseConfig1.setResponseContent(GsonUtil.jsonEleToStr(jsonObject1));
 		logger.info("httpResponseConfig:\t{}", httpResponseConfig1);
 		HttpResponseConfig httpResponseConfig2 = new HttpResponseConfig();
 		httpResponseConfig2.setResponseStatusCode(200);
-		JsonObject jsonObject2 = GsonUtil.getJsonObjFromJsonFile("/Users/jasonzhang/Desktop/b.json");
-		httpResponseConfig2.setResponseContent(GsonUtil.jsonObjToStr(jsonObject2));
+		JsonElement jsonObject2 = GsonUtil.getJsonObjFromJsonFile("/Users/jasonzhang/Desktop/b.json");
+		httpResponseConfig2.setResponseContent(GsonUtil.jsonEleToStr(jsonObject2));
 		logger.info("httpResponseConfig:\t{}", httpResponseConfig2);
 
 		JsonCompareRecorder recorder = new JsonCompareRecorder();
@@ -101,14 +98,12 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 
 	@DataProvider
 	public Object[][] dataProvider3(ITestContext context) {
-		Object[][] objects = new Object[][] { new Object[] { TestCaseEnum.POST_PROJECT_INFO.getConfig() } };
-
-		return objects;
+		return new Object[][] { new Object[] { TestCaseEnum.POST_PROJECT_INFO.getConfig() } };
 	}
 
 	// @Test(dataProvider = "dataProvider3") // 测试Post Entity
 	public void test4(HttpRequestConfig res2) throws HttpException {
-		res2.addJsessionId("5B18673DDCF1A8F884A09613B7B9117C");
+		res2.addJSessionId("5B18673DDCF1A8F884A09613B7B9117C");
 
 		logger.info("httpResponseConfig:\t{}", res2);
 
@@ -132,8 +127,8 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 	private JsonCompareRecorder2 checkRecorder(JsonCompareRecorder2 recorder) throws HttpException {
 		HttpResponseConfig httpResponseConfig2 = new HttpResponseConfig();
 		httpResponseConfig2.setResponseStatusCode(100);
-		JsonObject jsonObject2 = GsonUtil.getJsonObjFromJsonFile("C:/Users/kzdatd/Desktop/b.json");
-		httpResponseConfig2.setResponseContent(GsonUtil.jsonObjToStr(jsonObject2));
+		JsonElement jsonObject2 = GsonUtil.getJsonObjFromJsonFile("C:/Users/kzdatd/Desktop/b.json");
+		httpResponseConfig2.setResponseContent(GsonUtil.jsonEleToStr(jsonObject2));
 		// logger.info("{}", httpResponseConfig2);
 		HttpResponseConfig httpResponseConfig1 = HttpUtil.service(TestCaseEnum.GET_ANALYSIS_TYPES.getConfig());
 		recorder.setRule(JsonCompareRecorder2.KEY_RESPONSE_CODE, FilterEnum.IGNORE_RESPONSE_CODE);
@@ -141,12 +136,12 @@ public class TestHttp extends AbstractTestNGSpringContextTests {
 		return recorder;
 	}
 	
-	@Test(enabled = true)
+	@Test
 	public void testCheckOne () throws HttpException {
 		HttpResponseConfig httpResponseConfig2 = new HttpResponseConfig();
 		httpResponseConfig2.setResponseStatusCode(100);
-		JsonObject jsonObject2 = GsonUtil.getJsonObjFromJsonFile("C:/Users/kzdatd/Desktop/b.json");
-		httpResponseConfig2.setResponseContent(GsonUtil.jsonObjToStr(jsonObject2));
+		JsonElement jsonObject2 = GsonUtil.getJsonObjFromJsonFile("C:/Users/kzdatd/Desktop/b.json");
+		httpResponseConfig2.setResponseContent(GsonUtil.jsonEleToStr(jsonObject2));
 		// logger.info("{}", httpResponseConfig2);
 		HttpResponseConfig httpResponseConfig1 = HttpUtil.service(TestCaseEnum.GET_ANALYSIS_TYPES.getConfig());
 		JsonCompareRecorder2 recorder = new JsonCompareRecorder2();

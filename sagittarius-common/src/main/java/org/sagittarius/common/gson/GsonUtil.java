@@ -16,8 +16,8 @@ import com.google.gson.JsonParser;
 
 public class GsonUtil {
 
-    public static String jsonObjToStr(JsonObject jsonObject) {
-        return new Gson().toJson(jsonObject);
+    public static String jsonEleToStr(JsonElement jsonElement) {
+        return new Gson().toJson(jsonElement);
     }
 
     /**

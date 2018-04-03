@@ -3,6 +3,7 @@ package org.sagittarius.common;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 /**
  * 反射工具类
@@ -118,9 +119,9 @@ public class ReflectUnit {
         }
     }
 
-    public static Method getMethod(Class<?> clazz, String methodName) {
+    public static Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
         try {
-            return clazz.getMethod(methodName);
+            return clazz.getDeclaredMethod(methodName, parameterTypes);
         } catch (NoSuchMethodException | SecurityException e) {
             throw new RuntimeException(e);
         }
@@ -128,6 +129,9 @@ public class ReflectUnit {
 
     public static Object invoke(Method method, Object obj) {
         try {
+            if (Modifier.toString(method.getModifiers()).contains("private")) {
+                method.setAccessible(true);
+            }
             return method.invoke(obj);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new RuntimeException(e);
@@ -136,6 +140,9 @@ public class ReflectUnit {
 
     public static Object invoke(Method method, Object obj, Object... args) {
         try {
+            if (Modifier.toString(method.getModifiers()).contains("private")) {
+                method.setAccessible(true);
+            }
             return method.invoke(obj, args);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new RuntimeException(e);
