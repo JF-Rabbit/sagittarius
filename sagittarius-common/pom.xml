@@ -106,6 +106,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.5.3</version>
+		</dependency>
+
 	</dependencies>
 	<version>0.0.1-SNAPSHOT</version>
 	<groupId>sagittarius-common</groupId>

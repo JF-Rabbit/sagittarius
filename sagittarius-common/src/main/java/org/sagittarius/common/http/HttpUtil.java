@@ -140,7 +140,7 @@ public class HttpUtil {
         return map;
     }
 
-    private static String getContent(InputStream stream) throws IOException {
+    public static String getContent(InputStream stream) throws IOException {
         BufferedReader reader = null;
         StringBuilder builder = new StringBuilder();
         try {
