@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class 函数式接口 {
 
-	/* Predicate接口 */
+    /* Predicate接口 */
 
     /**
      * 用来判断是否满足某个或多个条件
@@ -31,7 +31,7 @@ public class 函数式接口 {
         System.out.println(startsWithJ.and(fourLetterLong).test("Java"));
     }
 
-	/* Function 接口 */
+    /* Function 接口 */
 
     /**
      * 定义一个方法
@@ -43,7 +43,7 @@ public class 函数式接口 {
         System.out.println(function2.apply("qwert"));
     }
 
-	/* Optional 接口 */
+    /* Optional 接口 */
 
     /**
      * 用来判断一个对象为null或不为null时的后续操作
@@ -72,7 +72,7 @@ public class 函数式接口 {
         System.out.println(optional.map(u -> u.getName()).map(u -> u.toLowerCase()).map(u -> u.length()).orElseThrow(NullPointerException::new)); // 返回一个异常
     }
 
-	/* Supplier 接口 */
+    /* Supplier 接口 */
 
     /**
      * 对象工厂，调用时返回一个对象
@@ -85,7 +85,7 @@ public class 函数式接口 {
         System.out.println(userSupplier2.get());
     }
 
-	/* Consumer 接口 */
+    /* Consumer 接口 */
 
     /**
      * 定义一个单个元素操作的方法
@@ -97,7 +97,7 @@ public class 函数式接口 {
         one.accept(userFactory.create("Marry"));
     }
 
-	/* Stream 接口 */
+    /* Stream 接口 */
 
     /**
      * 应用在一组元素上一次执行的操作序列，支持list和set
@@ -113,14 +113,14 @@ public class 函数式接口 {
         stringCollection.add("bbb2");
         stringCollection.add("ddd1");
 
-		/* Filter 过滤 */
+        /* Filter 过滤 */
         stringCollection.stream().filter(s -> s.startsWith("a")).forEach(System.out::println);
         /* Sort 排序 */
         stringCollection.stream().sorted().filter(s -> s.startsWith("a")).forEach(System.out::println);
         System.out.println(stringCollection); // 原数据不会被修改
-		/* Map 映射 */
+        /* Map 映射 */
         stringCollection.stream().map(String::toUpperCase).sorted(Comparator.comparing(String::toString)).forEach(System.out::println);
-		/* Match 匹配 */
+        /* Match 匹配 */
         boolean anyStartsWithA = stringCollection.stream().anyMatch(s -> s.startsWith("a"));
         System.out.println(anyStartsWithA); // true
         boolean allStartsWithA = stringCollection.stream().allMatch(s -> s.startsWith("a"));
@@ -128,11 +128,11 @@ public class 函数式接口 {
         boolean noneStartsWithZ = stringCollection.stream().noneMatch(s -> s.startsWith("z"));
         System.out.println(noneStartsWithZ); // true
 
-		/* Count 计数 */
+        /* Count 计数 */
         long startsWithB = stringCollection.stream().filter((s) -> s.startsWith("b")).count();
         System.out.println(startsWithB); // 3
 
-		/* Reduce 规约 多个元素规约为一个元素 */
+        /* Reduce 规约 多个元素规约为一个元素 */
         Optional<String> reduced = stringCollection.stream().sorted().reduce((s1, s2) -> s1 + "#" + s2);
         reduced.ifPresent(System.out::println);
         // "aaa1#aaa2#bbb1#bbb2#bbb3#ccc#ddd1#ddd2"
@@ -167,6 +167,40 @@ public class 函数式接口 {
         long millis3 = TimeUnit.NANOSECONDS.toMillis(t5 - t4);
         System.out.println(String.format("parallel sort took: %d ms", millis3));
 
+    }
+
+    public static void listSort() {
+
+        List<Map<String, Integer>> list = new ArrayList<>();
+        list.add(new HashMap<String, Integer>() {{
+            this.put("a", 2);
+            this.put("b", 3);
+            this.put("c", 1);
+        }});
+        list.add(new HashMap<String, Integer>() {{
+            this.put("a", 2);
+            this.put("b", 3);
+            this.put("c", 4);
+        }});
+        list.add(new HashMap<String, Integer>() {{
+            this.put("a", 3);
+            this.put("b", 3);
+            this.put("c", 4);
+        }});
+        list = list.stream().sorted((o1, o2) -> {
+            if (!o2.get("a").equals(o1.get("a"))) {
+                return o2.get("a") - o1.get("a");
+            } else {
+                if (!o2.get("b").equals(o1.get("b"))) {
+                    return o2.get("b") - o1.get("b");
+                } else {
+                    return o2.get("c") - o1.get("c");
+                }
+
+            }
+        }).collect(Collectors.toList());
+
+        System.out.println(list);
     }
 
     public static void main(String[] args) {
