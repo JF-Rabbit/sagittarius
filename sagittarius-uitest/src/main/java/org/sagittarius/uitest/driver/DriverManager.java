@@ -6,7 +6,6 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
@@ -145,7 +144,7 @@ public class DriverManager implements DriverConstant {
 
     public static int find_element_timeout = DEFAULT_SELENIUM_FIND_ELEMENT_TIMEOUT;
 
-    private int initFindElementTimeout() throws DriverInitException {
+    private int initFindElementTimeout() {
         if (findElementTimeout != null) {
             find_element_timeout = Integer.valueOf(String.valueOf(findElementTimeout));
             return find_element_timeout;
@@ -153,7 +152,7 @@ public class DriverManager implements DriverConstant {
         return DEFAULT_SELENIUM_FIND_ELEMENT_TIMEOUT;
     }
 
-    private int initSeleniumPageLoadTimeout() throws DriverInitException {
+    private int initSeleniumPageLoadTimeout() {
         if (loadPageTimeout != null) {
             return Integer.valueOf(String.valueOf(loadPageTimeout));
         }
@@ -167,52 +166,50 @@ public class DriverManager implements DriverConstant {
     }
 
     @PostConstruct
-    public void initDriver() throws DriverInitException {
+    public void initDriverByOptions() throws DriverInitException {
         DriverType driverType = this.loadDriverTypeFromSource();
-
-        DesiredCapabilities capabilities;
         switch (driverType) {
             case LOCAL_CHROME:
                 this.setChromeConfig();
 
-                capabilities = DesiredCapabilities.chrome();
+                ChromeOptions options = new ChromeOptions();
 
-                setLocalChromeCapabilities(capabilities);
+                setChromeOptions(options);
 
-                driver = new ChromeDriver(capabilities);
+                driver = new ChromeDriver(options);
 
                 this.browser = Browser.CHROME;
                 driver = setBrowserLayout(driver);
                 break;
-            case REMOTE_CHROME:
-                capabilities = DesiredCapabilities.chrome();
-                driver = setRemoteWebDriver(capabilities);
-                break;
-            case LOCAL_FIREFOX:
-                this.setFirefoxConfig();
-                // skip SSL
-                // ProfilesIni profilesIni = new ProfilesIni();
-                // FirefoxProfile profile = profilesIni.getProfile("default");
-                // profile.setAcceptUntrustedCertificates(true);
-                // profile.setAssumeUntrustedCertificateIssuer(true);
-
-                // FirefoxOptions options = new FirefoxOptions();
-                // options.setProfile(profile);
-
-                capabilities = DesiredCapabilities.firefox();
-
-                driver = new FirefoxDriver(capabilities);
-            /*
-             * XXX can't set maximize for firefox
-			 * 
-			 * use maximize history manually to skip
-			 *
-			 * github bug: https://github.com/mozilla/geckodriver/issues/820
-			 * 
-			 */
-                driver = setBrowserLayout(driver);
-                this.browser = Browser.FIREFOX;
-                break;
+//            case REMOTE_CHROME:
+//                capabilities = DesiredCapabilities.chrome();
+//                driver = setRemoteWebDriver(capabilities);
+//                break;
+//            case LOCAL_FIREFOX:
+//                this.setFirefoxConfig();
+//                // skip SSL
+//                // ProfilesIni profilesIni = new ProfilesIni();
+//                // FirefoxProfile profile = profilesIni.getProfile("default");
+//                // profile.setAcceptUntrustedCertificates(true);
+//                // profile.setAssumeUntrustedCertificateIssuer(true);
+//
+//                // FirefoxOptions options = new FirefoxOptions();
+//                // options.setProfile(profile);
+//
+//                capabilities = DesiredCapabilities.firefox();
+//
+//                driver = new FirefoxDriver(capabilities);
+//            /*
+//             * XXX can't set maximize for firefox
+//			 *
+//			 * use maximize history manually to skip
+//			 *
+//			 * github bug: https://github.com/mozilla/geckodriver/issues/820
+//			 *
+//			 */
+//                driver = setBrowserLayout(driver);
+//                this.browser = Browser.FIREFOX;
+//                break;
         }
 
         if (driver == null) {
@@ -226,18 +223,10 @@ public class DriverManager implements DriverConstant {
 
     }
 
-    private void setLocalChromeCapabilities(DesiredCapabilities capabilities) {
-        setChromeOptions(capabilities);
-
-        // 允许获取浏览器日志
+    private void setChromeOptions(ChromeOptions options) {
         LoggingPreferences logPrefs = new LoggingPreferences();
         logPrefs.enable(LogType.BROWSER, Level.ALL);
-        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
-    }
-
-    private void setChromeOptions(DesiredCapabilities capabilities) {
-        ChromeOptions options = new ChromeOptions();
-
+        options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
 
         Map<String, Object> chromePrefs = new HashMap<>();
         // 允许下载多个文件
@@ -253,10 +242,10 @@ public class DriverManager implements DriverConstant {
         // 取消脚本警告提醒
         options.addArguments("disable-infobars");
 
-        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+        options.setCapability(ChromeOptions.CAPABILITY, options);
     }
 
-    private WebDriver setBrowserLayout(WebDriver driver) throws DriverInitException {
+    private WebDriver setBrowserLayout(WebDriver driver) {
 
         WebDriver.Window window = driver.manage().window();
         if (StringUtils.isNotEmpty(browserX) && StringUtils.isNotEmpty(browserY)) {
