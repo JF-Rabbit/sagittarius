@@ -3,17 +3,18 @@ package org.sagittarius.common;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ListUtil {
 
     @SafeVarargs
-	public static <T> List<T> addAll(List<T> list, T... params) {
+    public static <T> List<T> addAll(List<T> list, T... params) {
         list.addAll(Arrays.asList(params));
         return list;
     }
 
     @SafeVarargs
-	public static <T> List<T> asList(T... params) {
+    public static <T> List<T> asList(T... params) {
         return Arrays.asList(params);
     }
 
@@ -31,4 +32,12 @@ public class ListUtil {
         return list;
     }
 
+    public static <T> boolean matchCondition(List<T> list, Predicate<T> predicate) {
+        for (T t : list) {
+            if (!predicate.test(t)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
