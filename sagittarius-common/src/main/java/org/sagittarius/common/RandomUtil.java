@@ -6,6 +6,7 @@ import java.util.UUID;
 public class RandomUtil {
 
     private static final int MAX_UUID_LENGTH = 8;
+    private static final Random random = new Random();
 
     public static String randomUUID() {
         return UUID.randomUUID().toString().substring(0, MAX_UUID_LENGTH);
@@ -22,7 +23,7 @@ public class RandomUtil {
     public static String randomString(int strLength, String library) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < strLength; i++) {
-            builder.append(library.charAt(new Random().nextInt(library.length())));
+            builder.append(library.charAt(random.nextInt(library.length())));
         }
         return builder.toString();
     }
@@ -33,7 +34,7 @@ public class RandomUtil {
     public static String randomHanzi_ALL(int length) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < length; i++) {
-            String randomHex = Integer.toHexString(HANZI_UNICODE_STSRT + new Random().nextInt(HANZI_UNICODE_MAX_NUM));
+            String randomHex = Integer.toHexString(HANZI_UNICODE_STSRT + random.nextInt(HANZI_UNICODE_MAX_NUM));
             builder.append((char) (Integer.parseInt(randomHex, 16)));
         }
         return builder.toString();
@@ -45,8 +46,20 @@ public class RandomUtil {
         String resource = IOUtil.readFirstLine(HANZI_3500_PATH);
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < length; i++) {
-            builder.append(resource.charAt((new Random().nextInt(resource.length()))));
+            builder.append(resource.charAt((random.nextInt(resource.length()))));
         }
+        return builder.toString();
+    }
+
+    private static final String COLOR_CODE = "1234567890abcdef";
+
+    public static String randomColor() {
+        StringBuilder builder = new StringBuilder("#");
+
+        for (int i = 0; i < 6; i++) {
+            builder.append(COLOR_CODE.toCharArray()[random.nextInt(COLOR_CODE.length() - 1)]);
+        }
+
         return builder.toString();
     }
 
