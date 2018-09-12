@@ -19,6 +19,13 @@ public class MongoDBConfig {
 		super();
 	}
 
+	public MongoDBConfig(String name, String databaseName, String url, int port) {
+		this.name = name;
+		this.databaseName = databaseName;
+		this.url = url;
+		this.port = port;
+	}
+
 	public MongoDBConfig(String name, String userName, String databaseName, String password, String url, int port) {
 		this.name = name;
 		this.userName = userName;
